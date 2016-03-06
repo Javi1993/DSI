@@ -1,11 +1,4 @@
 
-/**
- * Autor: Manuel Pereira
- * Fecha: Octubre de 2011
- * Descripcion: Esta clase es el punto de partida para la practica 3, y 
- * debera ser modificada por el alumno segun el enunciado
- */
-
 @SuppressWarnings("serial")
 public class RellenarPorAlumno extends NoTocarEstaClase {
 
