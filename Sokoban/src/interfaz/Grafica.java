@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,10 +41,16 @@ public class Grafica extends JFrame{
 	private static final int COLOR_BLANCO = -1;
 	private static final int COLOR_GRIS = -7829368;
 
-	public static void main(String [] args)
+	public static void main(String [] args) throws InterruptedException
 	{	
 		Player p1 = new Player(111, 1);
 		//proceso de login en vez usar player de prueba
+		Login lo = new Login();
+		while(!lo.valido){
+			Thread.sleep(500);
+		}
+		lo.setVisible(false);
+		lo.dispose();
 		new Grafica(p1);
 	}
 
@@ -60,13 +68,19 @@ public class Grafica extends JFrame{
 		altoFrame = alto * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
 		setSize (anchoFrame, altoFrame);
 		setTitle("DSI | Sokoban");
-		addKeyListener (new TeclaPulsada(this));
 		this.setVisible(true);
 		this.setResizable(false);
 		this.pintarTablero();
 		this.pintarBotones();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		addKeyListener (new TeclaPulsada(this));
 	}
 
 	public void update (Graphics g)
