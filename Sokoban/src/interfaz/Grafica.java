@@ -43,15 +43,15 @@ public class Grafica extends JFrame{
 
 	public static void main(String [] args) throws InterruptedException
 	{	
-		Player p1 = new Player(111, 1);
 		//proceso de login en vez usar player de prueba
 		Login lo = new Login();
 		while(!lo.valido){
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		}
 		lo.setVisible(false);
 		lo.dispose();
-		new Grafica(p1);
+		Thread.sleep(1000);
+		new Grafica(lo.player);
 	}
 
 	public Grafica(Player p){
@@ -71,15 +71,8 @@ public class Grafica extends JFrame{
 		this.setVisible(true);
 		this.setResizable(false);
 		this.pintarTablero();
-		this.pintarBotones();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		addKeyListener (new TeclaPulsada(this));
 	}
 
@@ -173,6 +166,7 @@ public class Grafica extends JFrame{
 					break;
 				}
 			}
+			this.pintarBotones();
 		}
 
 		// Pinta los pasos

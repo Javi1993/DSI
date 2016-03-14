@@ -1,6 +1,7 @@
 package interfaz;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,13 +11,18 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import jugador.Player;
 
 @SuppressWarnings("serial")
 public class Login extends JFrame{
 
 	JTextField user;
-	JTextField password;
+	JPasswordField password;
+	Player player;
 	boolean valido;
 
 	public Login(){
@@ -38,7 +44,7 @@ public class Login extends JFrame{
 		this.getContentPane().add(label);
 		this.getContentPane().add(user);
 		JLabel label1 = new JLabel("PASSWORD");
-		password = new JTextField(15);
+		password = new JPasswordField(15);
 		this.getContentPane().add(label1);
 		this.getContentPane().add(password);
 	}
@@ -46,24 +52,22 @@ public class Login extends JFrame{
 	private void crearBotones(){
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
-		JButton b1 = new JButton("Login"); 
+		JButton b1 = new JButton("Empezar"); 
 		b1.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println(user.getText());
-				System.out.println(password.getText());
-				valido = true;
+				Border borde = new LineBorder(Color.RED, 1);
+				player = new Player(user.getText(), new String(password.getPassword()));
+				valido = player.estado;
+				if(!valido){b1.setBorder(borde);
+				password.setBorder(borde);}
 			}
 		});
 
-		JButton b2 = new JButton("Register");  
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
-		b2.setPreferredSize(new Dimension(90, 25)); 
-		b2.setFont(new Font("Arial", 1, 11));
 		southPanel.add(b1);
-		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);
 	}
 }
