@@ -166,8 +166,9 @@ public class Grafica extends JFrame{
 					break;
 				}
 			}
-			this.pintarBotones();
 		}
+		
+		this.pintarBotones();
 
 		// Pinta los pasos
 		g.setColor(Color.black);
@@ -240,19 +241,21 @@ public class Grafica extends JFrame{
 		b2 = new JButton("Reset");  
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				char[] sol = Resolver.solucion(escenario);
-				for(int i =0; i<sol.length; i++)
-				{
-					escenario.realizarMovimiento(sol[i]);
-					pintarTablero();
-					update(getGraphics());
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
+				char[] sol = Resolver.solucion(escenario, pasos);
+				
+				//el resolver devuelve en arrya de char los movimientos a hacer
+//				for(int i =0; i<sol.length; i++)
+//				{
+//					escenario.realizarMovimiento(sol[i]);
+//					pintarTablero();
+//					update(getGraphics());
+//					try {
+//						Thread.sleep(300);
+//					} catch (InterruptedException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//				}
 			}
 		}); 
 		b2.addActionListener(new ActionListener() {          

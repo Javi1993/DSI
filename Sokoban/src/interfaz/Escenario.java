@@ -1,36 +1,41 @@
 package interfaz;
 
-public class Escenario {
-		char [][] cas = new char[][] {
-			//Matriz de caracteres que representa el tablero del juego.
-			{' ',' ',' ',' ','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-			{' ',' ',' ',' ','H',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-			{' ',' ',' ',' ','H','*',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-			{' ',' ','H','H','H',' ',' ','*','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-			{' ',' ','H',' ',' ','*',' ','*',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-			{'H','H','H',' ','H',' ','H','H',' ','H',' ',' ',' ','H','H','H','H','H','H',' '},
-			{'H',' ',' ',' ','H',' ','H','H',' ','H','H','H','H','H',' ',' ','O','O','H',' '},
-			{'H',' ','*',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','O','O','H',' '},
-			{'H','H','H','H','H',' ','H','H','H',' ','H','a','H','H',' ',' ','O','O','H',' '},
-			{' ',' ',' ',' ','H',' ',' ',' ',' ',' ','H','H','H','H','H','H','H','H','H',' '},
-			{' ',' ',' ',' ','H','H','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' '}
-		};
+import java.util.ArrayList;
+import java.util.List;
 
-//	char [][] cas = new char[][] {
-//		//Matriz de caracteres que representa el tablero del juego.
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
-//		{' ',' ',' ','H','O','H',' ',' ',' '},
-//		{' ',' ',' ','H',' ','H',' ',' ',' '},
-//		{' ',' ',' ','H','*','H',' ',' ',' '},
-//		{' ',' ',' ','H','a','H',' ',' ',' '},
-//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//		{' ',' ',' ',' ',' ',' ',' ',' ',' '}
-//	};
+public class Escenario {
+	char [][] cas = new char[][] {
+		//Matriz de caracteres que representa el tablero del juego.
+		{' ',' ',' ',' ','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','H',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','H','*',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ','H','H','H',' ',' ','*','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ','H',' ',' ','*',' ','*',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{'H','H','H',' ','H',' ','H','H',' ','H',' ',' ',' ','H','H','H','H','H','H',' '},
+		{'H',' ',' ',' ','H',' ','H','H',' ','H','H','H','H','H',' ',' ','O','O','H',' '},
+		{'H',' ','*',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','O','O','H',' '},
+		{'H','H','H','H','H',' ','H','H','H',' ','H','a','H','H',' ',' ','O','O','H',' '},
+		{' ',' ',' ',' ','H',' ',' ',' ',' ',' ','H','H','H','H','H','H','H','H','H',' '},
+		{' ',' ',' ',' ','H','H','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+	};
+	private List<Posicion> cajas;
+	private List<Posicion> destinos;
+
+	//	char [][] cas = new char[][] {
+	//		//Matriz de caracteres que representa el tablero del juego.
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
+	//		{' ',' ',' ','H','O','H',' ',' ',' '},
+	//		{' ',' ',' ','H',' ','H',' ',' ',' '},
+	//		{' ',' ',' ','H','*','H',' ',' ',' '},
+	//		{' ',' ',' ','H','a','H',' ',' ',' '},
+	//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '}
+	//	};
 
 	/** Enumeración para tipos de casilla */
 	public enum TipoCasilla {VACIA, CAJA,
@@ -87,6 +92,20 @@ public class Escenario {
 			}
 			return miPosicion;
 		}
+
+		public int placedBox()
+		{//Devuelve el numero de cajas colocadas en posicion correcta
+			int placedBox = 0;
+			for(int x = 0; x<cas.length; x++){
+				for(int y = 0; y<cas[x].length; y++){
+					if(cas[x][y] == 'X'){
+						placedBox++;
+					}
+				}
+			}
+			return placedBox;
+		}
+
 		public boolean hasGanado(){
 			//Este método devuelve un booleano que indica si se ha ganado la partida.
 			boolean victoria = false;
@@ -187,10 +206,49 @@ public class Escenario {
 			}		
 			return movimiento;
 		}
+
+		private void cajasSinColocar()
+		{//guarda las coordenadas de las cajas sin colocar
+			cajas = new ArrayList<Posicion>();
+			for(int x = 0; x<cas.length; x++){
+				for(int y = 0; y<cas[x].length; y++){
+					if(cas[x][y] == '*'){
+						Posicion aux = new Posicion();
+						aux.x=x;
+						aux.y=y;
+						cajas.add(aux);
+					}
+				}
+			}
+		}
+
+		private void destinosLibres()
+		{
+			destinos = new ArrayList<Posicion>();
+			for(int x = 0; x<cas.length; x++){
+				for(int y = 0; y<cas[x].length; y++){
+					if(cas[x][y] == 'O'){
+						Posicion aux = new Posicion();
+						aux.x=x;
+						aux.y=y;
+						destinos.add(aux);
+					}
+				}
+			}
+		}
+		
 		public int getANCHO() {
 			return ANCHO;
 		}
 		public int getALTO() {
 			return ALTO;
+		}
+		public List<Posicion> getCajas() {
+			cajasSinColocar();
+			return cajas;
+		}
+		public List<Posicion> getDestinos() {
+			destinosLibres();
+			return destinos;
 		}
 }

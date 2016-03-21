@@ -4,6 +4,7 @@ package interfaz;
 public class Posicion {
 	public int x;
 	public int y;
+
 	public Posicion posicionDesplazada(char tecla){
 		Posicion moverPosicion = new Posicion();
 		switch (tecla) { 
