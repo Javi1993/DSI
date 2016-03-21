@@ -119,6 +119,24 @@ public class Escenario {
 			victoria = true;
 			return victoria;
 		}
+		
+		public void resetEscenario(){
+			cas = new char[][] {
+				//Matriz de caracteres que representa el tablero del juego.
+				{' ',' ',' ',' ','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','H',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','H','*',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ','H','H','H',' ',' ','*','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ','H',' ',' ','*',' ','*',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{'H','H','H',' ','H',' ','H','H',' ','H',' ',' ',' ','H','H','H','H','H','H',' '},
+				{'H',' ',' ',' ','H',' ','H','H',' ','H','H','H','H','H',' ',' ','O','O','H',' '},
+				{'H',' ','*',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','O','O','H',' '},
+				{'H','H','H','H','H',' ','H','H','H',' ','H','a','H','H',' ',' ','O','O','H',' '},
+				{' ',' ',' ',' ','H',' ',' ',' ',' ',' ','H','H','H','H','H','H','H','H','H',' '},
+				{' ',' ',' ',' ','H','H','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+			};
+		}
+		
 		public boolean realizarMovimiento (char tecla){	
 			//Este método recibe como parámetro una tecla, y realiza el movimiento sobre el tablero de juego en función de la tecla.
 			boolean movimiento = false;

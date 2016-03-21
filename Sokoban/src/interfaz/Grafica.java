@@ -11,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -70,6 +68,7 @@ public class Grafica extends JFrame{
 		setTitle("DSI | Sokoban");
 		this.setVisible(true);
 		this.setResizable(false);
+		this.pintarBotones();
 		this.pintarTablero();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,9 +166,6 @@ public class Grafica extends JFrame{
 				}
 			}
 		}
-		
-		this.pintarBotones();
-
 		// Pinta los pasos
 		g.setColor(Color.black);
 		g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 5, BORDE+ (PIXELSCUADRADO+1)* (alto - 3) + 7,
@@ -238,35 +234,40 @@ public class Grafica extends JFrame{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
 		b1 = new JButton("Resolver"); 
-		b2 = new JButton("Reset");  
+		b2 = new JButton("Reiniciar");  
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
 				char[] sol = Resolver.solucion(escenario, pasos);
-				
 				//el resolver devuelve en arrya de char los movimientos a hacer
-//				for(int i =0; i<sol.length; i++)
-//				{
-//					escenario.realizarMovimiento(sol[i]);
-//					pintarTablero();
-//					update(getGraphics());
-//					try {
-//						Thread.sleep(300);
-//					} catch (InterruptedException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//				}
+				//				for(int i =0; i<sol.length; i++)
+				//				{
+				//					escenario.realizarMovimiento(sol[i]);
+				//					pintarTablero();
+				//					update(getGraphics());
+				//					try {
+				//						Thread.sleep(300);
+				//					} catch (InterruptedException e1) {
+				//						// TODO Auto-generated catch block
+				//						e1.printStackTrace();
+				//					}
+				//				}
 			}
 		}); 
 		b2.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Click en boton2");
+				System.out.println("Reiniciando nivel...");
+				establecerPasos(0);
+				escenario.resetEscenario();
+				pintarTablero();
+				update(getGraphics());
 			}
 		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
+		b1.addKeyListener(new TeclaPulsada(this));
 		b2.setPreferredSize(new Dimension(90, 25)); 
 		b2.setFont(new Font("Arial", 1, 11));
+		b2.addKeyListener(new TeclaPulsada(this));
 		southPanel.add(b1);
 		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);

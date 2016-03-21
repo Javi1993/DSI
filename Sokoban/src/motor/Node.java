@@ -1,5 +1,6 @@
 package motor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import interfaz.Escenario;
@@ -51,14 +52,18 @@ public class Node {
 		int total = 0;
 		List<Posicion> cajas = escenario.getCajas();
 		List<Posicion> destinos = escenario.getDestinos();
+		List<Posicion> auxiliar = new ArrayList<Posicion>();
+		Posicion posAux = null;
 		for(int i = 0; i<cajas.size(); i++){
 			int aux = escenario.getALTO()+escenario.getALTO()+1;//reseteamos variable auxiliar
 			for(int j = 0; j<destinos.size(); j++){
-				if(Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y) < aux)
+				if((auxiliar.contains(destinos.get(j)))&&(Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y) < aux))
 				{//calculamos distancia manhattan y guardamos la menor para esa caja respecto a los destinos libres
 					aux = Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y);
+					posAux = destinos.get(j);
 				}
 			}
+			auxiliar.add(posAux);
 			total = total + aux;
 		}
 		setH(total);//actualizamos H
