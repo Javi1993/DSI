@@ -36,6 +36,7 @@ public class Login extends JFrame{
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
+		this.setLocationRelativeTo(null);
 	}
 
 	private void crearLabels(){

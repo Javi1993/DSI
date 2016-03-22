@@ -7,57 +7,56 @@ import interfaz.Escenario;
 import interfaz.Posicion;
 
 public class Node {
-	private int g; //coste del recorrido hasta el nodo n (pasos)
-	private int h; //coste aproximado de acomodar las cajas restantes (pasos) (distancia Manhattan)
-	private int i;//número de cajas colocadas en una casilla destino
-	private int f;
+	private Integer g; //coste del recorrido hasta el nodo n (pasos)
+	private Integer h; //coste aproximado de acomodar las cajas restantes (pasos) (distancia Manhattan)
+	private Integer i;//número de cajas colocadas en una casilla destino
+	private Integer f;
 	private Escenario escenario;
 
-	public Node(/*int col, int row,*/Escenario escenario, int g, int i) {
+	public Node(Escenario escenario, int g, int i) {
 		this.setEscenario(escenario);
 		this.setG(g);
 		this.setI(i);
 		manhattan();//para calcular el valor de h(x)
-		//this.f = i|g+h; dentro de la lista abierta aparecerán primero los nodos con más cajas acomodadas 
-		//correctamente y en caso de empates seguirán aquellos con menor costo acumulado de g(n) y h(n).
+		this.setF(this.getG()+this.getH());
 	}
 
 	//Funcion heuristica
-	public int getF() {
+	public Integer getF() {
 		return f;
 	}
 
-	public void setF(int x) { //x(x) es i(x) o g(x)
-		this.f = x+this.h;
+	public void setF(Integer f) {
+		this.f = f;
 	}
 
-	public int getI() {
+	public Integer getI() {
 		return i;
 	}
 
-	private void setI(int i) {
+	private void setI(Integer i) {
 		this.i = i;
 	}
 
-	public int getH() {
+	public Integer getH() {
 		return h;
 	}
 
-	private void setH(int h) {
+	private void setH(Integer h) {
 		this.h = h;
 	}
 
 	private void manhattan ()
 	{
-		int total = 0;
+		Integer total = 0;
 		List<Posicion> cajas = escenario.getCajas();
 		List<Posicion> destinos = escenario.getDestinos();
 		List<Posicion> auxiliar = new ArrayList<Posicion>();
 		Posicion posAux = null;
 		for(int i = 0; i<cajas.size(); i++){
-			int aux = escenario.getALTO()+escenario.getALTO()+1;//reseteamos variable auxiliar
+			Integer aux = escenario.getALTO()+escenario.getALTO()+1;//reseteamos variable auxiliar
 			for(int j = 0; j<destinos.size(); j++){
-				if((auxiliar.contains(destinos.get(j)))&&(Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y) < aux))
+				if((!auxiliar.contains(destinos.get(j)))&&(Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y) < aux))
 				{//calculamos distancia manhattan y guardamos la menor para esa caja respecto a los destinos libres
 					aux = Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y);
 					posAux = destinos.get(j);
@@ -69,11 +68,11 @@ public class Node {
 		setH(total);//actualizamos H
 	}
 
-	public int getG() {
+	public Integer getG() {
 		return g;
 	}
 
-	private void setG(int g) {
+	private void setG(Integer g) {
 		this.g = g;
 	}
 

@@ -72,6 +72,7 @@ public class Grafica extends JFrame{
 		this.pintarTablero();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		addKeyListener (new TeclaPulsada(this));
 	}
 
