@@ -12,13 +12,15 @@ public class Node {
 	private Integer i;//número de cajas colocadas en una casilla destino
 	private Integer f;
 	private Escenario escenario;
+	private String ID;
 
-	public Node(Escenario escenario, int g, int i) {
+	public Node(Escenario escenario, Integer g, Integer i, String ID) {
 		this.setEscenario(escenario);
 		this.setG(g);
 		this.setI(i);
 		manhattan();//para calcular el valor de h(x)
 		this.setF(this.getG()+this.getH());
+		this.setID(ID);
 	}
 
 	//Funcion heuristica
@@ -80,7 +82,15 @@ public class Node {
 		return escenario;
 	}
 
-	private void setEscenario(Escenario escenario) {
+	public void setEscenario(Escenario escenario) {
 		this.escenario = escenario;
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String ID) {
+		this.ID = ID;
 	} 
 }

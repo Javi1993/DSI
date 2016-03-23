@@ -209,6 +209,10 @@ public class Grafica extends JFrame{
 		case 'x':
 		case 'd':
 			//Si se pulsa una de estas teclas realiza el movimiento solo si este es posible.
+			/*
+			 * CAMBIAR
+			 * 
+			 */
 			if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
 				if(escenario.hasGanado())
 				{
@@ -222,6 +226,7 @@ public class Grafica extends JFrame{
 		case 'q':
 		case 'Q':
 			// Si se pulsa la tecla q sale del programa
+			System.out.println("Saliendo del juego...");
 			System.exit(0);
 			break;
 		default:
@@ -238,20 +243,25 @@ public class Grafica extends JFrame{
 		b2 = new JButton("Reiniciar");  
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				char[] sol = Resolver.solucion(escenario, pasos);
-				//el resolver devuelve en arrya de char los movimientos a hacer
-				//				for(int i =0; i<sol.length; i++)
-				//				{
-				//					escenario.realizarMovimiento(sol[i]);
-				//					pintarTablero();
-				//					update(getGraphics());
-				//					try {
-				//						Thread.sleep(300);
-				//					} catch (InterruptedException e1) {
-				//						// TODO Auto-generated catch block
-				//						e1.printStackTrace();
-				//					}
-				//				}
+				char[] sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+				if(sol!=null){
+					System.out.println("SE HA ENCONTRADO UNA SOLUCIÓN");
+					for(int i =0; i<sol.length; i++)
+					{
+						escenario.realizarMovimiento(sol[i]);
+						establecerPasos(pasos+1);
+						pintarTablero();
+						update(getGraphics());
+						try {
+							Thread.sleep(300);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}else{
+					System.out.println("NO SE HA ENCONTRADO UNA SOLUCION REINICIE EL NIVEL Y VUELVA A PROBAR");
+				}
 			}
 		}); 
 		b2.addActionListener(new ActionListener() {          

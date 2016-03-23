@@ -4,38 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Escenario {
-	char [][] cas = new char[][] {
+	//	public char [][] cas = new char[][] {
+	//		//Matriz de caracteres que representa el tablero del juego.
+	//		{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ',' ',' ','#','$',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ','#','#','#',' ',' ','$','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{' ',' ','#',' ',' ','$',' ','$',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+	//		{'#','#','#',' ','#',' ','#','#',' ','#',' ',' ',' ','#','#','#','#','#','#',' '},
+	//		{'#',' ',' ',' ','#',' ','#','#',' ','#','#','#','#','#',' ',' ','.','.','#',' '},
+	//		{'#',' ','$',' ',' ','$',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','.','.','#',' '},
+	//		{'#','#','#','#','#',' ','#','#','#',' ','#','@','#','#',' ',' ','.','.','#',' '},
+	//		{' ',' ',' ',' ','#',' ',' ',' ',' ',' ','#','#','#','#','#','#','#','#','#',' '},
+	//		{' ',' ',' ',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+	//	};
+
+	public char [][] cas = new char[][] {
 		//Matriz de caracteres que representa el tablero del juego.
-		{' ',' ',' ',' ','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		{' ',' ',' ',' ','H',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		{' ',' ',' ',' ','H','*',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		{' ',' ','H','H','H',' ',' ','*','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		{' ',' ','H',' ',' ','*',' ','*',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		{'H','H','H',' ','H',' ','H','H',' ','H',' ',' ',' ','H','H','H','H','H','H',' '},
-		{'H',' ',' ',' ','H',' ','H','H',' ','H','H','H','H','H',' ',' ','O','O','H',' '},
-		{'H',' ','*',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','O','O','H',' '},
-		{'H','H','H','H','H',' ','H','H','H',' ','H','a','H','H',' ',' ','O','O','H',' '},
-		{' ',' ',' ',' ','H',' ',' ',' ',' ',' ','H','H','H','H','H','H','H','H','H',' '},
-		{' ',' ',' ',' ','H','H','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#',' ',' ','.','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#',' ','$',' ','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#','#','@','#','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#','#','$','#','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#','.',' ',' ','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}
 	};
+
 	private List<Posicion> cajas;
 	private List<Posicion> destinos;
-
-	//	char [][] cas = new char[][] {
-	//		//Matriz de caracteres que representa el tablero del juego.
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
-	//		{' ',' ',' ','H','O','H',' ',' ',' '},
-	//		{' ',' ',' ','H',' ','H',' ',' ',' '},
-	//		{' ',' ',' ','H','*','H',' ',' ',' '},
-	//		{' ',' ',' ','H','a','H',' ',' ',' '},
-	//		{' ',' ',' ',' ','H',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-	//		{' ',' ',' ',' ',' ',' ',' ',' ',' '}
-	//	};
 
 	/** Enumeración para tipos de casilla */
 	public enum TipoCasilla {VACIA, CAJA,
@@ -52,25 +55,25 @@ public class Escenario {
 			 */
 			TipoCasilla casilla = null;
 			switch(cas[x][y]){
-			case 'H':
+			case '#':
 				casilla = TipoCasilla.MURO;
 				break;
 			case ' ':
 				casilla = TipoCasilla.VACIA;
 				break;
-			case 'O':
+			case '.':
 				casilla = TipoCasilla.DESTINO;
 				break;
-			case '*':
+			case '$':
 				casilla = TipoCasilla.CAJA;
 				break;
-			case 'X':	
+			case '*':	
 				casilla = TipoCasilla.CAJA_SOBRE_DESTINO;
 				break;
-			case 'a':
+			case '@':
 				casilla = TipoCasilla.JUGADOR;
 				break;
-			case '@':
+			case '+':
 				casilla = TipoCasilla.JUGADOR_SOBRE_DESTINO;
 				break;
 			}	
@@ -81,10 +84,10 @@ public class Escenario {
 			Posicion miPosicion = new Posicion();
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == 'a'){
+					if(cas[x][y] == '@'){
 						miPosicion.x = x;
 						miPosicion.y = y;
-					}else if( cas[x][y] == '@'){
+					}else if( cas[x][y] == '+'){
 						miPosicion.x = x;
 						miPosicion.y = y;
 					}
@@ -98,7 +101,7 @@ public class Escenario {
 			int placedBox = 0;
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == 'X'){
+					if(cas[x][y] == '*'){
 						placedBox++;
 					}
 				}
@@ -111,7 +114,7 @@ public class Escenario {
 			boolean victoria = false;
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == 'O'|cas[x][y] == '@'){
+					if(cas[x][y] == '.'|cas[x][y] == '+'){
 						return victoria;
 					}
 				}		
@@ -119,24 +122,42 @@ public class Escenario {
 			victoria = true;
 			return victoria;
 		}
-		
+
 		public void resetEscenario(){
+//			cas = new char[][] {
+//				//Matriz de caracteres que representa el tablero del juego.
+//				{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+//				{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+//				{' ',' ',' ',' ','#','$',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+//				{' ',' ','#','#','#',' ',' ','$','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+//				{' ',' ','#',' ',' ','$',' ','$',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+//				{'#','#','#',' ','#',' ','#','#',' ','#',' ',' ',' ','#','#','#','#','#','#',' '},
+//				{'#',' ',' ',' ','#',' ','#','#',' ','#','#','#','#','#',' ',' ','.','.','#',' '},
+//				{'#',' ','$',' ',' ','$',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','.','.','#',' '},
+//				{'#','#','#','#','#',' ','#','#','#',' ','#','@','#','#',' ',' ','.','.','#',' '},
+//				{' ',' ',' ',' ','#',' ',' ',' ',' ',' ','#','#','#','#','#','#','#','#','#',' '},
+//				{' ',' ',' ',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+//			};
+			
 			cas = new char[][] {
 				//Matriz de caracteres que representa el tablero del juego.
-				{' ',' ',' ',' ','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-				{' ',' ',' ',' ','H',' ',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-				{' ',' ',' ',' ','H','*',' ',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-				{' ',' ','H','H','H',' ',' ','*','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-				{' ',' ','H',' ',' ','*',' ','*',' ','H',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-				{'H','H','H',' ','H',' ','H','H',' ','H',' ',' ',' ','H','H','H','H','H','H',' '},
-				{'H',' ',' ',' ','H',' ','H','H',' ','H','H','H','H','H',' ',' ','O','O','H',' '},
-				{'H',' ','*',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','O','O','H',' '},
-				{'H','H','H','H','H',' ','H','H','H',' ','H','a','H','H',' ',' ','O','O','H',' '},
-				{' ',' ',' ',' ','H',' ',' ',' ',' ',' ','H','H','H','H','H','H','H','H','H',' '},
-				{' ',' ',' ',' ','H','H','H','H','H','H','H',' ',' ',' ',' ',' ',' ',' ',' ',' '}
+				{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#',' ',' ','.','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#',' ','$',' ','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#','#','@','#','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#','#','$','#','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#','.',' ',' ','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+				{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}
 			};
 		}
-		
+
 		public boolean realizarMovimiento (char tecla){	
 			//Este método recibe como parámetro una tecla, y realiza el movimiento sobre el tablero de juego en función de la tecla.
 			boolean movimiento = false;
@@ -147,79 +168,79 @@ public class Escenario {
 			Posicion nuevaPosicion2 = new Posicion();
 			nuevaPosicion2 = nuevaPosicion.posicionDesplazada(tecla);
 			if(cas[nuevaPosicion.x][nuevaPosicion.y] == ' '){
-				cas[nuevaPosicion.x][nuevaPosicion.y] = 'a';
-				if(cas[miPosicion.x][miPosicion.y] == 'a'){
-					cas[miPosicion.x][miPosicion.y] = ' ';
-				}
-				else if(cas[miPosicion.x][miPosicion.y] == '@'){
-					cas[miPosicion.x][miPosicion.y] = 'O';
-				}
-				movimiento = true;
-			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == 'O'){
 				cas[nuevaPosicion.x][nuevaPosicion.y] = '@';
-				if(cas[miPosicion.x][miPosicion.y] == 'a'){
+				if(cas[miPosicion.x][miPosicion.y] == '@'){
 					cas[miPosicion.x][miPosicion.y] = ' ';
 				}
-				else if(cas[miPosicion.x][miPosicion.y] == '@'){
-					cas[miPosicion.x][miPosicion.y] = 'O';
+				else if(cas[miPosicion.x][miPosicion.y] == '+'){
+					cas[miPosicion.x][miPosicion.y] = '.';
 				}
 				movimiento = true;
-			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == 'X'){
-				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == 'X' | cas[nuevaPosicion2.x][nuevaPosicion2.y] == 'H'){
-					System.out.println("El movimiento no se puede realizar");
+			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '.'){
+				cas[nuevaPosicion.x][nuevaPosicion.y] = '+';
+				if(cas[miPosicion.x][miPosicion.y] == '@'){
+					cas[miPosicion.x][miPosicion.y] = ' ';
 				}
-				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == 'O'){
-					cas[nuevaPosicion2.x][nuevaPosicion2.y] = 'X';
-					cas[nuevaPosicion.x][nuevaPosicion.y] = '@';
-					if(cas[miPosicion.x][miPosicion.y] == 'a'){
+				else if(cas[miPosicion.x][miPosicion.y] == '+'){
+					cas[miPosicion.x][miPosicion.y] = '.';
+				}
+				movimiento = true;
+			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '*'){
+				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '*' | cas[nuevaPosicion2.x][nuevaPosicion2.y] == '#'){
+					//					System.out.println("El movimiento no se puede realizar");
+				}
+				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '.'){
+					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '*';
+					cas[nuevaPosicion.x][nuevaPosicion.y] = '+';
+					if(cas[miPosicion.x][miPosicion.y] == '@'){
 						cas[miPosicion.x][miPosicion.y] = ' ';
 					}
-					else if(cas[miPosicion.x][miPosicion.y] == '@'){
-						cas[miPosicion.x][miPosicion.y] = 'O';
+					else if(cas[miPosicion.x][miPosicion.y] == '+'){
+						cas[miPosicion.x][miPosicion.y] = '.';
 					}
 				}else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == ' '){
-					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '*';
-					cas[nuevaPosicion.x][nuevaPosicion.y] = '@';
-					cas[miPosicion.x][miPosicion.y] = 'O';
+					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '$';
+					cas[nuevaPosicion.x][nuevaPosicion.y] = '+';
+					cas[miPosicion.x][miPosicion.y] = ' ';
 
 				}
-			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '*'){
+			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '$'){
 				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == ' '){
-					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '*';
-					cas[nuevaPosicion.x][nuevaPosicion.y] = 'a';
-					if(cas[miPosicion.x][miPosicion.y] == 'a'){
+					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '$';
+					cas[nuevaPosicion.x][nuevaPosicion.y] = '@';
+					if(cas[miPosicion.x][miPosicion.y] == '@'){
 						cas[miPosicion.x][miPosicion.y] = ' ';
 					}
-					else if(cas[miPosicion.x][miPosicion.y] == '@'){
-						cas[miPosicion.x][miPosicion.y] = 'O';
+					else if(cas[miPosicion.x][miPosicion.y] == '+'){
+						cas[miPosicion.x][miPosicion.y] = '.';
 					}
 					movimiento = true;
 				}
-				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == 'H'){
-					System.out.println("El movimiento no se puede realizar");
+				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '#'){
+					//					System.out.println("El movimiento no se puede realizar");
 					movimiento = false;
 				}
-				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '*'){
-					System.out.println("El movimiento no se puede realizar");
+				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '$'){
+					//					System.out.println("El movimiento no se puede realizar");
 					movimiento = false;
 				}	
-				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == 'X'){
-					System.out.println("El movimiento no se puede realizar");
+				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '*'){
+					//					System.out.println("El movimiento no se puede realizar");
 					movimiento = false;
 				}
-				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y]==('O')){
-					cas[nuevaPosicion.x][nuevaPosicion.y] = 'a';
-					cas[nuevaPosicion2.x][nuevaPosicion2.y] = 'X';
-					if(cas[miPosicion.x][miPosicion.y] == 'a'){
+				else if(cas[nuevaPosicion2.x][nuevaPosicion2.y]==('.')){
+					cas[nuevaPosicion.x][nuevaPosicion.y] = '@';
+					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '*';
+					if(cas[miPosicion.x][miPosicion.y] == '@'){
 						cas[miPosicion.x][miPosicion.y] = ' ';
 					}
-					else if(cas[miPosicion.x][miPosicion.y] == '@'){
-						cas[miPosicion.x][miPosicion.y] = 'O';
+					else if(cas[miPosicion.x][miPosicion.y] == '+'){
+						cas[miPosicion.x][miPosicion.y] = '.';
 					}
 					movimiento=true;
 				}
-			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == 'H'){
-				System.out.println("El movimiento no se puede realizar");
+			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '#'){
+				//				System.out.println("El movimiento no se puede realizar");
 				movimiento = false;
 			}		
 			return movimiento;
@@ -230,7 +251,7 @@ public class Escenario {
 			cajas = new ArrayList<Posicion>();
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == '*'){
+					if(cas[x][y] == '$'){
 						Posicion aux = new Posicion();
 						aux.x=x;
 						aux.y=y;
@@ -245,7 +266,7 @@ public class Escenario {
 			destinos = new ArrayList<Posicion>();
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == 'O'){
+					if(cas[x][y] == '.'){
 						Posicion aux = new Posicion();
 						aux.x=x;
 						aux.y=y;
@@ -254,7 +275,7 @@ public class Escenario {
 				}
 			}
 		}
-		
+
 		public int getANCHO() {
 			return ANCHO;
 		}
