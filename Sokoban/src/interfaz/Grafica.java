@@ -53,7 +53,7 @@ public class Grafica extends JFrame{
 	}
 
 	public Grafica(Player p){
-		escenario = new Escenario();
+		escenario = new Escenario(p.getProgreso());//creamos el escenario
 		establecerCoodenadas(escenario);
 	}
 

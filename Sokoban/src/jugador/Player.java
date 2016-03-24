@@ -9,7 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 public class Player {
-	//MODIFICAR PARA ADECUARLA A SOLUCION FINAL
+
 	private String id;//id unica
 	private String pswd;//id unica
 	private int progreso;//nivel (debe ser una lista con todos los nivles compeltados)
@@ -53,8 +53,6 @@ public class Player {
 				return false;
 			}
 		}else{
-			//creamos el usuario COMPORBAR SI TIPO NULL PORQ EXISTIA Y ESA NO ERA LA PASS 
-			//(EN LA COSNULTA  de arriba PRIMERO VER SI EXISTE NOMBRE, leugo entrar en IF y ver contraseña, sino es rechazar
 			ArrayList<Document> progresoList = new ArrayList<Document>(){{
 				add(new Document("Nivel", 1));
 			}};
