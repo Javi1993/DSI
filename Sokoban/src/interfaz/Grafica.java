@@ -193,12 +193,12 @@ public class Grafica extends JFrame{
 	}
 
 	/**
-	 * Método invocado cada vez que el usuario pulsa una tecla
+	 * Mï¿½todo invocado cada vez que el usuario pulsa una tecla
 	 * @param tecla la tecla pulsada
 	 */
 	public void teclaPulsada(char tecla){
 		int pasos = obtenerPasos();
-		// En función de la tecla pulsada hace algo
+		// En funciï¿½n de la tecla pulsada hace algo
 		switch (tecla) {
 		case 'W':
 		case 'A':
@@ -240,12 +240,13 @@ public class Grafica extends JFrame{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
 		b1 = new JButton("Resolver"); 
-		b2 = new JButton("Reiniciar");  
+		b2 = new JButton("Empezar");  
+		b1.setVisible(false);
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
 				char[] sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
 				if(sol!=null){
-					System.out.println("SE HA ENCONTRADO UNA SOLUCIÓN");
+					System.out.println("SE HA ENCONTRADO UNA SOLUCIï¿½N");
 					for(int i =0; i<sol.length; i++)
 					{
 						escenario.realizarMovimiento(sol[i]);
@@ -268,6 +269,8 @@ public class Grafica extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reiniciando nivel...");
 				establecerPasos(0);
+				b2.setText("Reiniciar");
+				b1.setVisible(true);
 				escenario.resetEscenario();
 				pintarTablero();
 				update(getGraphics());

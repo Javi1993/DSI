@@ -53,7 +53,7 @@ public class Login extends JFrame{
 	private void crearBotones(){
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
-		JButton b1 = new JButton("Empezar"); 
+		JButton b1 = new JButton("Entrar"); 
 		b1.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
