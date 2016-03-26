@@ -252,6 +252,8 @@ public class Escenario {
 			{
 				if(p!=null){
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador",p.getId())));
+				}else{
+					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador","IA")));
 				}
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.seq",sol)));
 			}

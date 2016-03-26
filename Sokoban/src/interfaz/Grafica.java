@@ -263,6 +263,8 @@ public class Grafica extends JFrame{
 	{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
+		KeyListener keyListen = new TeclaPulsada(this);
+		aux = null;
 		b1 = new JButton("Solver"); 
 		b2 = new JButton("Start");  
 		b1.setVisible(false);
@@ -306,18 +308,24 @@ public class Grafica extends JFrame{
 							}
 							escenario.updateNivel(aux, null);
 						}
+						b2.removeKeyListener(aux);
 						b1.setText("Solver");
+						b1.setVisible(false);
+						b2.setText("Start");
+						establecerPasos(0);
+						escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
+						teclasManual = new ArrayList<String>();
+						pintarTablero();
+						update(getGraphics());
 					}	
 				}
 			}
 		}); 
-		KeyListener keyListen = new TeclaPulsada(this);
-		aux = null;
 		b2.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reiniciando nivel...");
 				establecerPasos(0);
-				b2.setText("Restart");	
+				escenario.setIA(false);
 				b2.removeKeyListener(aux);
 				aux = keyListen;
 				b2.addKeyListener(aux);
@@ -325,14 +333,14 @@ public class Grafica extends JFrame{
 				escenario.resetEscenario();
 				pintarTablero();
 				update(getGraphics());
+				b2.setText("Restart");
+				b1.setText("Solver");
 			}
 		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
-		//		b1.addKeyListener(new TeclaPulsada(this));
 		b2.setPreferredSize(new Dimension(90, 25)); 
 		b2.setFont(new Font("Arial", 1, 11));
-		//		b2.addKeyListener(new TeclaPulsada(this));
 		southPanel.add(b1);
 		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);
