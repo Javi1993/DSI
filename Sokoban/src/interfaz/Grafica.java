@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,6 +35,7 @@ public class Grafica extends JFrame{
 	private int pasos;
 	private Escenario.TipoCasilla[][] tablero;
 	public Escenario escenario;
+	public KeyListener aux;
 
 	private static final int COLOR_VERDE = -16711936;
 	private static final int COLOR_AZUL = -16776961;
@@ -56,7 +59,7 @@ public class Grafica extends JFrame{
 	}
 
 	public Grafica(Player p){
-		escenario = new Escenario(p.getProgreso());//creamos el escenario
+		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario
 		establecerCoodenadas(escenario);
 	}
 
@@ -76,7 +79,7 @@ public class Grafica extends JFrame{
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		addKeyListener (new TeclaPulsada(this));
+//		addKeyListener (new TeclaPulsada(this));
 	}
 
 	public void update (Graphics g)
@@ -175,12 +178,22 @@ public class Grafica extends JFrame{
 		g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 5, BORDE+ (PIXELSCUADRADO+1)* (alto - 3) + 7,
 				ANCHODERECHA - 2, PIXELSCUADRADO);
 		g.setColor(Color.white);
-		g.drawString("Pasos: " + pasos, BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 2));
+		g.drawString("Steps: " + pasos, BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 2));
 
 		//Pintar instrucciones
 		g.setColor(Color.black);
 		g.setFont(new Font("Dialog", Font.BOLD, 15));
-		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Resolver  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
+		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
+		
+		//Pintar record info
+		g.setColor(Color.black);
+		g.setFont(new Font("Dialog", Font.BOLD, 13));
+		if(escenario.getRecord()>0)
+		{
+			g.drawString("Level "+escenario.getNivel()+": The recordman is "+escenario.getRecordName()+" with "+escenario.getRecord()+" steps.", BORDE, BORDE-6);
+		}else{
+			g.drawString("Level "+escenario.getNivel()+": No record yet.", BORDE, BORDE-6);
+		}
 	}
 
 	public void pintarCuadradoTablero(int x, int y, Escenario.TipoCasilla tipoCasilla) {
@@ -242,37 +255,48 @@ public class Grafica extends JFrame{
 	{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
-		b1 = new JButton("Resolver"); 
-		b2 = new JButton("Empezar");  
+		b1 = new JButton("Solver"); 
+		b2 = new JButton("Start");  
 		b1.setVisible(false);
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				char[] sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
-				if(sol!=null){
-					System.out.println("SE HA ENCONTRADO UNA SOLUCI�N");
-					for(int i =0; i<sol.length; i++)
-					{
-						escenario.realizarMovimiento(sol[i]);
-						establecerPasos(pasos+1);
-						pintarTablero();
-						update(getGraphics());
-						try {
-							Thread.sleep(300);
-						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+				if(b1.getText().equals("Solver"))
+				{
+					char[] sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+					if(sol!=null){
+						System.out.println("SE HA ENCONTRADO UNA SOLUCI�N");
+						for(int i =0; i<sol.length; i++)
+						{
+							escenario.realizarMovimiento(sol[i]);
+							establecerPasos(pasos+1);
+							pintarTablero();
+							update(getGraphics());
+							try {
+								Thread.sleep(300);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
+					}else{
+						System.out.println("NO SE HA ENCONTRADO UNA SOLUCION REINICIE EL NIVEL Y VUELVA A PROBAR");
 					}
+					b1.setText("Next level");
 				}else{
-					System.out.println("NO SE HA ENCONTRADO UNA SOLUCION REINICIE EL NIVEL Y VUELVA A PROBAR");
+					b1.setText("Solver");
 				}
 			}
 		}); 
+		KeyListener keyListen = new TeclaPulsada(this);
+		aux = null;
 		b2.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Reiniciando nivel...");
 				establecerPasos(0);
-				b2.setText("Reiniciar");
+				b2.setText("Restart");	
+				b2.removeKeyListener(aux);
+				aux = keyListen;
+				b2.addKeyListener(aux);
 				b1.setVisible(true);
 				escenario.resetEscenario();
 				pintarTablero();
@@ -281,10 +305,10 @@ public class Grafica extends JFrame{
 		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
-		b1.addKeyListener(new TeclaPulsada(this));
+//		b1.addKeyListener(new TeclaPulsada(this));
 		b2.setPreferredSize(new Dimension(90, 25)); 
 		b2.setFont(new Font("Arial", 1, 11));
-		b2.addKeyListener(new TeclaPulsada(this));
+//		b2.addKeyListener(new TeclaPulsada(this));
 		southPanel.add(b1);
 		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);

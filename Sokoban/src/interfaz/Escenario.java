@@ -27,47 +27,19 @@ public class Escenario {
 	private MongoDatabase database;
 	private MongoCollection<Document> collection;
 	private int nivel;
+	private int record;
+	private String recordName;
 
-		//	public char [][] cas = new char[][] {
-		//		//Matriz de caracteres que representa el tablero del juego.
-		//		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#',' ',' ','.','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#',' ','$',' ','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#','#','@','#','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#','#','$','#','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#','.',' ',' ','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-		//		{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}
-		//	};
-
-
-
-	public Escenario(int nivel){
-		//que reciba nivel y genere?¿?
-		getNivelMapa(nivel);
-		this.setNivel(nivel);
-//		cas = new char[][] {
-//			//Matriz de caracteres que representa el tablero del juego.
-//			{' ',' ',' ',' ','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//			{' ',' ',' ',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//			{' ',' ',' ',' ','#','$',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//			{' ',' ','#','#','#',' ',' ','$','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//			{' ',' ','#',' ',' ','$',' ','$',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-//			{'#','#','#',' ','#',' ','#','#',' ','#',' ',' ',' ','#','#','#','#','#','#',' '},
-//			{'#',' ',' ',' ','#',' ','#','#',' ','#','#','#','#','#',' ',' ','.','.','#',' '},
-//			{'#',' ','$',' ',' ','$',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','.','.','#',' '},
-//			{'#','#','#','#','#',' ','#','#','#',' ','#','@','#','#',' ',' ','.','.','#',' '},
-//			{' ',' ',' ',' ','#',' ',' ',' ',' ',' ','#','#','#','#','#','#','#','#','#',' '},
-//			{' ',' ',' ',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ',' '}
-//		};
-		this.setANCHO(cas[0].length-1);
-		this.setALTO(cas.length);
+	public Escenario(int nivel, boolean nodo){
+		if(!nodo)
+		{
+			getNivelMapa(nivel);
+			this.setNivel(nivel);
+			this.setANCHO(cas[0].length-1);
+			this.setALTO(cas.length);
+		}else{
+			this.setNivel(nivel);
+		}
 	}
 
 	public TipoCasilla obtenerTipo(int x,	int y){
@@ -296,6 +268,9 @@ public class Escenario {
 		int j = 0;
 		if(nivelJSON!=null)
 		{
+			Document jugada =  (Document) nivelJSON.get("Jugada");
+			this.setRecord(((ArrayList<String>)jugada.get("seq")).size());
+			this.setRecordName(jugada.getString("Jugador"));
 			List<Object> aux1 = (List<Object>) nivelJSON.get("Mapa");
 			this.cas = new char[aux1.size()][(((List<Object>) aux1.get(0)).size())];
 			for (Object ax1 : aux1) {
@@ -321,5 +296,21 @@ public class Escenario {
 	}
 	public void setCas(char[][] cas) {
 		this.cas = cas.clone();
+	}
+
+	public int getRecord() {
+		return record;
+	}
+
+	public void setRecord(int record) {
+		this.record = record;
+	}
+
+	public String getRecordName() {
+		return recordName;
+	}
+
+	public void setRecordName(String recordName) {
+		this.recordName = recordName;
 	}
 }

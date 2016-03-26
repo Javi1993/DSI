@@ -43,21 +43,6 @@ public class Resolver {
 
 		while (!abiertos.isEmpty()) {
 			Node estudiando = abiertos.poll();
-
-			//			//-----------------------------------------------------
-			//
-			//			System.out.println("TECLA USADA PARA LLEGAR A: "+estudiando.getTecla());
-			//			for(int v = 0; v<estudiando.getEscenario().cas.length; v++)
-			//			{
-			//				for(int w=0; w<estudiando.getEscenario().cas[v].length; w++)
-			//				{
-			//					System.out.print(estudiando.getEscenario().cas[v][w]+";");
-			//				}
-			//				System.out.println();
-			//			}
-			//			//------------------------------------------------------ FALLA QUE AL METER LOS HIJOS DEL NODO
-			//			//ESTUDIADO LOS MEZCLA CON LOS OTROS Y SE LIA PARDA PARA LA SECUENCIA
-
 			if(estudiando.getEscenario().hasGanado())
 			{//Existe solucion, salimos
 				return estudiando.getID();
@@ -90,8 +75,10 @@ public class Resolver {
 		while(i<4)
 		{//maximo 4 movimientos a realizar (4 hijos posibles)
 			Node aux = null;
-			Escenario test = new Escenario(padre.getEscenario().getNivel());
+			Escenario test = new Escenario(padre.getEscenario().getNivel(), true);
 			copiarEscenarioActual(test, padre);
+			test.setALTO(test.getCas().length);
+			test.setANCHO(test.getCas()[0].length-1);
 			switch (i) {
 			case 0://movimiento hacia arriba
 				if(test.realizarMovimiento('W'))
