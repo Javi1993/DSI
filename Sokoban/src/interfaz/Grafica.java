@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import jugador.Mapas;
 import jugador.Player;
 import motor.Resolver;
 
@@ -48,6 +50,7 @@ public class Grafica extends JFrame{
 		}
 		lo.setVisible(false);
 		lo.dispose();
+		Mapas.generarMapas();
 		Thread.sleep(1000);
 		new Grafica(lo.player);
 	}
@@ -62,8 +65,8 @@ public class Grafica extends JFrame{
 		this.ancho = escenario.getANCHO();
 		this.alto = escenario.getALTO();
 		tablero = new Escenario.TipoCasilla[alto][ancho];
-		anchoFrame = ancho * (PIXELSCUADRADO+1) + (2 * BORDE) + ANCHODERECHA;
-		altoFrame = alto * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
+		anchoFrame = 19 * (PIXELSCUADRADO+1) + (2 * BORDE) + ANCHODERECHA;
+		altoFrame = 11 * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
 		setSize (anchoFrame, altoFrame);
 		setTitle("DSI | Sokoban");
 		this.setVisible(true);

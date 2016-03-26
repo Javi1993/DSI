@@ -50,8 +50,6 @@ public class Escenario {
 
 	public Escenario(int nivel){
 		//que reciba nivel y genere?¿?
-		client = new MongoClient("localhost", 27017);//conectamos
-		database = client.getDatabase("sokoban");//elegimos bbdd
 		getNivelMapa(nivel);
 		this.setNivel(nivel);
 //		cas = new char[][] {
@@ -290,6 +288,8 @@ public class Escenario {
 	}
 	@SuppressWarnings("unchecked")
 	private void getNivelMapa(int nivel){
+		client = new MongoClient("localhost", 27017);//conectamos
+		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("niveles");
 		Document nivelJSON = collection.find(new Document("_id",nivel)).first();
 		int i = 0;
@@ -308,6 +308,7 @@ public class Escenario {
 				j=0;
 			}
 		}
+		client.close();
 	}
 	public int getNivel() {
 		return nivel;

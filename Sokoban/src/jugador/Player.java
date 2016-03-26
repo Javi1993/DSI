@@ -50,6 +50,7 @@ public class Player {
 				int tmn = ((ArrayList<Document>)user.get("Progreso")).size();
 				this.progreso = (int)(((ArrayList<Document>)user.get("Progreso")).get(tmn-1).get("Nivel"));
 			}else{
+				client.close();
 				return false;
 			}
 		}else{
@@ -59,6 +60,7 @@ public class Player {
 			collection.insertOne(new Document("_id", this.id).append("Pass", this.pswd).append("Progreso",progresoList));
 			this.progreso=1;
 		}
+		client.close();
 		return true;
 	}
 }

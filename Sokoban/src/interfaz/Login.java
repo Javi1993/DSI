@@ -32,7 +32,7 @@ public class Login extends JFrame{
 		crearLabels();
 		crearBotones();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setPreferredSize(new Dimension(210, 200));
+		this.setPreferredSize(new Dimension(250, 200));
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
@@ -40,7 +40,7 @@ public class Login extends JFrame{
 	}
 
 	private void crearLabels(){
-		JLabel label = new JLabel("USER");
+		JLabel label = new JLabel("       USER       ");
 		user = new JTextField(15);
 		this.getContentPane().add(label);
 		this.getContentPane().add(user);
@@ -51,7 +51,7 @@ public class Login extends JFrame{
 	}
 
 	private void crearBotones(){
-		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // new FlowLayout not needed
+		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 15));
 		southPanel.setOpaque(true);
 		JButton b1 = new JButton("Entrar"); 
 		b1.addActionListener(new ActionListener()
