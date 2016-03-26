@@ -23,16 +23,15 @@ public class Mapas {
 
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
-		collection = database.getCollection("niveles");//elegimos la colección
+		collection = database.getCollection("niveles");//elegimos la colecciï¿½n
 
-		int id = 1;
+		int id = 1;//id deÃ± nivel
 		int cnt = 0;
-		if(collection.count()!=601)//SUSTITUIR '1' POR EL MAXIMO NUMERO QUE TENGAMOS DE NIVELES!!!
-		{//no estan creados los niveles, los generamos
-			collection.drop();
+		if(collection.count()==0 || collection.count()==601){//no estan creados los niveles, los generamos
+			collection.drop();//limpiamos por si habia contenido
 			Path ruta;
 			char[][] mapa = new char[11][20];
-			for(int i=1; i<=new File(".\\niveles\\").listFiles().length; i++)
+			for(int i=1; i<=new File("."+File.separator+"niveles"+File.separator).listFiles().length; i++)
 			{
 				try {
 					ruta = Paths.get("."+File.separator+"niveles"+File.separator+"level"+String.valueOf(i)+".txt");

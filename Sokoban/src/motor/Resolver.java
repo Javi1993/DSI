@@ -3,7 +3,6 @@ package motor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import interfaz.Escenario;
@@ -66,7 +65,7 @@ public class Resolver {
 				cerrados.add(estudiando);
 				List<Node> hijos = getHijos(estudiando);
 				if(!hijos.isEmpty())
-				{//se pueden hacer movimientos desde este nodo, los añadimos a la cola
+				{//se pueden hacer movimientos desde este nodo, los aï¿½adimos a la cola
 					for(Node h:hijos)
 					{
 						if(!yaEstudiado(h, cerrados)){//comprobamos si ese nodo fue ya estudiado
