@@ -5,22 +5,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-
-import org.bson.Document;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 import interfaz.Escenario;
 import interfaz.Posicion;
-import jugador.Player;
 
 public class Resolver {
-	
-	private static MongoClient client;
-	private static MongoDatabase database;
-	private static MongoCollection<Document> collection;  
 	
 	public static void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
