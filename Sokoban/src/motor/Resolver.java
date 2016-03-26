@@ -97,7 +97,7 @@ public class Resolver {
 				if(test.realizarMovimiento('W'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"W");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)/*&&comprobarBloques(aux)*/)
 					{
 						hijos.add(aux);
 						//						System.out.println("SI W");
@@ -108,7 +108,7 @@ public class Resolver {
 				if(test.realizarMovimiento('A'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"A");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)/*&&comprobarBloques(aux)*/)
 					{
 						hijos.add(aux);
 						//						System.out.println("SI A");
@@ -119,7 +119,7 @@ public class Resolver {
 				if(test.realizarMovimiento('D'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"D");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)/*&&comprobarBloques(aux)*/)
 					{
 						hijos.add(aux);
 						//						System.out.println("SI D");
@@ -130,7 +130,7 @@ public class Resolver {
 				if(test.realizarMovimiento('X'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"X");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)/*&&comprobarBloques(aux)*/)
 					{
 						hijos.add(aux);
 						//						System.out.println("SI X");
