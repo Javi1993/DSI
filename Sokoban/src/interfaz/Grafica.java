@@ -35,6 +35,7 @@ public class Grafica extends JFrame{
 	private int alto;
 	private int ancho;
 	private int pasos;
+	private KeyListener keyListen;
 	private char[] sol;
 	private static Login lo;
 	private Escenario.TipoCasilla[][] tablero;
@@ -66,6 +67,7 @@ public class Grafica extends JFrame{
 	public Grafica(Player p){
 		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario
 		teclasManual = new ArrayList<String>();
+		keyListen = new TeclaPulsada(this);
 		establecerCoodenadas(escenario);
 	}
 
@@ -85,7 +87,6 @@ public class Grafica extends JFrame{
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		//		addKeyListener (new TeclaPulsada(this));
 	}
 
 	public void update (Graphics g)
@@ -200,6 +201,14 @@ public class Grafica extends JFrame{
 		}else{
 			g.drawString("Level "+escenario.getNivel()+": No record yet.", BORDE, BORDE-6);
 		}
+
+		g.setColor(Color.black);
+		g.setFont(new Font("Dialog", Font.BOLD, 15));
+		if(escenario.hasGanado()&&!escenario.isIA()){
+			g.drawString("You win! =)", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+		}else if(escenario.hasGanado()&&escenario.isIA()){
+			g.drawString("IA win! =(", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+		}
 	}
 
 	public void pintarCuadradoTablero(int x, int y, Escenario.TipoCasilla tipoCasilla) {
@@ -230,15 +239,9 @@ public class Grafica extends JFrame{
 		case 'a':
 		case 'x':
 		case 'd':
-			//Si se pulsa una de estas teclas realiza el movimiento solo si este es posible.
-			/*
-			 * CAMBIAR
-			 * 
-			 */
 			if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
 				if(escenario.hasGanado())
 				{
-					System.out.println("Has ganado");
 					establecerPasos(pasos+1);
 					b1.setText("Next level");
 				}else{
@@ -250,7 +253,6 @@ public class Grafica extends JFrame{
 		case 'q':
 		case 'Q':
 			// Si se pulsa la tecla q sale del programa
-			System.out.println("Saliendo del juego...");
 			System.exit(0);
 			break;
 		default:
@@ -263,78 +265,19 @@ public class Grafica extends JFrame{
 	{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
-		KeyListener keyListen = new TeclaPulsada(this);
+
 		aux = null;
 		b1 = new JButton("Solver"); 
 		b2 = new JButton("Start");  
 		b1.setVisible(false);
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				if(b1.getText().equals("Solver"))
-				{
-					sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
-					if(sol!=null){
-						System.out.println("SE HA ENCONTRADO UNA SOLUCI�N");
-						for(int i =0; i<sol.length; i++)
-						{
-							escenario.realizarMovimiento(sol[i]);
-							establecerPasos(pasos+1);
-							pintarTablero();
-							update(getGraphics());
-							try {
-								Thread.sleep(300);
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-					}else{
-						System.out.println("NO SE HA ENCONTRADO UNA SOLUCION REINICIE EL NIVEL Y VUELVA A PROBAR");
-					}
-					b1.setText("Next level");
-				}else{
-					if(escenario.hasGanado())
-					{
-						if(!escenario.isIA())
-						{//guardamos jugada de usuario
-							lo.player.updatePlayer(teclasManual);
-							escenario.updateNivel(teclasManual, lo.player);
-						}else{
-							lo.player.updatePlayer(null);
-							List<String> aux = new ArrayList<String>();
-							for(int i = 0; i<sol.length; i++ )
-							{
-								aux.add(String.valueOf(sol[i]));
-							}
-							escenario.updateNivel(aux, null);
-						}
-						b2.removeKeyListener(aux);
-						b1.setText("Solver");
-						b1.setVisible(false);
-						b2.setText("Start");
-						establecerPasos(0);
-						escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
-						teclasManual = new ArrayList<String>();
-						pintarTablero();
-						update(getGraphics());
-					}	
-				}
+				solverButton();
 			}
 		}); 
 		b2.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Reiniciando nivel...");
-				establecerPasos(0);
-				escenario.setIA(false);
-				b2.removeKeyListener(aux);
-				aux = keyListen;
-				b2.addKeyListener(aux);
-				b1.setVisible(true);
-				escenario.resetEscenario();
-				pintarTablero();
-				update(getGraphics());
-				b2.setText("Restart");
-				b1.setText("Solver");
+				restarButton();
 			}
 		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
@@ -344,6 +287,87 @@ public class Grafica extends JFrame{
 		southPanel.add(b1);
 		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);
+	}
+
+	private void restarButton(){
+		if(!b2.getText().equals("Start")){
+			establecerPasos(0);
+			escenario.setIA(false);
+			b2.removeKeyListener(aux);
+		}
+		aux = keyListen;
+		b2.addKeyListener(aux);
+		b1.setVisible(true);
+		escenario.resetEscenario();
+		pintarTablero();
+		update(getGraphics());
+		b1.setText("Solver");
+		if(!b2.getText().equals("Start")){
+			getGraphics().setColor(Color.black);
+			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+			getGraphics().drawString("Level restarted.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+		}
+		b2.setText("Restart");
+	}
+
+	private void solverButton()
+	{
+		if(b1.getText().equals("Solver"))
+		{
+			getGraphics().setColor(Color.black);
+			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+			sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+			if(sol!=null){
+				for(int i =0; i<sol.length; i++)
+				{
+					escenario.realizarMovimiento(sol[i]);
+					establecerPasos(pasos+1);
+					pintarTablero();
+					update(getGraphics());
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}else{
+				pintarTablero();
+				update(getGraphics());
+				getGraphics().setColor(Color.black);
+				getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+				getGraphics().drawString("Solution not found.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+				getGraphics().drawString("Please restart level.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 9));
+			}
+			b1.setText("Next level");
+		}else{
+			if(escenario.hasGanado())
+			{
+				if(!escenario.isIA())
+				{//guardamos jugada de usuario
+					lo.player.updatePlayer(teclasManual);
+					escenario.updateNivel(teclasManual, lo.player);
+				}else{
+					lo.player.updatePlayer(null);
+					List<String> aux = new ArrayList<String>();
+					for(int i = 0; i<sol.length; i++ )
+					{
+						aux.add(String.valueOf(sol[i]));
+					}
+					escenario.updateNivel(aux, null);
+				}
+				b2.removeKeyListener(aux);
+				b1.setText("Solver");
+				b1.setVisible(false);
+				b2.setText("Start");
+				establecerPasos(0);
+				escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
+				teclasManual = new ArrayList<String>();
+				pintarTablero();
+				update(getGraphics());
+			}	
+		}
 	}
 
 	/**
