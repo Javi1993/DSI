@@ -1,6 +1,7 @@
 package jugador;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 
@@ -19,8 +20,6 @@ public class Player {
 	private MongoCollection<Document> collection;   
 
 	public Player(String id, String pswd){
-		client = new MongoClient("localhost", 27017);//conectamos
-		database = client.getDatabase("sokoban");//elegimos bbdd
 		this.id=id;
 		this.pswd=pswd;
 		estado = login();
@@ -39,8 +38,34 @@ public class Player {
 		this.progreso = progreso;
 	}
 
+	@SuppressWarnings("unchecked")
+	public void updatePlayer(List<String> secuencia)
+	{
+		client = new MongoClient("localhost", 27017);//conectamos
+		database = client.getDatabase("sokoban");//elegimos bbdd
+		collection = database.getCollection("jugadores");
+		if(secuencia!=null){
+			Document player = collection.find(new Document("_id", this.getId())).first();
+			List<String> pasosAnt =((List<String>)player.get("Progreso."+(this.getProgreso()-1)+".Jugada"));
+			if(pasosAnt==null||secuencia.size()<pasosAnt.size())
+			{
+				collection.updateOne(new Document("_id", this.getId()), new Document("$set", new Document("Progreso."+(this.getProgreso()-1)+".Jugada",secuencia)));
+			}
+		}
+		updateProgreso();
+		client.close();
+	}
+
+	private void updateProgreso()
+	{
+		this.setProgreso(this.getProgreso()+1);
+		collection.updateOne(new Document("_id", this.getId()), new Document("$set", new Document("Progreso."+(this.getProgreso()-1)+".Nivel",(this.getProgreso()))));
+	}
+
 	@SuppressWarnings({ "unchecked", "serial" })
 	private boolean login(){
+		client = new MongoClient("localhost", 27017);//conectamos
+		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("jugadores");
 		Document user = collection.find(new Document("_id",this.id)).first();
 		if(user!=null)

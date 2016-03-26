@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,9 +35,12 @@ public class Grafica extends JFrame{
 	private int alto;
 	private int ancho;
 	private int pasos;
+	private char[] sol;
+	private static Login lo;
 	private Escenario.TipoCasilla[][] tablero;
 	public Escenario escenario;
 	public KeyListener aux;
+	private List<String> teclasManual;
 
 	private static final int COLOR_VERDE = -16711936;
 	private static final int COLOR_AZUL = -16776961;
@@ -47,7 +52,7 @@ public class Grafica extends JFrame{
 	public static void main(String [] args) throws InterruptedException
 	{	
 		//proceso de login en vez usar player de prueba
-		Login lo = new Login();
+		lo = new Login();
 		while(!lo.valido){
 			Thread.sleep(1000);
 		}
@@ -60,6 +65,7 @@ public class Grafica extends JFrame{
 
 	public Grafica(Player p){
 		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario
+		teclasManual = new ArrayList<String>();
 		establecerCoodenadas(escenario);
 	}
 
@@ -79,7 +85,7 @@ public class Grafica extends JFrame{
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-//		addKeyListener (new TeclaPulsada(this));
+		//		addKeyListener (new TeclaPulsada(this));
 	}
 
 	public void update (Graphics g)
@@ -184,7 +190,7 @@ public class Grafica extends JFrame{
 		g.setColor(Color.black);
 		g.setFont(new Font("Dialog", Font.BOLD, 15));
 		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
-		
+
 		//Pintar record info
 		g.setColor(Color.black);
 		g.setFont(new Font("Dialog", Font.BOLD, 13));
@@ -234,9 +240,11 @@ public class Grafica extends JFrame{
 				{
 					System.out.println("Has ganado");
 					establecerPasos(pasos+1);
+					b1.setText("Next level");
 				}else{
 					establecerPasos(pasos+1);
 				}
+				teclasManual.add(String.valueOf(tecla));//guardamos los movimientos del usuario
 			}
 			break;
 		case 'q':
@@ -262,7 +270,7 @@ public class Grafica extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(b1.getText().equals("Solver"))
 				{
-					char[] sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+					sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
 					if(sol!=null){
 						System.out.println("SE HA ENCONTRADO UNA SOLUCI�N");
 						for(int i =0; i<sol.length; i++)
@@ -283,7 +291,23 @@ public class Grafica extends JFrame{
 					}
 					b1.setText("Next level");
 				}else{
-					b1.setText("Solver");
+					if(escenario.hasGanado())
+					{
+						if(!escenario.isIA())
+						{//guardamos jugada de usuario
+							lo.player.updatePlayer(teclasManual);
+							escenario.updateNivel(teclasManual, lo.player);
+						}else{
+							lo.player.updatePlayer(null);
+							List<String> aux = new ArrayList<String>();
+							for(int i = 0; i<sol.length; i++ )
+							{
+								aux.add(String.valueOf(sol[i]));
+							}
+							escenario.updateNivel(aux, null);
+						}
+						b1.setText("Solver");
+					}	
 				}
 			}
 		}); 
@@ -305,10 +329,10 @@ public class Grafica extends JFrame{
 		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
-//		b1.addKeyListener(new TeclaPulsada(this));
+		//		b1.addKeyListener(new TeclaPulsada(this));
 		b2.setPreferredSize(new Dimension(90, 25)); 
 		b2.setFont(new Font("Arial", 1, 11));
-//		b2.addKeyListener(new TeclaPulsada(this));
+		//		b2.addKeyListener(new TeclaPulsada(this));
 		southPanel.add(b1);
 		southPanel.add(b2);
 		this.add(southPanel, BorderLayout.SOUTH);
