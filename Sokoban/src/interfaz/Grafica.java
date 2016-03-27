@@ -333,6 +333,7 @@ public class Grafica extends JFrame{
 					}
 				}
 			}else{
+				b1.setVisible(false);
 				pintarTablero();
 				update(getGraphics());
 				getGraphics().setColor(Color.black);

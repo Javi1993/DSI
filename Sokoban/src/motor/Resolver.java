@@ -31,7 +31,7 @@ public class Resolver {
 		}else{
 			return null;
 		}
-		//meter solucion base de datos, en este metodo comprobar antes de clacular si ya esta insertaa
+		//comprobar antes de clacular si ya esta insertada en la BD!
 
 	}
 
@@ -402,10 +402,10 @@ public class Resolver {
 //			return true;
 //		}
 //		if(cntB+cntM==8&&centro)
-//		{//bloque de 3x3 con centro vacío se revelan nuevas posiciones sin solución
+//		{//bloque de 3x3 con centro vacï¿½o se revelan nuevas posiciones sin soluciï¿½n
 //			return true;
 //		}else if(cntB+cntM>=6&&cntB+cntM<=7&&centro)
-//		{//bloque de 3x3 con centro vacío con 1 ó 2 esquinas opuestas vacías produce una posición muerta 
+//		{//bloque de 3x3 con centro vacï¿½o con 1 ï¿½ 2 esquinas opuestas vacï¿½as produce una posiciï¿½n muerta 
 //			if((aux1[0][0]==' '&&aux1[2][2]==' ')||(aux1[0][2]==' '&&aux1[2][0]==' ')){
 //				return true;
 //			}else if(esquinaOpuestaVacia(aux1)){
