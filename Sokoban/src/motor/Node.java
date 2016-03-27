@@ -51,12 +51,12 @@ public class Node {
 	private void manhattan ()
 	{
 		Integer total = 0;
-		List<Posicion> cajas = escenario.getCajas();
-		List<Posicion> destinos = escenario.getDestinos();
-		List<Posicion> auxiliar = new ArrayList<Posicion>();
-		Posicion posAux = null;
+		List<Posicion> cajas = escenario.getCajas();//posiciones de las cajas sin colocar
+		List<Posicion> destinos = escenario.getDestinos();//posiciones de los destinos libres
+		List<Posicion> auxiliar = new ArrayList<Posicion>();//lista con posiciones ya emparejadas
 		for(int i = 0; i<cajas.size(); i++){
 			Integer aux = escenario.getALTO()+escenario.getALTO()+1;//reseteamos variable auxiliar
+			Posicion posAux = null;//posicion actual con distManhattan minima
 			for(int j = 0; j<destinos.size(); j++){
 				if((!auxiliar.contains(destinos.get(j)))&&(Math.abs(cajas.get(i).x-destinos.get(j).x) + Math.abs(cajas.get(i).y-destinos.get(j).y) < aux))
 				{//calculamos distancia manhattan y guardamos la menor para esa caja respecto a los destinos libres

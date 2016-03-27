@@ -152,8 +152,8 @@ public class Escenario {
 			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '*'){
 				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '*' | cas[nuevaPosicion2.x][nuevaPosicion2.y] == '#'){
 					//					System.out.println("El movimiento no se puede realizar");
-				}
-				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '.'){
+					movimiento = false;
+				}else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == '.'){
 					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '*';
 					cas[nuevaPosicion.x][nuevaPosicion.y] = '+';
 					if(cas[miPosicion.x][miPosicion.y] == '@'){
@@ -162,11 +162,17 @@ public class Escenario {
 					else if(cas[miPosicion.x][miPosicion.y] == '+'){
 						cas[miPosicion.x][miPosicion.y] = '.';
 					}
+					movimiento = true;
 				}else if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == ' '){
 					cas[nuevaPosicion2.x][nuevaPosicion2.y] = '$';
 					cas[nuevaPosicion.x][nuevaPosicion.y] = '+';
-					cas[miPosicion.x][miPosicion.y] = ' ';
-
+					if(cas[miPosicion.x][miPosicion.y] == '@'){
+						cas[miPosicion.x][miPosicion.y] = ' ';
+					}
+					else if(cas[miPosicion.x][miPosicion.y] == '+'){
+						cas[miPosicion.x][miPosicion.y] = '.';
+					}
+					movimiento = true;
 				}
 			}else if(cas[nuevaPosicion.x][nuevaPosicion.y] == '$'){
 				if(cas[nuevaPosicion2.x][nuevaPosicion2.y] == ' '){
@@ -230,7 +236,7 @@ public class Escenario {
 			destinos = new ArrayList<Posicion>();
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
-					if(cas[x][y] == '.'){
+					if(cas[x][y] == '.'||cas[x][y] == '+'){
 						Posicion aux = new Posicion();
 						aux.x=x;
 						aux.y=y;
