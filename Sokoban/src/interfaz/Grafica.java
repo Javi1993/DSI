@@ -40,9 +40,8 @@ public class Grafica extends JFrame{
 	private static Login lo;
 	private Escenario.TipoCasilla[][] tablero;
 	public Escenario escenario;
-	public KeyListener aux;
 	private List<String> teclasManual;
-
+	private boolean comenzado = false;
 	private static final int COLOR_VERDE = -16711936;
 	private static final int COLOR_AZUL = -16776961;
 	private static final int COLOR_NARANJA = -14336;
@@ -190,7 +189,7 @@ public class Grafica extends JFrame{
 		//Pintar instrucciones
 		g.setColor(Color.black);
 		g.setFont(new Font("Dialog", Font.BOLD, 15));
-		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
+		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
 
 		//Pintar record info
 		g.setColor(Color.black);
@@ -239,21 +238,35 @@ public class Grafica extends JFrame{
 		case 'a':
 		case 'x':
 		case 'd':
-			if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
-				if(escenario.hasGanado())
-				{
-					establecerPasos(pasos+1);
-					b1.setText("Next level");
-				}else{
-					establecerPasos(pasos+1);
+			if(comenzado){
+				if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
+					if(escenario.hasGanado())
+					{
+						establecerPasos(pasos+1);
+						b1.setText("Next level");
+					}else{
+						establecerPasos(pasos+1);
+					}
+					teclasManual.add(String.valueOf(tecla));//guardamos los movimientos del usuario
 				}
-				teclasManual.add(String.valueOf(tecla));//guardamos los movimientos del usuario
 			}
 			break;
 		case 'q':
 		case 'Q':
 			// Si se pulsa la tecla q sale del programa
 			System.exit(0);
+			break;
+		case 'r':
+		case 'R':
+			if(comenzado||(!comenzado&&escenario.hasGanado())){
+				// Si se pulsa la tecla r sale inicia el solver o se pasa de nivel
+				solverButton();
+			}
+			break;
+		case 't':
+		case 'T':
+			// Si se pulsa la tecla t se reinicia o empieza el nivel
+			restarButton();
 			break;
 		default:
 			if(!escenario.hasGanado()){
@@ -265,10 +278,9 @@ public class Grafica extends JFrame{
 	{
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
 		southPanel.setOpaque(true);
-
-		aux = null;
 		b1 = new JButton("Solver"); 
 		b2 = new JButton("Start");  
+		b2.addKeyListener(keyListen);
 		b1.setVisible(false);
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
@@ -290,13 +302,11 @@ public class Grafica extends JFrame{
 	}
 
 	private void restarButton(){
+		comenzado = true;
 		if(!b2.getText().equals("Start")){
 			establecerPasos(0);
 			escenario.setIA(false);
-			b2.removeKeyListener(aux);
 		}
-		aux = keyListen;
-		b2.addKeyListener(aux);
 		b1.setVisible(true);
 		escenario.resetEscenario();
 		pintarTablero();
@@ -312,6 +322,7 @@ public class Grafica extends JFrame{
 
 	private void solverButton()
 	{
+		comenzado = false;
 		if(b1.getText().equals("Solver"))
 		{
 			getGraphics().setColor(Color.black);
@@ -358,7 +369,6 @@ public class Grafica extends JFrame{
 					}
 					escenario.updateNivel(aux, null);
 				}
-				b2.removeKeyListener(aux);
 				b1.setText("Solver");
 				b1.setVisible(false);
 				b2.setText("Start");
