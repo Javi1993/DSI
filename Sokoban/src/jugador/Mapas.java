@@ -30,7 +30,7 @@ public class Mapas {
 		if(collection.count()==0){//no estan creados los niveles, los generamos
 			collection.drop();//limpiamos por si habia contenido
 			Path ruta;
-			char[][] mapa = new char[11][20];
+			char[][] mapa = new char[14][20];
 			for(int i=1; i<=new File("."+File.separator+"niveles"+File.separator).listFiles().length; i++)
 			{
 				try {
@@ -60,7 +60,7 @@ public class Mapas {
 								mapaAux.add(aux);
 							}
 							collection.insertOne(new Document("_id", id).append("Mapa", mapaAux).append("Jugada",new Document("seq", new ArrayList<String>()).append("Jugador", "")));
-							mapa = new char[11][20];//nuevo nivel
+							mapa = new char[14][20];//nuevo nivel
 							id++;
 							cnt=0;
 						}

@@ -20,7 +20,7 @@ public class Player {
 	private MongoCollection<Document> collection;   
 
 	public Player(String id, String pswd){
-		this.id=id;
+		this.setId(id);
 		this.pswd=pswd;
 		estado = login();
 	}
@@ -29,7 +29,14 @@ public class Player {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		String aux = null;
+		try{
+			aux = id.toLowerCase();
+			aux = Character.toString(aux.charAt(0)).toUpperCase()+aux.substring(1);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.id = aux;
 	}
 	public int getProgreso() {
 		return progreso;
@@ -67,6 +74,11 @@ public class Player {
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("jugadores");
+		if(this.getId().equals("IA")
+				||this.getId()==null||this.getId().equals("")
+				||this.pswd==null||this.pswd.trim().equals("")){//nadie puede usar este nombre o es invlaido
+			return false;
+		}
 		Document user = collection.find(new Document("_id",this.id)).first();
 		if(user!=null)
 		{

@@ -49,7 +49,7 @@ public class Login extends JFrame{
 		this.getContentPane().add(label1);
 		this.getContentPane().add(password);
 	}
-	
+
 	private void crearBotones(){
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 15));
 		southPanel.setOpaque(true);
@@ -59,8 +59,12 @@ public class Login extends JFrame{
 			public void actionPerformed(ActionEvent e)
 			{
 				Border borde = new LineBorder(Color.RED, 1);
-				player = new Player(user.getText(), new String(password.getPassword()));
-				valido = player.estado;
+				if(user.getText().trim().length()==0||password.getPassword().length==0)
+				{
+					valido = false;
+				}else{
+					player = new Player(user.getText().trim(), new String(password.getPassword()));
+					valido = player.estado;}
 				if(!valido){
 					getGraphics().setFont(new Font("Dialog", Font.PLAIN, 11));
 					getGraphics().drawString("User already exists or wrong password.", 10, 190);

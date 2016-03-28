@@ -76,7 +76,7 @@ public class Grafica extends JFrame{
 		this.alto = escenario.getALTO();
 		tablero = new Escenario.TipoCasilla[alto][ancho];
 		anchoFrame = 19 * (PIXELSCUADRADO+1) + (2 * BORDE) + ANCHODERECHA;
-		altoFrame = 11 * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
+		altoFrame = 14 * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
 		setSize (anchoFrame, altoFrame);
 		setTitle("DSI | Sokoban");
 		this.setVisible(true);
@@ -189,7 +189,7 @@ public class Grafica extends JFrame{
 		//Pintar instrucciones
 		g.setColor(Color.black);
 		g.setFont(new Font("Dialog", Font.BOLD, 15));
-		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*12));
+		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
 
 		//Pintar record info
 		g.setColor(Color.black);
