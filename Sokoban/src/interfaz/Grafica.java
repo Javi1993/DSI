@@ -325,6 +325,8 @@ public class Grafica extends JFrame{
 		comenzado = false;
 		if(b1.getText().equals("Solver"))
 		{
+			//			pintarTablero();
+			//			update(getGraphics());
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
@@ -404,10 +406,36 @@ public class Grafica extends JFrame{
 
 		public void keyPressed (KeyEvent e) {
 			char key = e.getKeyChar();
-			t.teclaPulsada(key);
+			switch (key) {
+			case 'W':
+			case 'A':
+			case 'X':
+			case 'D':
+			case 'w':
+			case 'a':
+			case 'x':
+			case 'd':
+			case 'Q':
+			case 'q':
+				t.teclaPulsada(key);
+				break;
+			default:
+				break;
+			}
 			t.pintarTablero();
 			t.update(t.getGraphics());
-			// t.repaint(); Antiguamente recargaba con esta, pero no va con JFRAME, si con FRAME
+			switch (key) {
+			case 'Q':
+			case 'q':
+			case 'R':
+			case 'r':
+			case 'T':
+			case 't':
+				t.teclaPulsada(key);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
