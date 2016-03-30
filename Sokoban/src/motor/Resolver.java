@@ -20,6 +20,12 @@ public class Resolver {
 
 	public static char[] solucion(Escenario escenario, int pasos)
 	{
+		/*
+		 * 
+		 * GENERAR ESCENARIOS PARCIALES EN BASE
+		 * A SOLUCION DE SEQ DEVUELTA Y AL NODO INICIAL!!
+		 * 
+		 */
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//se ha usado IA
 		char[] solExist = Mapas.verSol(escenario.getNivel());

@@ -27,53 +27,94 @@ public class Mapas {
 
 		int id = 1;//id deñ nivel
 		int cnt = 0;
-		if(collection.count()==0){//no estan creados los niveles, los generamos
+		if(collection.count()!=0){//no estan creados los niveles, los generamos
 			collection.drop();//limpiamos por si habia contenido
 			Path ruta;
 			char[][] mapa = new char[14][20];
-			for(int i=1; i<=new File("."+File.separator+"niveles"+File.separator).listFiles().length; i++)
-			{
-				try {
-					ruta = Paths.get("."+File.separator+"niveles"+File.separator+"level"+String.valueOf(i)+".txt");
-					Iterator<String> it = Files.lines(ruta).iterator();
-					while(it.hasNext()) {
-						String s = it.next();
-						if(s.length()>0&&s.charAt(0)!=';')
-						{//leemos el nivel del txt
-							for(int j = 0; j<s.length(); j++)
+			try {
+				ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
+				Iterator<String> it = Files.lines(ruta).iterator();
+				while(it.hasNext()) {
+					String s = it.next();
+					if(s.length()>0&&s.charAt(0)!=';')
+					{//leemos el nivel del txt
+						for(int j = 0; j<s.length(); j++)
+						{
+							mapa[cnt][j] = s.charAt(j);
+						}
+						cnt++;
+					}else if(s.length()==0&&cnt!=0)
+					{//fin de nivel
+						ajustarMapa(mapa);
+						List<List<String>> mapaAux = new ArrayList<List<String>>();
+						for(int k = 0; k<mapa.length; k++)
+						{//lo pasamos a un formato reconocible por la base de datos y sobre el que trabajaremos
+							List<String> aux = new ArrayList<String>();
+							for(int l = 0; l<mapa[k].length; l++)
 							{
-								mapa[cnt][j] = s.charAt(j);
+								aux.add(String.valueOf(mapa[k][l]).replace('\u0000', ' '));
 							}
-							cnt++;
+							mapaAux.add(aux);
 						}
-						else if(s.length()==0&&cnt!=0)
-						{//fin de nivel
-							ajustarMapa(mapa);
-							List<List<String>> mapaAux = new ArrayList<List<String>>();
-							for(int k = 0; k<mapa.length; k++)
-							{//lo pasamos a un formato reconocible por la base de datos y sobre el que trabajaremos
-								List<String> aux = new ArrayList<String>();
-								for(int l = 0; l<mapa[k].length; l++)
-								{
-									aux.add(String.valueOf(mapa[k][l]).replace('\u0000', ' '));
-								}
-								mapaAux.add(aux);
-							}
-							collection.insertOne(new Document("_id", id).append("Mapa", mapaAux).append("Jugada",new Document("seq", new ArrayList<String>()).append("Jugador", "").append("Time", "")));
-							mapa = new char[14][20];//nuevo nivel
-							id++;
-							cnt=0;
-						}
-
+						collection.insertOne(new Document("_id", id).append("Mapa", mapaAux).append("Jugada",new Document("seq", new ArrayList<String>()).append("Jugador", "").append("Time", "")));
+						mapa = new char[14][20];//nuevo nivel
+						id++;
+						cnt=0;
 					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		client.close();
 	}
+
+	//	private static void repetidos()
+	//	{
+	//		Path ruta;
+	//		char[][] mapa = new char[14][20];
+	//		int cnt = 0;
+	//		List<char[][]> test = new ArrayList<char[][]>();
+	//		try {
+	//			ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
+	//			Iterator<String> it = Files.lines(ruta).iterator();
+	//			while(it.hasNext()) {
+	//				String s = it.next();
+	//				if(s.length()>0&&s.charAt(0)!=';')
+	//				{//leemos el nivel del txt
+	//					for(int j = 0; j<s.length(); j++)
+	//					{
+	//						mapa[cnt][j] = s.charAt(j);
+	//					}
+	//					cnt++;
+	//				}else if(s.length()==0&&cnt!=0)
+	//				{//fin de nivel
+	//					test.add(mapa);
+	//					mapa = new char[14][20];//nuevo nivel
+	//					cnt=0;
+	//				}
+	//			}
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//
+	//
+	//		//COMPROBAR AHORA SI SON IGUALES, 2 iteratos sobre la lista!!
+	//		//porbarlo en MAIN de esta clase
+	//		for (int i = 0; i < test.size(); i++) {
+	//			for (int j = 0; j < test.size(); j++) {
+	//				if(i!=j)
+	//				{
+	//					if(Arrays.deepEquals(test.get(i), test.get(j)))
+	//					{
+	//						System.out.println((i+1)+" es igual a "+(j+1));
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
 
 	private static void ajustarMapa(char[][] mapa){
 		int cntCol=0;//cuenta las columnas de la derecha que no tienen nada
