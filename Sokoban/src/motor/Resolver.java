@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 import interfaz.Escenario;
 import interfaz.Posicion;
+import jugador.Mapas;
 
 public class Resolver {
 
 	private static String solIDA;
-
+	
 	public static void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
 
@@ -21,21 +22,35 @@ public class Resolver {
 	{
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//se ha usado IA
-		String secuencia = AStar(actual);//buscamos la solucion
-//		String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
-		if(secuencia!=null)
-		{
-			char[] sol = new char[secuencia.length()];//secuencia de teclas
-			for(int i=0;i<secuencia.length(); i++)
+		char[] solExist = Mapas.verSol(escenario.getNivel());
+		if(solExist!=null)
+		{//ya hay una solución almacenada de la IA
+			return solExist;
+		}else{//no hay solucion, la calculamos
+			long time_start, time_end;
+			time_start = System.currentTimeMillis();
+			String secuencia = AStar(actual);//buscamos la solucion
+			time_end = System.currentTimeMillis();
+			//		String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+			long time = time_end - time_start;
+			if(secuencia!=null)
 			{
-				sol[i]=secuencia.charAt(i);
+				char[] sol = new char[secuencia.length()];//secuencia de teclas
+				for(int i=0;i<secuencia.length(); i++)
+				{
+					sol[i]=secuencia.charAt(i);
+				}
+				List<String> aux = new ArrayList<String>();
+				for(int i = 0; i<sol.length; i++ )
+				{
+					aux.add(String.valueOf(sol[i]));
+				}
+				escenario.updateNivel(aux, null, time);
+				return sol;
+			}else{
+				return null;
 			}
-			return sol;
-		}else{
-			return null;
 		}
-		//comprobar antes de clacular si ya esta insertada en la BD!
-
 	}
 
 	private static String AStar(Node actual)

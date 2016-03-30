@@ -247,7 +247,7 @@ public class Escenario {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void updateNivel(List<String> sol, Player p)
+		public void updateNivel(List<String> sol, Player p, long time)
 		{
 			client = new MongoClient("localhost", 27017);//conectamos
 			database = client.getDatabase("sokoban");//elegimos bbdd
@@ -260,6 +260,7 @@ public class Escenario {
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador",p.getId())));
 				}else{
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador","IA")));
+					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Time", time)));
 				}
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.seq",sol)));
 			}

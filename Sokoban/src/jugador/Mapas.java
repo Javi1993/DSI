@@ -59,7 +59,7 @@ public class Mapas {
 								}
 								mapaAux.add(aux);
 							}
-							collection.insertOne(new Document("_id", id).append("Mapa", mapaAux).append("Jugada",new Document("seq", new ArrayList<String>()).append("Jugador", "")));
+							collection.insertOne(new Document("_id", id).append("Mapa", mapaAux).append("Jugada",new Document("seq", new ArrayList<String>()).append("Jugador", "").append("Time", "")));
 							mapa = new char[14][20];//nuevo nivel
 							id++;
 							cnt=0;
@@ -140,15 +140,39 @@ public class Mapas {
 
 	private static char[] getColumn(char[][] array, int index){
 		char[] column = new char[array[0].length]; // Here I assume a rectangular 2D array! 
-	    for(int i=0; i<array.length; i++){
-	       column[i] = array[i][index];
-	    }
-	    return column;
+		for(int i=0; i<array.length; i++){
+			column[i] = array[i][index];
+		}
+		return column;
 	}
 
 	private static void setColumn(char[][] array, char[] column, int index){
 		for(int i=0; i<array.length; i++){
 			array[i][index] = column[i];
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static char[] verSol(int id)
+	{
+		client = new MongoClient("localhost", 27017);//conectamos
+		database = client.getDatabase("sokoban");//elegimos bbdd
+		collection = database.getCollection("niveles");//elegimos la colecci�n
+		char seq[] = null;
+		Document sol = collection.find(new Document("_id", id)).first();
+		if(sol!=null)
+		{
+			Document inf = (Document)sol.get("Jugada");
+			if(inf.getString("Jugador")!=null&&inf.getString("Jugador").equals("IA")){
+				List<String> secuencia = (List<String>) inf.get("seq");
+				seq = new char[secuencia.size()];
+				for(int i = 0; i<seq.length; i++)
+				{
+					seq[i] = secuencia.get(i).charAt(0);
+				}
+			}
+		}
+		client.close();
+		return seq;
 	}
 }
