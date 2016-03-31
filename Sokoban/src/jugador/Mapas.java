@@ -27,7 +27,7 @@ public class Mapas {
 
 		int id = 1;//id deñ nivel
 		int cnt = 0;
-		if(collection.count()!=0){//no estan creados los niveles, los generamos
+		if(collection.count()==0){//no estan creados los niveles, los generamos
 			collection.drop();//limpiamos por si habia contenido
 			Path ruta;
 			char[][] mapa = new char[14][20];

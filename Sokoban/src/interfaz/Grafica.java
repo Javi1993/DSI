@@ -51,14 +51,13 @@ public class Grafica extends JFrame{
 
 	public static void main(String [] args) throws InterruptedException
 	{	
-		//proceso de login en vez usar player de prueba
+		Mapas.generarMapas();
 		lo = new Login();
 		while(!lo.valido){
 			Thread.sleep(1000);
 		}
 		lo.setVisible(false);
 		lo.dispose();
-		Mapas.generarMapas();
 		Thread.sleep(1000);
 		new Grafica(lo.player);
 	}
