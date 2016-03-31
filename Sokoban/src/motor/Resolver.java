@@ -20,12 +20,6 @@ public class Resolver {
 
 	public static char[] solucion(Escenario escenario, int pasos)
 	{
-		/*
-		 * 
-		 * GENERAR ESCENARIOS PARCIALES EN BASE
-		 * A SOLUCION DE SEQ DEVUELTA Y AL NODO INICIAL!!
-		 * 
-		 */
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//se ha usado IA
 		char[] solExist = Mapas.verSol(escenario.getNivel());
@@ -35,9 +29,9 @@ public class Resolver {
 		}else{//no hay solucion, la calculamos
 			long time_start, time_end;
 			time_start = System.currentTimeMillis();
-			String secuencia = AStar(actual);//buscamos la solucion
-			time_end = System.currentTimeMillis();
+			String secuencia = AStar(actual);//buscamos la solucion con A*
 			//		String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+			time_end = System.currentTimeMillis();
 			long time = time_end - time_start;
 			if(secuencia!=null)
 			{
@@ -51,7 +45,9 @@ public class Resolver {
 				{
 					aux.add(String.valueOf(sol[i]));
 				}
-				escenario.updateNivel(aux, null, time);
+				Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
+				copiarEscenarioActual(test, actual);
+				escenario.updateNivel(aux, null, time, test);
 				return sol;
 			}else{
 				return null;
@@ -517,7 +513,7 @@ public class Resolver {
 	//		return false;
 	//	}
 
-	private static void copiarEscenarioActual(Escenario test, Node padre)
+	public static void copiarEscenarioActual(Escenario test, Node padre)
 	{
 		char[][] auxEsce = new char[padre.getEscenario().getALTO()][padre.getEscenario().getANCHO()+1];
 		for (int j = 0; j < auxEsce.length; j++) {

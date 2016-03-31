@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import jugador.Player;
+import motor.Node;
 
 public class Escenario {
 
@@ -116,6 +117,15 @@ public class Escenario {
 			}
 			victoria = true;
 			return victoria;
+		}
+
+		public void escenarioToString(){
+			for(int x = 0; x<cas.length; x++){
+				for(int y = 0; y<cas[x].length; y++){
+					System.out.print(cas[x][y]);
+				}
+				System.out.println();
+			}
 		}
 
 		public void resetEscenario(){
@@ -247,7 +257,7 @@ public class Escenario {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void updateNivel(List<String> sol, Player p, long time)
+		public void updateNivel(List<String> sol, Player p, long time, Escenario incial)
 		{
 			client = new MongoClient("localhost", 27017);//conectamos
 			database = client.getDatabase("sokoban");//elegimos bbdd
@@ -256,13 +266,27 @@ public class Escenario {
 			List<String> pasosAnt =((List<String>)nivel.get("Jugada.seq"));
 			if(pasosAnt==null||sol.size()<pasosAnt.size())
 			{
+				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas y su secuencia
+				incial = new Escenario(incial.getNivel(), false);
+				Node aux = new Node(incial, 0, incial.placedBox(), "");
+				seq.add(new Document("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
 				if(p!=null){
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador",p.getId())));
+					for (String c : sol) {
+						incial.realizarMovimiento(c.charAt(0));
+						aux = new Node(incial, aux.getG()+1, incial.placedBox(), aux.getID()+c);
+						seq.add(new Document("tecla", c).append("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
+					}
 				}else{
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Jugador","IA")));
 					collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.Time", time)));
+					for (String c : sol) {
+						incial.realizarMovimiento(c.charAt(0));
+						aux = new Node(incial, aux.getG()+1, incial.placedBox(), aux.getID()+c);
+						seq.add(new Document("tecla", c).append("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
+					}
 				}
-				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.seq",sol)));
+				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document("Jugada.seq",seq)));
 			}
 			client.close();
 		}
@@ -287,6 +311,22 @@ public class Escenario {
 			destinosLibres();
 			return destinos;
 		}
+		
+		private List<List<String>> charArrayToList()
+		{
+			List<List<String>> mapaAux = new ArrayList<List<String>>();
+			for(int k = 0; k<cas.length; k++)
+			{//lo pasamos a un formato reconocible por la base de datos y sobre el que trabajaremos
+				List<String> aux = new ArrayList<String>();
+				for(int l = 0; l<cas[k].length; l++)
+				{
+					aux.add(String.valueOf(cas[k][l]).replace('\u0000', ' '));
+				}
+				mapaAux.add(aux);
+			}
+			return mapaAux;
+		}
+		
 		@SuppressWarnings("unchecked")
 		private void getNivelMapa(int nivel){
 			client = new MongoClient("localhost", 27017);//conectamos

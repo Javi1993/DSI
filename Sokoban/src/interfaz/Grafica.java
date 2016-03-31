@@ -317,6 +317,7 @@ public class Grafica extends JFrame{
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Level restarted.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 		}
+		teclasManual = new ArrayList<String>();
 		b2.setText("Restart");
 	}
 
@@ -331,6 +332,7 @@ public class Grafica extends JFrame{
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 			sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+			teclasManual = new ArrayList<String>();
 			if(sol!=null){
 				for(int i =0; i<sol.length; i++)
 				{
@@ -361,7 +363,7 @@ public class Grafica extends JFrame{
 				if(!escenario.isIA())
 				{//guardamos jugada de usuario
 					lo.player.updatePlayer(teclasManual);
-					escenario.updateNivel(teclasManual, lo.player, 0);
+					escenario.updateNivel(teclasManual, lo.player, 0, escenario);
 				}else{
 					lo.player.updatePlayer(null);
 				}
