@@ -2,12 +2,12 @@ package jugador;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bson.Document;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import interfaz.Escenario;
+import motor.Node;
 
 public class Player {
 
@@ -46,17 +46,26 @@ public class Player {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void updatePlayer(List<String> secuencia)
+	public void updatePlayer(List<String> secuencia, Escenario escenario)
 	{
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("jugadores");
 		if(secuencia!=null){
 			Document player = collection.find(new Document("_id", this.getId())).first();
-			List<String> pasosAnt =((List<String>)player.get("Progreso."+(this.getProgreso()-1)+".Jugada"));
+			List<Document> pasosAnt =((List<Document>)player.get("Progreso."+(this.getProgreso()-1)+".Jugada"));
 			if(pasosAnt==null||secuencia.size()<pasosAnt.size())
 			{
-				collection.updateOne(new Document("_id", this.getId()), new Document("$set", new Document("Progreso."+(this.getProgreso()-1)+".Jugada",secuencia)));
+				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
+				Escenario test = new Escenario(escenario.getNivel(), false);
+				Node aux = new Node(test, 0, test.placedBox(), "");
+				seq.add(new Document("mapa", test.charArrayToList()).append("heuristica", aux.getF()));
+				for (String c : secuencia) {
+					test.realizarMovimiento(c.charAt(0));
+					aux = new Node(test, aux.getG()+1, test.placedBox(), aux.getID()+c);
+					seq.add(new Document("tecla", c).append("mapa", test.charArrayToList()).append("heuristica", aux.getF()));
+				}
+				collection.updateOne(new Document("_id", this.getId()), new Document("$set", new Document("Progreso."+(this.getProgreso()-1)+".Jugada", seq)));
 			}
 		}
 		updateProgreso();

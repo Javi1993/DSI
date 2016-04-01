@@ -266,7 +266,7 @@ public class Escenario {
 			List<String> pasosAnt =((List<String>)nivel.get("Jugada.seq"));
 			if(pasosAnt==null||sol.size()<pasosAnt.size())
 			{
-				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas y su secuencia
+				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
 				Node aux = new Node(incial, 0, incial.placedBox(), "");
 				seq.add(new Document("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
@@ -312,7 +312,7 @@ public class Escenario {
 			return destinos;
 		}
 		
-		private List<List<String>> charArrayToList()
+		public List<List<String>> charArrayToList()
 		{
 			List<List<String>> mapaAux = new ArrayList<List<String>>();
 			for(int k = 0; k<cas.length; k++)

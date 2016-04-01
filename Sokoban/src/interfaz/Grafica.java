@@ -361,10 +361,10 @@ public class Grafica extends JFrame{
 			{
 				if(!escenario.isIA())
 				{//guardamos jugada de usuario
-					lo.player.updatePlayer(teclasManual);
+					lo.player.updatePlayer(teclasManual, escenario);
 					escenario.updateNivel(teclasManual, lo.player, 0, escenario);
 				}else{
-					lo.player.updatePlayer(null);
+					lo.player.updatePlayer(null, escenario);
 				}
 				b1.setText("Solver");
 				b1.setVisible(false);

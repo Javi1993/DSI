@@ -46,7 +46,7 @@ public class Resolver {
 					aux.add(String.valueOf(sol[i]));
 				}
 				Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
-				copiarEscenarioActual(test, actual);
+				copiarEscenarioActual(test, actual.getEscenario());
 				escenario.updateNivel(aux, null, time, test);
 				return sol;
 			}else{
@@ -168,7 +168,7 @@ public class Resolver {
 		{//maximo 4 movimientos a realizar (4 hijos posibles)
 			Node aux = null;
 			Escenario test = new Escenario(padre.getEscenario().getNivel(), true);
-			copiarEscenarioActual(test, padre);
+			copiarEscenarioActual(test, padre.getEscenario());
 			test.setALTO(test.getCas().length);
 			test.setANCHO(test.getCas()[0].length-1);
 			switch (i) {
@@ -513,11 +513,11 @@ public class Resolver {
 	//		return false;
 	//	}
 
-	public static void copiarEscenarioActual(Escenario test, Node padre)
+	public static void copiarEscenarioActual(Escenario test, Escenario padre)
 	{
-		char[][] auxEsce = new char[padre.getEscenario().getALTO()][padre.getEscenario().getANCHO()+1];
+		char[][] auxEsce = new char[padre.getALTO()][padre.getANCHO()+1];
 		for (int j = 0; j < auxEsce.length; j++) {
-			System.arraycopy(padre.getEscenario().getCas()[j], 0, auxEsce[j], 0, padre.getEscenario().getCas()[0].length);
+			System.arraycopy(padre.getCas()[j], 0, auxEsce[j], 0, padre.getCas()[0].length);
 		}
 		test.setCas(auxEsce);
 	}
