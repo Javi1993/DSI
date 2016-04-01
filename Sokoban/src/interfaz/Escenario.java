@@ -16,12 +16,12 @@ public class Escenario {
 
 	private char [][] cas;
 
-	/** Enumeración para tipos de casilla */
+	/** Enumeraciï¿½n para tipos de casilla */
 	public enum TipoCasilla {VACIA, CAJA,
 		JUGADOR, MURO, DESTINO,
 		CAJA_SOBRE_DESTINO, JUGADOR_SOBRE_DESTINO	};
 
-		// Definición de constantes para dimensiones del tablero
+		// Definiciï¿½n de constantes para dimensiones del tablero
 		private int ANCHO;
 		private int ALTO;
 		private List<Posicion> cajas;
@@ -46,8 +46,8 @@ public class Escenario {
 		}
 
 		public TipoCasilla obtenerTipo(int x,	int y){
-			/*Este método devuelve un objeto de tipo RellenarPorAlumno.TipoCasilla, 
-			 * que contiene el tipo de la casilla situada enla posición (x,y)
+			/*Este mï¿½todo devuelve un objeto de tipo RellenarPorAlumno.TipoCasilla, 
+			 * que contiene el tipo de la casilla situada enla posiciï¿½n (x,y)
 			 */
 			TipoCasilla casilla = null;
 			switch(cas[x][y]){
@@ -76,7 +76,7 @@ public class Escenario {
 			return casilla;
 		}
 		public Posicion buscarJugador(){
-			//Devuelve la posición en la que se encuentra el jugador en cada momento del juego.
+			//Devuelve la posiciï¿½n en la que se encuentra el jugador en cada momento del juego.
 			Posicion miPosicion = new Posicion();
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
@@ -106,7 +106,7 @@ public class Escenario {
 		}
 
 		public boolean hasGanado(){
-			//Este método devuelve un booleano que indica si se ha ganado la partida.
+			//Este mï¿½todo devuelve un booleano que indica si se ha ganado la partida.
 			boolean victoria = false;
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
@@ -133,7 +133,7 @@ public class Escenario {
 		}
 
 		public boolean realizarMovimiento (char tecla){	
-			//Este método recibe como parámetro una tecla, y realiza el movimiento sobre el tablero de juego en función de la tecla.
+			//Este mï¿½todo recibe como parï¿½metro una tecla, y realiza el movimiento sobre el tablero de juego en funciï¿½n de la tecla.
 			boolean movimiento = false;
 			Posicion miPosicion;
 			miPosicion = buscarJugador();
@@ -264,7 +264,7 @@ public class Escenario {
 			collection = database.getCollection("niveles");
 			Document nivel = collection.find(new Document("_id", this.getNivel())).first();
 			List<String> pasosAnt =((List<String>)nivel.get("Jugada.seq"));
-			if(pasosAnt==null||sol.size()<pasosAnt.size())
+			if(pasosAnt==null||sol.size()<(pasosAnt.size()-1))
 			{
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
