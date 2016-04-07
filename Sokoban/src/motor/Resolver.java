@@ -22,15 +22,18 @@ public class Resolver {
 	{
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//se ha usado IA
-		char[] solExist = Mapas.verSol(escenario.getNivel());
+		String tipe="AStar";
+//		String tipe="IDAStar";
+		char[] solExist = Mapas.verSol(escenario.getNivel(), tipe);
 		if(solExist!=null)
 		{//ya hay una solución almacenada de la IA
 			return solExist;
 		}else{//no hay solucion, la calculamos
 			long time_start, time_end;
+
 			time_start = System.currentTimeMillis();
 			String secuencia = AStar(actual);//buscamos la solucion con A*
-			//		String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
 			time_end = System.currentTimeMillis();
 			long time = time_end - time_start;
 			if(secuencia!=null)
@@ -47,7 +50,7 @@ public class Resolver {
 				}
 				Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
 				copiarEscenarioActual(test, actual.getEscenario());
-				escenario.updateNivel(aux, null, time, test);
+				escenario.updateNivel(aux, null, time, test, tipe);
 				return sol;
 			}else{
 				return null;

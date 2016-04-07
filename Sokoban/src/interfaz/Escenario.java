@@ -257,15 +257,29 @@ public class Escenario {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void updateNivel(List<String> sol, Player p, long time, Escenario incial)
+		public void updateNivel(List<String> sol, Player p, long time, Escenario incial, String tipe)
 		{
 			client = new MongoClient("localhost", 27017);//conectamos
 			database = client.getDatabase("sokoban");//elegimos bbdd
 			collection = database.getCollection("niveles");
 			Document nivel = collection.find(new Document("_id", this.getNivel())).first();
+			if(nivel.get(tipe)==null)
+			{//no hay guardada solucion de la IA
+				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Time", time)));
+				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
+				incial = new Escenario(incial.getNivel(), false);
+				Node aux = new Node(incial, 0, incial.placedBox(), "");
+				seq.add(new Document("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
+				for (String c : sol) {
+					incial.realizarMovimiento(c.charAt(0));
+					aux = new Node(incial, aux.getG()+1, incial.placedBox(), aux.getID()+c);
+					seq.add(new Document("tecla", c).append("mapa", incial.charArrayToList()).append("heuristica", aux.getF()));
+				}
+				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".seq",seq)));
+			}
 			List<String> pasosAnt =((List<String>)nivel.get("Jugada.seq"));
 			if(pasosAnt==null||sol.size()<(pasosAnt.size()-1))
-			{
+			{//la solucion es mejor que la almacenada
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
 				Node aux = new Node(incial, 0, incial.placedBox(), "");

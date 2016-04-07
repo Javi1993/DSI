@@ -194,7 +194,7 @@ public class Mapas {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static char[] verSol(int id)
+	public static char[] verSol(int id, String tipe)
 	{
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
@@ -203,13 +203,14 @@ public class Mapas {
 		Document sol = collection.find(new Document("_id", id)).first();
 		if(sol!=null)
 		{
-			Document inf = (Document)sol.get("Jugada");
-			if(inf.getString("Jugador")!=null&&inf.getString("Jugador").equals("IA")){
-				List<String> secuencia = (List<String>) inf.get("seq");
-				seq = new char[secuencia.size()];
+			Document inf = (Document)sol.get(tipe);
+			if(inf!=null)
+			{//hay una solucion ya guardada	
+				List<Document> secuencia = (List<Document>) inf.get("seq");
+				seq = new char[secuencia.size()-1];
 				for(int i = 0; i<seq.length; i++)
 				{
-					seq[i] = secuencia.get(i).charAt(0);
+					seq[i] = ((Document)secuencia.get(i+1)).getString("tecla").charAt(0);
 				}
 			}
 		}

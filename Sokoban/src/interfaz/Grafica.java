@@ -362,7 +362,7 @@ public class Grafica extends JFrame{
 				if(!escenario.isIA())
 				{//guardamos jugada de usuario
 					lo.player.updatePlayer(teclasManual, escenario);
-					escenario.updateNivel(teclasManual, lo.player, 0, escenario);
+					escenario.updateNivel(teclasManual, lo.player, 0, escenario, null);
 				}else{
 					lo.player.updatePlayer(null, escenario);
 				}
