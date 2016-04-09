@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import org.bson.Document;
+
 import interfaz.Escenario;
 import interfaz.Posicion;
 import jugador.Mapas;
@@ -13,7 +16,7 @@ public class Resolver {
 
 	private static String solIDA;
 	private static int nodosTotal;
-	
+
 	public static void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
 
@@ -24,38 +27,54 @@ public class Resolver {
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//se ha usado IA
 		String tipe="AStar";
-//		String tipe="IDAStar";
+		//		String tipe="IDAStar";
 		char[] solExist = Mapas.verSol(escenario.getNivel(), tipe);
-		if(solExist!=null)
+		if(solExist!=null && pasos==0)
 		{//ya hay una soluci�n almacenada de la IA
 			return solExist;
-		}else{//no hay solucion, la calculamos
-			long time_start, time_end;
-
-			time_start = System.currentTimeMillis();
-			String secuencia = AStar(actual);//buscamos la solucion con A*
-//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
-			time_end = System.currentTimeMillis();
-			long time = time_end - time_start;
-			if(secuencia!=null)
-			{
-				char[] sol = new char[secuencia.length()];//secuencia de teclas
-				for(int i=0;i<secuencia.length(); i++)
-				{
-					sol[i]=secuencia.charAt(i);
+		}else if(solExist!=null && pasos!=0)
+		{//hay solucion pero el jugador se encuentra en una posicion distinta de la inicial
+			Escenario test = new Escenario(actual.getEscenario().getNivel(), false);
+			int posAux = 0;
+			for (char c : solExist) {//buscamos si esa posicion es un paso intermedio de la solucion
+				if(Arrays.deepEquals(test.getCas(), escenario.getCas()))
+				{//existe solucion guardada desde la posicion actual del usuario
+					char[] solAux = new char[solExist.length-posAux];
+					for(int i = 0; i<solAux.length; i++){
+						solAux[i] = solExist[i+posAux];
+					}
+					return solAux;//devolvemos la solucion modificada
+				}else{//avanzamos
+					test.realizarMovimiento(c);
+					posAux++;
 				}
-				List<String> aux = new ArrayList<String>();
-				for(int i = 0; i<sol.length; i++ )
-				{
-					aux.add(String.valueOf(sol[i]));
-				}
-				Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
-				copiarEscenarioActual(test, actual.getEscenario());
-				escenario.updateNivel(aux, null, time, test, tipe, nodosTotal);
-				return sol;
-			}else{
-				return null;
 			}
+		}
+		//no hay solucion, la calculamos
+		long time_start, time_end;
+		time_start = System.currentTimeMillis();
+		String secuencia = AStar(actual);//buscamos la solucion con A*
+		//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+		time_end = System.currentTimeMillis();
+		long time = time_end - time_start;
+		if(secuencia!=null)
+		{
+			char[] sol = new char[secuencia.length()];//secuencia de teclas
+			for(int i=0;i<secuencia.length(); i++)
+			{
+				sol[i]=secuencia.charAt(i);
+			}
+			List<String> aux = new ArrayList<String>();
+			for(int i = 0; i<sol.length; i++ )
+			{
+				aux.add(String.valueOf(sol[i]));
+			}
+			Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
+			copiarEscenarioActual(test, actual.getEscenario());
+			escenario.updateNivel(aux, null, time, test, tipe, nodosTotal);
+			return sol;
+		}else{//no hay solucion para el nivel en el estado actual
+			return null;
 		}
 	}
 
