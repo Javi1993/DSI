@@ -257,7 +257,7 @@ public class Escenario {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void updateNivel(List<String> sol, Player p, long time, Escenario incial, String tipe)
+		public void updateNivel(List<String> sol, Player p, long time, Escenario incial, String tipe, int nodos)
 		{
 			client = new MongoClient("localhost", 27017);//conectamos
 			database = client.getDatabase("sokoban");//elegimos bbdd
@@ -266,6 +266,7 @@ public class Escenario {
 			if(nivel.get(tipe)==null)
 			{//no hay guardada solucion de la IA
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Time", time)));
+				if(tipe.equals("AStar")){collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Nodos", nodos)));}
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
 				Node aux = new Node(incial, 0, incial.placedBox(), "");

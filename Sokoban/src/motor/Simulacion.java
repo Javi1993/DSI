@@ -16,6 +16,7 @@ public class Simulacion {
 			Resolver.solucion(testEscenario, 0);
 			p.updatePlayer(null, testEscenario);
 			niveles++;
+			System.out.println("Nivel "+niveles+" completado!");
 		}
 	}
 }

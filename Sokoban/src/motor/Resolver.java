@@ -12,6 +12,7 @@ import jugador.Mapas;
 public class Resolver {
 
 	private static String solIDA;
+	private static int nodosTotal;
 	
 	public static void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
@@ -26,7 +27,7 @@ public class Resolver {
 //		String tipe="IDAStar";
 		char[] solExist = Mapas.verSol(escenario.getNivel(), tipe);
 		if(solExist!=null)
-		{//ya hay una solución almacenada de la IA
+		{//ya hay una soluciï¿½n almacenada de la IA
 			return solExist;
 		}else{//no hay solucion, la calculamos
 			long time_start, time_end;
@@ -50,7 +51,7 @@ public class Resolver {
 				}
 				Escenario test = new Escenario(actual.getEscenario().getNivel(), true);
 				copiarEscenarioActual(test, actual.getEscenario());
-				escenario.updateNivel(aux, null, time, test, tipe);
+				escenario.updateNivel(aux, null, time, test, tipe, nodosTotal);
 				return sol;
 			}else{
 				return null;
@@ -60,6 +61,7 @@ public class Resolver {
 
 	private static String AStar(Node actual)
 	{
+		nodosTotal = 0;
 		Comparator<Node> comparator = new MyComparator();
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
@@ -68,6 +70,7 @@ public class Resolver {
 			Node estudiando = abiertos.poll();
 			if(estudiando.getEscenario().hasGanado())
 			{//Existe solucion, salimos
+				nodosTotal = cerrados.size();
 				return estudiando.getID();
 			}else{
 				List<Node> hijos = getHijos(estudiando);
@@ -83,11 +86,12 @@ public class Resolver {
 					}
 				}
 			}
-			//						System.out.println("TAMAÑO: " +abiertos.size());
+			//						System.out.println("TAMAï¿½O: " +abiertos.size());
 			//			imprimirCola(abiertos);
 		}
 		//		System.out.println("Se han estudiado "+cerrados.size()+" nodos");
 		//		imprimirColaDos(cerrados);
+		nodosTotal = cerrados.size();
 		return null;
 	}
 
