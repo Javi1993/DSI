@@ -7,7 +7,7 @@ import jugador.Player;
 public class Simulacion {
 	
 	public static void main(String[] args){
-		int niveles = 0;
+		int niveles = 80;
 		Mapas.generarMapas();
 		Player p = new Player("User", "pass");
 		while(niveles<114)

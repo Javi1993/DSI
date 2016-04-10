@@ -108,8 +108,8 @@ public class Resolver {
 			//						System.out.println("TAMA�O: " +abiertos.size());
 			//			imprimirCola(abiertos);
 		}
-		//		System.out.println("Se han estudiado "+cerrados.size()+" nodos");
-		//		imprimirColaDos(cerrados);
+//				System.out.println("Se han estudiado "+cerrados.size()+" nodos");
+//				imprimirColaDos(cerrados);
 		nodosTotal = cerrados.size();
 		return null;
 	}
@@ -172,19 +172,19 @@ public class Resolver {
 	//		}
 	//	}
 
-	//	private static void imprimirColaDos(List<Node> cola)
-	//	{
-	//		for (Node node : cola) {
-	//			System.out.println("------------------------------");
-	//			for(int i = 0; i<node.getEscenario().getCas().length; i++)
-	//			{
-	//				for(int j = 0; j<node.getEscenario().getCas()[i].length; j++){
-	//					System.out.print(node.getEscenario().getCas()[i][j]);
-	//				}
-	//				System.out.println();
-	//			}
-	//		}
-	//	}
+//		private static void imprimirColaDos(List<Node> cola)
+//		{
+//			for (Node node : cola) {
+//				System.out.println("------------------------------");
+//				for(int i = 0; i<node.getEscenario().getCas().length; i++)
+//				{
+//					for(int j = 0; j<node.getEscenario().getCas()[i].length; j++){
+//						System.out.print(node.getEscenario().getCas()[i][j]);
+//					}
+//					System.out.println();
+//				}
+//			}
+//		}
 
 	private static List<Node> getHijos(Node padre)
 	{
@@ -251,11 +251,11 @@ public class Resolver {
 		{
 			for (Posicion posicion : cajasSinColocar) {
 				if(esParedLimitada(test.getEscenario(), posicion)){
-					return true;
+					return false;
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private static boolean comprobarEsquina(Node test)
@@ -319,11 +319,11 @@ public class Resolver {
 		aux1[2][0]=test.getCas()[caja.x-1][caja.y];
 		
 		char[][] aux2 = new char[1][3];//caja con posibles paredes izquierda y/o derecha
-		aux2[0][1]=test.getCas()[caja.x][caja.y-1];
-		aux2[0][2]=test.getCas()[caja.x][caja.y];
-		aux2[0][3]=test.getCas()[caja.x][caja.y+1];
+		aux2[0][0]=test.getCas()[caja.x][caja.y-1];
+		aux2[0][1]=test.getCas()[caja.x][caja.y];
+		aux2[0][2]=test.getCas()[caja.x][caja.y+1];
 		
-		if((aux1[0][0]!=' ')||(aux1[2][0]!=' '))
+		if((aux1[0][0]=='#')||(aux1[2][0]=='#'))
 		{//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
 			for(int i = 0; i<((test.getCas()[0].length)-(caja.y)); i++)
 			{//recorremos hacia derecha
@@ -341,9 +341,10 @@ public class Resolver {
 					return false;
 				}
 			}
+			return true;
 		}
 		
-		if(aux2[0][1]!=' '||aux2[0][3]!=' ')
+		if(aux2[0][0]=='#'||aux2[0][2]=='#')
 		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
 			for(int i = 0; i<((test.getCas().length)-(caja.x)); i++)
 			{//recorremos hacia arriba
@@ -361,8 +362,9 @@ public class Resolver {
 					return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private static boolean esUnBloque3x3(Escenario test, Posicion caja) {
