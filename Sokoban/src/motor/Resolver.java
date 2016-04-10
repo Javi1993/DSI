@@ -202,7 +202,7 @@ public class Resolver {
 				if(test.realizarMovimiento('W'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"W");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)&&comprobarBloques(aux)&&comprobarParedesLimitadas(aux))
 					{
 						hijos.add(aux);
 					}
@@ -212,7 +212,7 @@ public class Resolver {
 				if(test.realizarMovimiento('A'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"A");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)&&comprobarBloques(aux)&&comprobarParedesLimitadas(aux))
 					{
 						hijos.add(aux);
 					}
@@ -222,7 +222,7 @@ public class Resolver {
 				if(test.realizarMovimiento('D'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"D");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)&&comprobarBloques(aux)&&comprobarParedesLimitadas(aux))
 					{
 						hijos.add(aux);
 					}
@@ -232,7 +232,7 @@ public class Resolver {
 				if(test.realizarMovimiento('X'))
 				{
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"X");
-					if(comprobarEsquina(aux)&&comprobarBloques(aux))
+					if(comprobarEsquina(aux)&&comprobarBloques(aux)&&comprobarParedesLimitadas(aux))
 					{
 						hijos.add(aux);
 					}
@@ -242,6 +242,20 @@ public class Resolver {
 			i++;
 		}
 		return hijos;
+	}
+
+	private static boolean comprobarParedesLimitadas(Node test)
+	{
+		List<Posicion> cajasSinColocar = test.getEscenario().getCajas();//obtenemos la posicion de las cajas sin colocar
+		if(!cajasSinColocar.isEmpty())
+		{
+			for (Posicion posicion : cajasSinColocar) {
+				if(esParedLimitada(test.getEscenario(), posicion)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean comprobarEsquina(Node test)
@@ -277,7 +291,7 @@ public class Resolver {
 		{
 			for (Posicion posicion : cajasSinColocar) {
 				//comprobamos bloques 2x2
-				if(esUnBloque2x2(test.getEscenario(), posicion))
+				if(esUnBloque2x2(test.getEscenario(), posicion)||esUnBloque3x3(test.getEscenario(), posicion))
 				{//se quiere mover a una esquina que deja la caja bloqueada
 					//					System.out.println("BLOQUE");
 					//					System.out.println("------------------------------");
@@ -298,124 +312,177 @@ public class Resolver {
 		return true;
 	}
 
-	//	private static boolean esUnBloque3x3(Escenario test, Posicion caja) {
-	//		//creamos el escenario 3x3 que rodea a nuestra caja
-	//		char[][] aux1 = new char[3][3];//caja en 0,0
-	//		aux1[0][0]=test.getCas()[caja.x][caja.y];
-	//		aux1[0][1]=test.getCas()[caja.x][caja.y+1];
-	//		aux1[0][2]=test.getCas()[caja.x][caja.y+2];
-	//		aux1[1][0]=test.getCas()[caja.x+1][caja.y];
-	//		aux1[1][1]=test.getCas()[caja.x+1][caja.y+1];
-	//		aux1[1][2]=test.getCas()[caja.x+1][caja.y+2];
-	//		aux1[2][0]=test.getCas()[caja.x+2][caja.y];
-	//		aux1[2][1]=test.getCas()[caja.x+2][caja.y+1];
-	//		aux1[2][2]=test.getCas()[caja.x+2][caja.y+2];
-	//
-	//		char[][] aux2 = new char[3][3];//caja en 0,1
-	//		aux1[0][0]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[0][1]=test.getCas()[caja.x][caja.y];
-	//		aux1[0][2]=test.getCas()[caja.x][caja.y+1];
-	//		aux1[1][0]=test.getCas()[caja.x+1][caja.y-1];
-	//		aux1[1][1]=test.getCas()[caja.x+1][caja.y];
-	//		aux1[1][2]=test.getCas()[caja.x+1][caja.y+1];
-	//		aux1[2][0]=test.getCas()[caja.x+2][caja.y-1];
-	//		aux1[2][1]=test.getCas()[caja.x+2][caja.y];
-	//		aux1[2][2]=test.getCas()[caja.x+2][caja.y+1];
-	//
-	//		char[][] aux3 = new char[3][3];//caja en 0,2
-	//		aux1[0][0]=test.getCas()[caja.x][caja.y-2];
-	//		aux1[0][1]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[0][2]=test.getCas()[caja.x][caja.y];
-	//		aux1[1][0]=test.getCas()[caja.x+1][caja.y-2];
-	//		aux1[1][1]=test.getCas()[caja.x+1][caja.y-1];
-	//		aux1[1][2]=test.getCas()[caja.x+1][caja.y];
-	//		aux1[2][0]=test.getCas()[caja.x+2][caja.y-2];
-	//		aux1[2][1]=test.getCas()[caja.x+2][caja.y-1];
-	//		aux1[2][2]=test.getCas()[caja.x+2][caja.y];
-	//
-	//		char[][] aux4 = new char[3][3];//caja en 1,0
-	//		aux1[0][0]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[0][1]=test.getCas()[caja.x-1][caja.y+1];
-	//		aux1[0][2]=test.getCas()[caja.x-1][caja.y+2];
-	//		aux1[1][0]=test.getCas()[caja.x][caja.y];
-	//		aux1[1][1]=test.getCas()[caja.x][caja.y+1];
-	//		aux1[1][2]=test.getCas()[caja.x][caja.y+2];
-	//		aux1[2][0]=test.getCas()[caja.x+1][caja.y];
-	//		aux1[2][1]=test.getCas()[caja.x+1][caja.y+1];
-	//		aux1[2][2]=test.getCas()[caja.x+1][caja.y+2];
-	//
-	//		char[][] aux5 = new char[3][3];//caja en 1,1
-	//		aux1[0][0]=test.getCas()[caja.x-1][caja.y-1];
-	//		aux1[0][1]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[0][2]=test.getCas()[caja.x-1][caja.y+1];
-	//		aux1[1][0]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[1][1]=test.getCas()[caja.x][caja.y];
-	//		aux1[1][2]=test.getCas()[caja.x][caja.y+1];
-	//		aux1[2][0]=test.getCas()[caja.x+1][caja.y-1];
-	//		aux1[2][1]=test.getCas()[caja.x+1][caja.y];
-	//		aux1[2][2]=test.getCas()[caja.x+1][caja.y+1];
-	//
-	//		char[][] aux6 = new char[3][3];//caja en 1,2
-	//		aux1[0][0]=test.getCas()[caja.x-1][caja.y-2];
-	//		aux1[0][1]=test.getCas()[caja.x-1][caja.y-1];
-	//		aux1[0][2]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[1][0]=test.getCas()[caja.x][caja.y-2];
-	//		aux1[1][1]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[1][2]=test.getCas()[caja.x][caja.y];
-	//		aux1[2][0]=test.getCas()[caja.x+1][caja.y-2];
-	//		aux1[2][1]=test.getCas()[caja.x+1][caja.y-1];
-	//		aux1[2][2]=test.getCas()[caja.x+1][caja.y];
-	//
-	//		char[][] aux7 = new char[3][3];//caja en 2,0
-	//		aux1[0][0]=test.getCas()[caja.x-2][caja.y];
-	//		aux1[0][1]=test.getCas()[caja.x-2][caja.y+1];
-	//		aux1[0][2]=test.getCas()[caja.x-2][caja.y+2];
-	//		aux1[1][0]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[1][1]=test.getCas()[caja.x-1][caja.y+1];
-	//		aux1[1][2]=test.getCas()[caja.x-1][caja.y+2];
-	//		aux1[2][0]=test.getCas()[caja.x][caja.y];
-	//		aux1[2][1]=test.getCas()[caja.x][caja.y+1];
-	//		aux1[2][2]=test.getCas()[caja.x][caja.y+2];
-	//
-	//		char[][] aux8 = new char[3][3];//caja en 2,1
-	//		aux1[0][0]=test.getCas()[caja.x-2][caja.y-1];
-	//		aux1[0][1]=test.getCas()[caja.x-2][caja.y];
-	//		aux1[0][2]=test.getCas()[caja.x-2][caja.y+1];
-	//		aux1[1][0]=test.getCas()[caja.x-1][caja.y-1];
-	//		aux1[1][1]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[1][2]=test.getCas()[caja.x-1][caja.y+1];
-	//		aux1[2][0]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[2][1]=test.getCas()[caja.x][caja.y];
-	//		aux1[2][2]=test.getCas()[caja.x][caja.y+1];
-	//
-	//		char[][] aux9 = new char[3][3];//caja en 2,2
-	//		aux1[0][0]=test.getCas()[caja.x-2][caja.y-2];
-	//		aux1[0][1]=test.getCas()[caja.x-2][caja.y-1];
-	//		aux1[0][2]=test.getCas()[caja.x-2][caja.y];
-	//		aux1[1][0]=test.getCas()[caja.x-1][caja.y-2];
-	//		aux1[1][1]=test.getCas()[caja.x-1][caja.y-1];
-	//		aux1[1][2]=test.getCas()[caja.x-1][caja.y];
-	//		aux1[2][0]=test.getCas()[caja.x][caja.y-2];
-	//		aux1[2][1]=test.getCas()[caja.x][caja.y-1];
-	//		aux1[2][2]=test.getCas()[caja.x][caja.y];
-	//
-	//		if(testBloque3x3(aux1)||testBloque3x3(aux2)||testBloque3x3(aux3)||testBloque3x3(aux4)
-	//				||testBloque3x3(aux5)||testBloque3x3(aux6)||testBloque3x3(aux7)
-	//				||testBloque3x3(aux8)||testBloque3x3(aux9))
-	//		{//vemos si alguno forma bloque 3x3
-	//			//								System.out.println("------------------------------");
-	//			//								for(int i = 0; i<test.getCas().length; i++)
-	//			//								{
-	//			//									for(int j = 0; j<test.getCas()[i].length; j++){
-	//			//										System.out.print(test.getCas()[i][j]);
-	//			//									}
-	//			//									System.out.println();
-	//			//								}
-	//			return true;
-	//		}
-	//
-	//		return false;
-	//	}
+	private static boolean esParedLimitada(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
+		aux1[0][0]=test.getCas()[caja.x+1][caja.y];
+		aux1[1][0]=test.getCas()[caja.x][caja.y];
+		aux1[2][0]=test.getCas()[caja.x-1][caja.y];
+		
+		char[][] aux2 = new char[1][3];//caja con posibles paredes izquierda y/o derecha
+		aux2[0][1]=test.getCas()[caja.x][caja.y-1];
+		aux2[0][2]=test.getCas()[caja.x][caja.y];
+		aux2[0][3]=test.getCas()[caja.x][caja.y+1];
+		
+		if((aux1[0][0]!=' ')||(aux1[2][0]!=' '))
+		{//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
+			for(int i = 0; i<((test.getCas()[0].length)-(caja.y)); i++)
+			{//recorremos hacia derecha
+				if((((test.getCas()[caja.x+1][caja.y+i]==' ')||(test.getCas()[caja.x+1][caja.y+i]=='@')||(test.getCas()[caja.x+1][caja.y+i]=='+'))
+						&&((test.getCas()[caja.x-1][caja.y+i]==' ')||(test.getCas()[caja.x-1][caja.y+i]=='@')||(test.getCas()[caja.x-1][caja.y+i]=='+')))
+						||(test.getCas()[caja.x][caja.y+i]=='.')){
+					return false;
+				}
+			}
+			for(int i = 0; i<caja.y; i++)
+			{//recorremos hacia izquierda
+				if((((test.getCas()[caja.x+1][caja.y-i]==' ')||(test.getCas()[caja.x+1][caja.y-i]=='@')||(test.getCas()[caja.x+1][caja.y-i]=='+'))
+						&&((test.getCas()[caja.x-1][caja.y-i]==' ')||(test.getCas()[caja.x-1][caja.y-i]=='@')||(test.getCas()[caja.x-1][caja.y-i]=='+')))
+						||(test.getCas()[caja.x][caja.y-i]=='.')){
+					return false;
+				}
+			}
+		}
+		
+		if(aux2[0][1]!=' '||aux2[0][3]!=' ')
+		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
+			for(int i = 0; i<((test.getCas().length)-(caja.x)); i++)
+			{//recorremos hacia arriba
+				if((((test.getCas()[caja.x+i][caja.y+1]==' ')||(test.getCas()[caja.x+i][caja.y+1]=='@')||(test.getCas()[caja.x+i][caja.y+1]=='+'))
+						&&((test.getCas()[caja.x+i][caja.y-1]==' ')||(test.getCas()[caja.x+i][caja.y-1]=='@')||(test.getCas()[caja.x+i][caja.y-1]=='+')))
+						||(test.getCas()[caja.x+i][caja.y]=='.')){
+					return false;
+				}
+			}
+			for(int i = 0; i<caja.x; i++)
+			{//recorremos hacia abajo
+				if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
+						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
+						||(test.getCas()[caja.x-i][caja.y]=='.')){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private static boolean esUnBloque3x3(Escenario test, Posicion caja) {
+		//creamos el escenario 3x3 que rodea a nuestra caja
+		char[][] aux1 = new char[3][3];//caja en 0,0
+		aux1[0][0]=test.getCas()[caja.x][caja.y];
+		aux1[0][1]=test.getCas()[caja.x][caja.y+1];
+		aux1[0][2]=test.getCas()[caja.x][caja.y+2];
+		aux1[1][0]=test.getCas()[caja.x+1][caja.y];
+		aux1[1][1]=test.getCas()[caja.x+1][caja.y+1];
+		aux1[1][2]=test.getCas()[caja.x+1][caja.y+2];
+		aux1[2][0]=test.getCas()[caja.x+2][caja.y];
+		aux1[2][1]=test.getCas()[caja.x+2][caja.y+1];
+		aux1[2][2]=test.getCas()[caja.x+2][caja.y+2];
+
+		char[][] aux2 = new char[3][3];//caja en 0,1
+		aux1[0][0]=test.getCas()[caja.x][caja.y-1];
+		aux1[0][1]=test.getCas()[caja.x][caja.y];
+		aux1[0][2]=test.getCas()[caja.x][caja.y+1];
+		aux1[1][0]=test.getCas()[caja.x+1][caja.y-1];
+		aux1[1][1]=test.getCas()[caja.x+1][caja.y];
+		aux1[1][2]=test.getCas()[caja.x+1][caja.y+1];
+		aux1[2][0]=test.getCas()[caja.x+2][caja.y-1];
+		aux1[2][1]=test.getCas()[caja.x+2][caja.y];
+		aux1[2][2]=test.getCas()[caja.x+2][caja.y+1];
+
+		char[][] aux3 = new char[3][3];//caja en 0,2
+		aux1[0][0]=test.getCas()[caja.x][caja.y-2];
+		aux1[0][1]=test.getCas()[caja.x][caja.y-1];
+		aux1[0][2]=test.getCas()[caja.x][caja.y];
+		aux1[1][0]=test.getCas()[caja.x+1][caja.y-2];
+		aux1[1][1]=test.getCas()[caja.x+1][caja.y-1];
+		aux1[1][2]=test.getCas()[caja.x+1][caja.y];
+		aux1[2][0]=test.getCas()[caja.x+2][caja.y-2];
+		aux1[2][1]=test.getCas()[caja.x+2][caja.y-1];
+		aux1[2][2]=test.getCas()[caja.x+2][caja.y];
+
+		char[][] aux4 = new char[3][3];//caja en 1,0
+		aux1[0][0]=test.getCas()[caja.x-1][caja.y];
+		aux1[0][1]=test.getCas()[caja.x-1][caja.y+1];
+		aux1[0][2]=test.getCas()[caja.x-1][caja.y+2];
+		aux1[1][0]=test.getCas()[caja.x][caja.y];
+		aux1[1][1]=test.getCas()[caja.x][caja.y+1];
+		aux1[1][2]=test.getCas()[caja.x][caja.y+2];
+		aux1[2][0]=test.getCas()[caja.x+1][caja.y];
+		aux1[2][1]=test.getCas()[caja.x+1][caja.y+1];
+		aux1[2][2]=test.getCas()[caja.x+1][caja.y+2];
+
+		char[][] aux5 = new char[3][3];//caja en 1,1
+		aux1[0][0]=test.getCas()[caja.x-1][caja.y-1];
+		aux1[0][1]=test.getCas()[caja.x-1][caja.y];
+		aux1[0][2]=test.getCas()[caja.x-1][caja.y+1];
+		aux1[1][0]=test.getCas()[caja.x][caja.y-1];
+		aux1[1][1]=test.getCas()[caja.x][caja.y];
+		aux1[1][2]=test.getCas()[caja.x][caja.y+1];
+		aux1[2][0]=test.getCas()[caja.x+1][caja.y-1];
+		aux1[2][1]=test.getCas()[caja.x+1][caja.y];
+		aux1[2][2]=test.getCas()[caja.x+1][caja.y+1];
+
+		char[][] aux6 = new char[3][3];//caja en 1,2
+		aux1[0][0]=test.getCas()[caja.x-1][caja.y-2];
+		aux1[0][1]=test.getCas()[caja.x-1][caja.y-1];
+		aux1[0][2]=test.getCas()[caja.x-1][caja.y];
+		aux1[1][0]=test.getCas()[caja.x][caja.y-2];
+		aux1[1][1]=test.getCas()[caja.x][caja.y-1];
+		aux1[1][2]=test.getCas()[caja.x][caja.y];
+		aux1[2][0]=test.getCas()[caja.x+1][caja.y-2];
+		aux1[2][1]=test.getCas()[caja.x+1][caja.y-1];
+		aux1[2][2]=test.getCas()[caja.x+1][caja.y];
+
+		char[][] aux7 = new char[3][3];//caja en 2,0
+		aux1[0][0]=test.getCas()[caja.x-2][caja.y];
+		aux1[0][1]=test.getCas()[caja.x-2][caja.y+1];
+		aux1[0][2]=test.getCas()[caja.x-2][caja.y+2];
+		aux1[1][0]=test.getCas()[caja.x-1][caja.y];
+		aux1[1][1]=test.getCas()[caja.x-1][caja.y+1];
+		aux1[1][2]=test.getCas()[caja.x-1][caja.y+2];
+		aux1[2][0]=test.getCas()[caja.x][caja.y];
+		aux1[2][1]=test.getCas()[caja.x][caja.y+1];
+		aux1[2][2]=test.getCas()[caja.x][caja.y+2];
+
+		char[][] aux8 = new char[3][3];//caja en 2,1
+		aux1[0][0]=test.getCas()[caja.x-2][caja.y-1];
+		aux1[0][1]=test.getCas()[caja.x-2][caja.y];
+		aux1[0][2]=test.getCas()[caja.x-2][caja.y+1];
+		aux1[1][0]=test.getCas()[caja.x-1][caja.y-1];
+		aux1[1][1]=test.getCas()[caja.x-1][caja.y];
+		aux1[1][2]=test.getCas()[caja.x-1][caja.y+1];
+		aux1[2][0]=test.getCas()[caja.x][caja.y-1];
+		aux1[2][1]=test.getCas()[caja.x][caja.y];
+		aux1[2][2]=test.getCas()[caja.x][caja.y+1];
+
+		char[][] aux9 = new char[3][3];//caja en 2,2
+		aux1[0][0]=test.getCas()[caja.x-2][caja.y-2];
+		aux1[0][1]=test.getCas()[caja.x-2][caja.y-1];
+		aux1[0][2]=test.getCas()[caja.x-2][caja.y];
+		aux1[1][0]=test.getCas()[caja.x-1][caja.y-2];
+		aux1[1][1]=test.getCas()[caja.x-1][caja.y-1];
+		aux1[1][2]=test.getCas()[caja.x-1][caja.y];
+		aux1[2][0]=test.getCas()[caja.x][caja.y-2];
+		aux1[2][1]=test.getCas()[caja.x][caja.y-1];
+		aux1[2][2]=test.getCas()[caja.x][caja.y];
+
+		if(testBloque3x3(aux1)||testBloque3x3(aux2)||testBloque3x3(aux3)||testBloque3x3(aux4)
+				||testBloque3x3(aux5)||testBloque3x3(aux6)||testBloque3x3(aux7)
+				||testBloque3x3(aux8)||testBloque3x3(aux9))
+		{//vemos si alguno forma bloque 3x3
+			//								System.out.println("------------------------------");
+			//								for(int i = 0; i<test.getCas().length; i++)
+			//								{
+			//									for(int j = 0; j<test.getCas()[i].length; j++){
+			//										System.out.print(test.getCas()[i][j]);
+			//									}
+			//									System.out.println();
+			//								}
+			return true;
+		}
+
+		return false;
+	}
 
 	private static boolean esUnBloque2x2 (Escenario test, Posicion caja){
 		//creamos el escenario 2x2 que rodea a nuestra caja
@@ -457,7 +524,7 @@ public class Resolver {
 				if(aux1[i][j]=='#'){
 					cntM++;
 				}
-				if(aux1[i][j]=='$'){
+				if(aux1[i][j]=='$'||aux1[i][j]=='*'){
 					cntB++;
 				}
 			}
@@ -470,74 +537,48 @@ public class Resolver {
 		}
 	}
 
-	//	private static boolean testBloque3x3(char[][] aux1) {
-	//		int cntB=0;//contador cajas
-	//		int cntM=0;//contador muros
-	//		boolean centro = false;//centro vacio
-	//		if(aux1[1][1]==' '){centro = true;}
-	//		for(int i=0;i<aux1.length; i++)
-	//		{
-	//			for(int j = 0;j<aux1[i].length; j++)
-	//			{
-	//				if(aux1[i][j]=='#'){
-	//					cntM++;
-	//				}
-	//				if(aux1[i][j]=='$'){
-	//					cntB++;
-	//				}
-	//			}
-	//		}
-	//		if(cntB+cntM==9)
-	//		{//bloque de 3x3 solido
-	//			return true;
-	//		}
-	//		if(cntB+cntM==8&&centro)
-	//		{//bloque de 3x3 con centro vac�o se revelan nuevas posiciones sin soluci�n
-	//			return true;
-	//		}else if(cntB+cntM>=6&&cntB+cntM<=7&&centro)
-	//		{//bloque de 3x3 con centro vac�o con 1 � 2 esquinas opuestas vac�as produce una posici�n muerta 
-	//			if((aux1[0][0]==' '&&aux1[2][2]==' ')||(aux1[0][2]==' '&&aux1[2][0]==' ')){
-	//				return true;
-	//			}else if(esquinaOpuestaVacia(aux1)){
-	//				return true;
-	//			}
-	//		}
-	//		return false;
-	//	}
-
-	//	private static boolean esquinaOpuestaVacia(char[][] aux1)
-	//	{
-	//		char esquina1 = aux1[0][0];
-	//		char esquina2 = aux1[0][2];
-	//		char esquina3 = aux1[2][0];
-	//		char esquina4 = aux1[2][2];
-	//
-	//		if(esquina1==' '&&(esquina2=='$'||esquina2=='#'||esquina2=='*')
-	//				&&(esquina3=='$'||esquina3=='#'||esquina3=='*')
-	//				&&(esquina4=='$'||esquina4=='#'||esquina4=='*'))
-	//		{
-	//			return true;
-	//		}
-	//		if(esquina2==' '&&(esquina1=='$'||esquina1=='#'||esquina1=='*')
-	//				&&(esquina3=='$'||esquina3=='#'||esquina3=='*')
-	//				&&(esquina4=='$'||esquina4=='#'||esquina4=='*'))
-	//		{
-	//			return true;
-	//		}
-	//		if(esquina3==' '&&(esquina2=='$'||esquina2=='#'||esquina2=='*')
-	//				&&(esquina1=='$'||esquina1=='#'||esquina1=='*')
-	//				&&(esquina4=='$'||esquina4=='#'||esquina4=='*'))
-	//		{
-	//			return true;
-	//		}
-	//		if(esquina4==' '&&(esquina2=='$'||esquina2=='#'||esquina2=='*')
-	//				&&(esquina3=='$'||esquina3=='#'||esquina3=='*')
-	//				&&(esquina1=='$'||esquina1=='#'||esquina1=='*'))
-	//		{
-	//			return true;
-	//		}
-	//		return false;
-	//	}
+	private static boolean testBloque3x3(char[][] aux1) {
+		int cntB=0;//contador cajas
+		int cntM=0;//contador muros
+		boolean centro = false;//centro vacio
+		if(aux1[1][1]==' '){centro = true;}
+		for(int i=0;i<aux1.length; i++)
+		{
+			for(int j = 0;j<aux1[i].length; j++)
+			{
+				if(aux1[i][j]=='#'){
+					cntM++;
+				}
+				if(aux1[i][j]=='$'||aux1[i][j]=='*'){
+					cntB++;
+				}
+			}
+		}
+		if(cntB+cntM==9)
+		{//bloque de 3x3 solido
+			return true;
+		}
+		if(cntB+cntM==8&&centro)
+		{//bloque de 3x3 con centro vac�o se revelan nuevas posiciones sin soluci�n
+			return true;
+		}else if((cntB+cntM)==6&&centro)
+		{//bloque de 3x3 con centro vac�o con 2 esquinas opuestas vac�as produce una posici�n muerta 
+			if((aux1[0][0]==' '&&aux1[2][2]==' ')||(aux1[0][2]==' '&&aux1[2][0]==' '))
+			{//esquinas opuestas vacias
+				return true;
+			}
+		}else if((cntB+cntM)==7&&centro)
+		{//bloque de 3x3 con centro vac�o con 1 esquinas vac�as produce una posici�n muerta 
+			if((aux1[0][0]==' '&&aux1[0][2]!=' '&&aux1[2][0]!=' '&&aux1[2][2]!=' ')
+					||(aux1[0][0]!=' '&&aux1[0][2]==' '&&aux1[2][0]!=' '&&aux1[2][2]!=' ')
+					||(aux1[0][0]!=' '&&aux1[0][2]!=' '&&aux1[2][0]==' '&&aux1[2][2]!=' ')
+					||(aux1[0][0]!=' '&&aux1[0][2]!=' '&&aux1[2][0]!=' '&&aux1[2][2]==' '))
+			{//esquina vacia
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static void copiarEscenarioActual(Escenario test, Escenario padre)
 	{

@@ -13,7 +13,11 @@ public class Simulacion {
 		while(niveles<114)
 		{
 			Escenario testEscenario = new Escenario(p.getProgreso(), false);//creamos el escenario
-			Resolver.solucion(testEscenario, 0);
+			if(Resolver.solucion(testEscenario, 0)==null){
+				niveles++;
+				System.out.println("Nivel "+niveles+" no encuenta solucion!");
+				break;
+			}
 			p.updatePlayer(null, testEscenario);
 			niveles++;
 			System.out.println("Nivel "+niveles+" completado!");
