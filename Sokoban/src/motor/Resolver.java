@@ -329,7 +329,7 @@ public class Resolver {
 			{//recorremos hacia derecha
 				if((((test.getCas()[caja.x+1][caja.y+i]==' ')||(test.getCas()[caja.x+1][caja.y+i]=='@')||(test.getCas()[caja.x+1][caja.y+i]=='+'))
 						&&((test.getCas()[caja.x-1][caja.y+i]==' ')||(test.getCas()[caja.x-1][caja.y+i]=='@')||(test.getCas()[caja.x-1][caja.y+i]=='+')))
-						||(test.getCas()[caja.x][caja.y+i]=='.')){
+						||(test.getCas()[caja.x][caja.y+i]=='.'||test.getCas()[caja.x][caja.y+i]=='+')){
 					return false;
 				}
 			}
@@ -337,7 +337,7 @@ public class Resolver {
 			{//recorremos hacia izquierda
 				if((((test.getCas()[caja.x+1][caja.y-i]==' ')||(test.getCas()[caja.x+1][caja.y-i]=='@')||(test.getCas()[caja.x+1][caja.y-i]=='+'))
 						&&((test.getCas()[caja.x-1][caja.y-i]==' ')||(test.getCas()[caja.x-1][caja.y-i]=='@')||(test.getCas()[caja.x-1][caja.y-i]=='+')))
-						||(test.getCas()[caja.x][caja.y-i]=='.')){
+						||(test.getCas()[caja.x][caja.y-i]=='.'||test.getCas()[caja.x][caja.y-i]=='+')){
 					return false;
 				}
 			}
@@ -349,7 +349,7 @@ public class Resolver {
 			{//recorremos hacia arriba
 				if((((test.getCas()[caja.x+i][caja.y+1]==' ')||(test.getCas()[caja.x+i][caja.y+1]=='@')||(test.getCas()[caja.x+i][caja.y+1]=='+'))
 						&&((test.getCas()[caja.x+i][caja.y-1]==' ')||(test.getCas()[caja.x+i][caja.y-1]=='@')||(test.getCas()[caja.x+i][caja.y-1]=='+')))
-						||(test.getCas()[caja.x+i][caja.y]=='.')){
+						||(test.getCas()[caja.x+i][caja.y]=='.'||test.getCas()[caja.x+i][caja.y]=='+')){
 					return false;
 				}
 			}
@@ -357,7 +357,7 @@ public class Resolver {
 			{//recorremos hacia abajo
 				if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
 						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
-						||(test.getCas()[caja.x-i][caja.y]=='.')){
+						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
 					return false;
 				}
 			}
