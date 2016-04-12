@@ -90,6 +90,8 @@ public class Resolver {
 			if(estudiando.getEscenario().hasGanado())
 			{//Existe solucion, salimos
 				nodosTotal = cerrados.size();
+				cerrados.clear();
+				abiertos.clear();
 				return estudiando.getID();
 			}else{
 				List<Node> hijos = getHijos(estudiando);
@@ -111,6 +113,8 @@ public class Resolver {
 //				System.out.println("Se han estudiado "+cerrados.size()+" nodos");
 //				imprimirColaDos(cerrados);
 		nodosTotal = cerrados.size();
+		cerrados.clear();
+		abiertos.clear();
 		return null;
 	}
 
