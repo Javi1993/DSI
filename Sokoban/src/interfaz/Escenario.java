@@ -240,6 +240,19 @@ public class Escenario {
 				}
 			}
 		}
+		
+		public int cajas()
+		{//cuenta las cajas del nivel
+			int aux = 0;
+			for(int x = 0; x<cas.length; x++){
+				for(int y = 0; y<cas[x].length; y++){
+					if(cas[x][y] == '$'||cas[x][y] == '*'){
+						aux++;
+					}
+				}
+			}
+			return aux;
+		}
 
 		private void destinosLibres()
 		{

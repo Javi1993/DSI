@@ -70,51 +70,47 @@ public class Mapas {
 		client.close();
 	}
 
-	//	private static void repetidos()
-	//	{
-	//		Path ruta;
-	//		char[][] mapa = new char[14][20];
-	//		int cnt = 0;
-	//		List<char[][]> test = new ArrayList<char[][]>();
-	//		try {
-	//			ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
-	//			Iterator<String> it = Files.lines(ruta).iterator();
-	//			while(it.hasNext()) {
-	//				String s = it.next();
-	//				if(s.length()>0&&s.charAt(0)!=';')
-	//				{//leemos el nivel del txt
-	//					for(int j = 0; j<s.length(); j++)
-	//					{
-	//						mapa[cnt][j] = s.charAt(j);
-	//					}
-	//					cnt++;
-	//				}else if(s.length()==0&&cnt!=0)
-	//				{//fin de nivel
-	//					test.add(mapa);
-	//					mapa = new char[14][20];//nuevo nivel
-	//					cnt=0;
-	//				}
-	//			}
-	//		} catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
-	//
-	//
-	//		//COMPROBAR AHORA SI SON IGUALES, 2 iteratos sobre la lista!!
-	//		//porbarlo en MAIN de esta clase
-	//		for (int i = 0; i < test.size(); i++) {
-	//			for (int j = 0; j < test.size(); j++) {
-	//				if(i!=j)
-	//				{
-	//					if(Arrays.deepEquals(test.get(i), test.get(j)))
-	//					{
-	//						System.out.println((i+1)+" es igual a "+(j+1));
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
+//	public static void repetidos()
+//	{
+//		Path ruta;
+//		char[][] mapa = new char[14][20];
+//		int cnt = 0;
+//		List<char[][]> test = new ArrayList<char[][]>();
+//		try {
+//			ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
+//			Iterator<String> it = Files.lines(ruta).iterator();
+//			while(it.hasNext()) {
+//				String s = it.next();
+//				if(s.length()>0&&s.charAt(0)!=';')
+//				{//leemos el nivel del txt
+//					for(int j = 0; j<s.length(); j++)
+//					{
+//						mapa[cnt][j] = s.charAt(j);
+//					}
+//					cnt++;
+//				}else if(s.length()==0&&cnt!=0)
+//				{//fin de nivel
+//					test.add(mapa);
+//					mapa = new char[14][20];//nuevo nivel
+//					cnt=0;
+//				}
+//			}
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		for (int i = 0; i < test.size(); i++) {
+//			for (int j = 0; j < test.size(); j++) {
+//				if(i!=j)
+//				{
+//					if(Arrays.deepEquals(test.get(i), test.get(j)))
+//					{
+//						System.out.println((i+1)+" es igual a "+(j+1));
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	private static void ajustarMapa(char[][] mapa){
 		int cntCol=0;//cuenta las columnas de la derecha que no tienen nada
