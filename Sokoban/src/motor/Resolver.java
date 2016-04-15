@@ -252,7 +252,7 @@ public class Resolver {
 		if(!cajasSinColocar.isEmpty())
 		{
 			for (Posicion posicion : cajasSinColocar) {
-				if(esParedLimitada(test.getEscenario(), posicion)){
+				if(esParedLimitada(test.getEscenario(), posicion)||esCaminoBloqueante(test.getEscenario(), posicion)){
 					return false;
 				}
 			}
@@ -314,6 +314,103 @@ public class Resolver {
 		return true;
 	}
 
+	//NUEVO METODO, USAR MATRICES DE PAREDLIMITADAS Y SOLO VER SI SIEMPRE ES # y # y 
+	//encontrmaos en medio caja (da = si colcoada en goal) y no está entre medias player!
+	private static boolean esCaminoBloqueante(Escenario test, Posicion caja) {
+		boolean jugadorMedio = false;
+		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
+		aux1[0][0]=test.getCas()[caja.x+1][caja.y];
+		aux1[1][0]=test.getCas()[caja.x][caja.y];
+		aux1[2][0]=test.getCas()[caja.x-1][caja.y];
+
+		char[][] aux2 = new char[1][3];//caja con posibles paredes izquierda y/o derecha
+		aux2[0][0]=test.getCas()[caja.x][caja.y-1];
+		aux2[0][1]=test.getCas()[caja.x][caja.y];
+		aux2[0][2]=test.getCas()[caja.x][caja.y+1];
+		if((aux1[0][0]=='#')&&(aux1[2][0]=='#'))
+		{//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
+			jugadorMedio = false;
+			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++)
+			{//recorremos hacia derecha
+				if((test.getCas()[caja.x+1][caja.y+i]=='#'||test.getCas()[caja.x+1][caja.y+i]=='$'||test.getCas()[caja.x+1][caja.y+i]=='*')
+						&&(test.getCas()[caja.x-1][caja.y+i]=='#'||test.getCas()[caja.x-1][caja.y+i]=='$'||test.getCas()[caja.x-1][caja.y+i]=='*')
+						&&(test.getCas()[caja.x][caja.y+i]!='.'||test.getCas()[caja.x][caja.y+i]!='+')){
+					if(test.getCas()[caja.x][caja.y+i]=='@')
+					{
+						jugadorMedio = true;
+					}
+					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y+i]=='$'||test.getCas()[caja.x][caja.y+i]=='*')){
+						System.out.println("CAMINO BLOQUEANTE HORIZONTAL EN "+caja.x+","+caja.y);
+						test.escenarioToString();
+						return true;
+					}
+				}else{
+					break;
+				}
+			}
+			for(int i = 1; i<=caja.y; i++)
+			{//recorremos hacia izquierda
+				if((((test.getCas()[caja.x+1][caja.y-i]=='#')||(test.getCas()[caja.x+1][caja.y-i]=='$')||(test.getCas()[caja.x+1][caja.y-i]=='*'))
+						&&((test.getCas()[caja.x-1][caja.y-i]=='#')||(test.getCas()[caja.x-1][caja.y-i]=='$')||(test.getCas()[caja.x-1][caja.y-i]=='*')))
+						&&(test.getCas()[caja.x][caja.y-i]!='.'||test.getCas()[caja.x][caja.y-i]!='+')){
+					if(test.getCas()[caja.x][caja.y-i]=='@')
+					{
+						jugadorMedio = true;
+					}
+					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y-i]=='$'||test.getCas()[caja.x][caja.y-i]=='*')){
+						System.out.println("CAMINO BLOQUEANTE HORIZONTAL EN "+caja.x+","+caja.y);
+						test.escenarioToString();
+						return true;
+					}
+				}else{
+					return false;
+				}
+			}
+			return true;
+		}
+		if(aux2[0][0]=='#'&&aux2[0][2]=='#')
+		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
+			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++)
+			{//recorremos hacia arriba
+				if((((test.getCas()[caja.x+i][caja.y+1]=='#')||(test.getCas()[caja.x+i][caja.y+1]=='$')||(test.getCas()[caja.x+i][caja.y+1]=='*'))
+						&&((test.getCas()[caja.x+i][caja.y-1]=='#')||(test.getCas()[caja.x+i][caja.y-1]=='$')||(test.getCas()[caja.x+i][caja.y-1]=='*')))
+						&&(test.getCas()[caja.x+i][caja.y]!='.'||test.getCas()[caja.x+i][caja.y]!='+')){
+					if(test.getCas()[caja.x+i][caja.y]=='@')
+					{
+						jugadorMedio = true;
+					}
+					if(!jugadorMedio&&(test.getCas()[caja.x+i][caja.y]=='$'||test.getCas()[caja.x+i][caja.y]=='*')){
+						System.out.println("CAMINO BLOQUEANTE VERTICAL EN "+caja.x+","+caja.y);
+						test.escenarioToString();
+						return true;
+					}
+				}else{
+					break;
+				}
+			}
+			for(int i = 1; i<=caja.x; i++)
+			{//recorremos hacia abajo
+				if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
+						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
+						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
+					if(test.getCas()[caja.x-i][caja.y]=='@')
+					{
+						jugadorMedio = true;
+					}
+					if(!jugadorMedio&&(test.getCas()[caja.x-i][caja.y]=='$'||test.getCas()[caja.x-i][caja.y]=='*')){
+						System.out.println("CAMINO BLOQUEANTE VERTICAL EN "+caja.x+","+caja.y);
+						test.escenarioToString();
+						return true;
+					}
+				}else{
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	private static boolean esParedLimitada(Escenario test, Posicion caja) {
 		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
 		aux1[0][0]=test.getCas()[caja.x+1][caja.y];
@@ -327,7 +424,7 @@ public class Resolver {
 
 		if((aux1[0][0]=='#')||(aux1[2][0]=='#'))
 		{//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
-			for(int i = 0; i<((test.getCas()[0].length)-(caja.y)); i++)
+			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++)
 			{//recorremos hacia derecha
 				if((((test.getCas()[caja.x+1][caja.y+i]==' ')||(test.getCas()[caja.x+1][caja.y+i]=='@')||(test.getCas()[caja.x+1][caja.y+i]=='+'))
 						&&((test.getCas()[caja.x-1][caja.y+i]==' ')||(test.getCas()[caja.x-1][caja.y+i]=='@')||(test.getCas()[caja.x-1][caja.y+i]=='+')))
@@ -335,7 +432,7 @@ public class Resolver {
 					return false;
 				}
 			}
-			for(int i = 0; i<caja.y; i++)
+			for(int i = 1; i<=caja.y; i++)
 			{//recorremos hacia izquierda
 				if((((test.getCas()[caja.x+1][caja.y-i]==' ')||(test.getCas()[caja.x+1][caja.y-i]=='@')||(test.getCas()[caja.x+1][caja.y-i]=='+'))
 						&&((test.getCas()[caja.x-1][caja.y-i]==' ')||(test.getCas()[caja.x-1][caja.y-i]=='@')||(test.getCas()[caja.x-1][caja.y-i]=='+')))
@@ -348,7 +445,7 @@ public class Resolver {
 
 		if(aux2[0][0]=='#'||aux2[0][2]=='#')
 		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
-			for(int i = 0; i<((test.getCas().length)-(caja.x)); i++)
+			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++)
 			{//recorremos hacia arriba
 				if((((test.getCas()[caja.x+i][caja.y+1]==' ')||(test.getCas()[caja.x+i][caja.y+1]=='@')||(test.getCas()[caja.x+i][caja.y+1]=='+'))
 						&&((test.getCas()[caja.x+i][caja.y-1]==' ')||(test.getCas()[caja.x+i][caja.y-1]=='@')||(test.getCas()[caja.x+i][caja.y-1]=='+')))
@@ -356,7 +453,7 @@ public class Resolver {
 					return false;
 				}
 			}
-			for(int i = 0; i<caja.x; i++)
+			for(int i = 1; i<=caja.x; i++)
 			{//recorremos hacia abajo
 				if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
 						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
