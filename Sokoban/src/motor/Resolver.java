@@ -315,7 +315,7 @@ public class Resolver {
 	}
 
 	//NUEVO METODO, USAR MATRICES DE PAREDLIMITADAS Y SOLO VER SI SIEMPRE ES # y # y 
-	//encontrmaos en medio caja (da = si colcoada en goal) y no está entre medias player!
+	//encontrmaos en medio caja (da = si colcoada en goal) y no estï¿½ entre medias player!
 	private static boolean esCaminoBloqueante(Escenario test, Posicion caja) {
 		boolean jugadorMedio = false;
 		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
@@ -340,14 +340,15 @@ public class Resolver {
 						jugadorMedio = true;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y+i]=='$'||test.getCas()[caja.x][caja.y+i]=='*')){
-						System.out.println("CAMINO BLOQUEANTE HORIZONTAL EN "+caja.x+","+caja.y);
-						test.escenarioToString();
+//						System.out.println("CAMINO BLOQUEANTE HORIZONTAL 1 EN "+caja.x+","+caja.y);
+//						test.escenarioToString();
 						return true;
 					}
 				}else{
 					break;
 				}
 			}
+			jugadorMedio = false;
 			for(int i = 1; i<=caja.y; i++)
 			{//recorremos hacia izquierda
 				if((((test.getCas()[caja.x+1][caja.y-i]=='#')||(test.getCas()[caja.x+1][caja.y-i]=='$')||(test.getCas()[caja.x+1][caja.y-i]=='*'))
@@ -358,8 +359,8 @@ public class Resolver {
 						jugadorMedio = true;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y-i]=='$'||test.getCas()[caja.x][caja.y-i]=='*')){
-						System.out.println("CAMINO BLOQUEANTE HORIZONTAL EN "+caja.x+","+caja.y);
-						test.escenarioToString();
+//						System.out.println("CAMINO BLOQUEANTE HORIZONTAL 2 EN "+caja.x+","+caja.y);
+//						test.escenarioToString();
 						return true;
 					}
 				}else{
@@ -370,6 +371,7 @@ public class Resolver {
 		}
 		if(aux2[0][0]=='#'&&aux2[0][2]=='#')
 		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
+			jugadorMedio = false;
 			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++)
 			{//recorremos hacia arriba
 				if((((test.getCas()[caja.x+i][caja.y+1]=='#')||(test.getCas()[caja.x+i][caja.y+1]=='$')||(test.getCas()[caja.x+i][caja.y+1]=='*'))
@@ -380,26 +382,27 @@ public class Resolver {
 						jugadorMedio = true;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x+i][caja.y]=='$'||test.getCas()[caja.x+i][caja.y]=='*')){
-						System.out.println("CAMINO BLOQUEANTE VERTICAL EN "+caja.x+","+caja.y);
-						test.escenarioToString();
+//						System.out.println("CAMINO BLOQUEANTE VERTICAL 1 EN "+caja.x+","+caja.y);
+//						test.escenarioToString();
 						return true;
 					}
 				}else{
 					break;
 				}
 			}
+			jugadorMedio = false;
 			for(int i = 1; i<=caja.x; i++)
 			{//recorremos hacia abajo
 				if((((test.getCas()[caja.x-i][caja.y+1]=='#')||(test.getCas()[caja.x-i][caja.y+1]=='$')||(test.getCas()[caja.x-i][caja.y+1]=='*'))
 						&&((test.getCas()[caja.x-i][caja.y-1]=='#')||(test.getCas()[caja.x-i][caja.y-1]=='$')||(test.getCas()[caja.x-i][caja.y-1]=='*')))
-						||(test.getCas()[caja.x-i][caja.y]!='.'||test.getCas()[caja.x-i][caja.y]!='+')){
+						&&(test.getCas()[caja.x-i][caja.y]!='.'||test.getCas()[caja.x-i][caja.y]!='+')){
 					if(test.getCas()[caja.x-i][caja.y]=='@')
 					{
 						jugadorMedio = true;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x-i][caja.y]=='$'||test.getCas()[caja.x-i][caja.y]=='*')){
-						System.out.println("CAMINO BLOQUEANTE VERTICAL EN "+caja.x+","+caja.y);
-						test.escenarioToString();
+//						System.out.println("CAMINO BLOQUEANTE VERTICAL 2 EN "+caja.x+","+caja.y);
+//						test.escenarioToString();
 						return true;
 					}
 				}else{
@@ -479,7 +482,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x+2][caja.y];
 			aux1[2][1]=test.getCas()[caja.x+2][caja.y+1];
 			aux1[2][2]=test.getCas()[caja.x+2][caja.y+2];
-		}else if(caja.x>=12&&caja.y<18){//evitamos salirnos de los límites de filas del escenario
+		}else if(caja.x>=12&&caja.y<18){//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=test.getCas()[caja.x][caja.y];
 			aux1[0][1]=test.getCas()[caja.x][caja.y+1];
 			aux1[0][2]=test.getCas()[caja.x][caja.y+2];
@@ -489,7 +492,7 @@ public class Resolver {
 			aux1[2][0]=' ';
 			aux1[2][1]=' ';
 			aux1[2][2]=' ';
-		}else if(caja.y>=18&&caja.x<12){//evitamos salirnos de los límites de columnas del escenario
+		}else if(caja.y>=18&&caja.x<12){//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=test.getCas()[caja.x][caja.y];
 			aux1[0][1]=test.getCas()[caja.x][caja.y+1];
 			aux1[0][2]=' ';
@@ -522,7 +525,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x+2][caja.y-1];
 			aux1[2][1]=test.getCas()[caja.x+2][caja.y];
 			aux1[2][2]=test.getCas()[caja.x+2][caja.y+1];
-		}else{//evitamos salirnos de los límites de filas del escenario
+		}else{//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=test.getCas()[caja.x][caja.y-1];
 			aux1[0][1]=test.getCas()[caja.x][caja.y];
 			aux1[0][2]=test.getCas()[caja.x][caja.y+1];
@@ -545,7 +548,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x+2][caja.y-2];
 			aux1[2][1]=test.getCas()[caja.x+2][caja.y-1];
 			aux1[2][2]=test.getCas()[caja.x+2][caja.y];
-		}else if(caja.x>=12&&caja.y>1){//evitamos salirnos de los límites de filas del escenario
+		}else if(caja.x>=12&&caja.y>1){//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=test.getCas()[caja.x][caja.y-2];
 			aux1[0][1]=test.getCas()[caja.x][caja.y-1];
 			aux1[0][2]=test.getCas()[caja.x][caja.y];
@@ -555,7 +558,7 @@ public class Resolver {
 			aux1[2][0]=' ';
 			aux1[2][1]=' ';
 			aux1[2][2]=' ';
-		}else if(caja.y<=1&&caja.x<12){//evitamos salirnos de los límites de columnas del escenario
+		}else if(caja.y<=1&&caja.x<12){//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=test.getCas()[caja.x][caja.y-1];
 			aux1[0][2]=test.getCas()[caja.x][caja.y];
@@ -588,7 +591,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x+1][caja.y];
 			aux1[2][1]=test.getCas()[caja.x+1][caja.y+1];
 			aux1[2][2]=test.getCas()[caja.x+1][caja.y+2];
-		}else{//evitamos salirnos de los límites de columnas del escenario
+		}else{//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=test.getCas()[caja.x-1][caja.y];
 			aux1[0][1]=test.getCas()[caja.x-1][caja.y+1];
 			aux1[0][2]=' ';
@@ -622,7 +625,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x+1][caja.y-2];
 			aux1[2][1]=test.getCas()[caja.x+1][caja.y-1];
 			aux1[2][2]=test.getCas()[caja.x+1][caja.y];
-		}else{//evitamos salirnos de los límites de columnas del escenario
+		}else{//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=test.getCas()[caja.x-1][caja.y-1];
 			aux1[0][2]=test.getCas()[caja.x-1][caja.y];
@@ -645,7 +648,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y];
 			aux1[2][1]=test.getCas()[caja.x][caja.y+1];
 			aux1[2][2]=test.getCas()[caja.x][caja.y+2];
-		}else if(caja.x<=1&&caja.y<18){//evitamos salirnos de los límites de filas del escenario
+		}else if(caja.x<=1&&caja.y<18){//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=' ';
 			aux1[0][2]=' ';
@@ -655,7 +658,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y];
 			aux1[2][1]=test.getCas()[caja.x][caja.y+1];
 			aux1[2][2]=test.getCas()[caja.x][caja.y+2];
-		}else if(caja.y>=18&&caja.x>1){//evitamos salirnos de los límites de columnas del escenario
+		}else if(caja.y>=18&&caja.x>1){//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=test.getCas()[caja.x-2][caja.y];
 			aux1[0][1]=test.getCas()[caja.x-2][caja.y+1];
 			aux1[0][2]=' ';
@@ -665,7 +668,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y];
 			aux1[2][1]=test.getCas()[caja.x][caja.y+1];
 			aux1[2][2]=' ';
-		}else{//evitamos salirnos de ambos límites del escenario
+		}else{//evitamos salirnos de ambos lï¿½mites del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=' ';
 			aux1[0][2]=' ';
@@ -688,7 +691,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y-1];
 			aux1[2][1]=test.getCas()[caja.x][caja.y];
 			aux1[2][2]=test.getCas()[caja.x][caja.y+1];
-		}else{//evitamos salirnos de los límites de filas del escenario
+		}else{//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=' ';
 			aux1[0][2]=' ';
@@ -711,7 +714,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y-2];
 			aux1[2][1]=test.getCas()[caja.x][caja.y-1];
 			aux1[2][2]=test.getCas()[caja.x][caja.y];
-		}else if(caja.x<=1&&caja.y>1){//evitamos salirnos de los límites de filas del escenario
+		}else if(caja.x<=1&&caja.y>1){//evitamos salirnos de los lï¿½mites de filas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=' ';
 			aux1[0][2]=' ';
@@ -721,7 +724,7 @@ public class Resolver {
 			aux1[2][0]=test.getCas()[caja.x][caja.y-2];
 			aux1[2][1]=test.getCas()[caja.x][caja.y-1];
 			aux1[2][2]=test.getCas()[caja.x][caja.y];
-		}else if(caja.x>1&&caja.y<=1){//evitamos salirnos de los límites de columnas del escenario
+		}else if(caja.x>1&&caja.y<=1){//evitamos salirnos de los lï¿½mites de columnas del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=test.getCas()[caja.x-2][caja.y-1];
 			aux1[0][2]=test.getCas()[caja.x-2][caja.y];
@@ -731,7 +734,7 @@ public class Resolver {
 			aux1[2][0]=' ';
 			aux1[2][1]=test.getCas()[caja.x][caja.y-1];
 			aux1[2][2]=test.getCas()[caja.x][caja.y];
-		}else{//evitamos salirnos de ambos límites del escenario
+		}else{//evitamos salirnos de ambos lï¿½mites del escenario
 			aux1[0][0]=' ';
 			aux1[0][1]=' ';
 			aux1[0][2]=' ';
