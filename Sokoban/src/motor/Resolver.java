@@ -390,9 +390,9 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.x; i++)
 			{//recorremos hacia abajo
-				if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
-						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
-						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
+				if((((test.getCas()[caja.x-i][caja.y+1]=='#')||(test.getCas()[caja.x-i][caja.y+1]=='$')||(test.getCas()[caja.x-i][caja.y+1]=='*'))
+						&&((test.getCas()[caja.x-i][caja.y-1]=='#')||(test.getCas()[caja.x-i][caja.y-1]=='$')||(test.getCas()[caja.x-i][caja.y-1]=='*')))
+						||(test.getCas()[caja.x-i][caja.y]!='.'||test.getCas()[caja.x-i][caja.y]!='+')){
 					if(test.getCas()[caja.x-i][caja.y]=='@')
 					{
 						jugadorMedio = true;
