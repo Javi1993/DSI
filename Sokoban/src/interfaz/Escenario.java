@@ -241,8 +241,11 @@ public class Escenario {
 			}
 		}
 		
-		public int cajas()
-		{//cuenta las cajas del nivel
+		/**
+		 * Devuelve el numero de cajas que tiene el nivel (independientemente si estan o no colocadas)
+		 * @return Entero con el numero de cajas
+		 */
+		public int cajas(){
 			int aux = 0;
 			for(int x = 0; x<cas.length; x++){
 				for(int y = 0; y<cas[x].length; y++){
@@ -363,7 +366,7 @@ public class Escenario {
 			Document nivelJSON = collection.find(new Document("_id",nivel)).first();
 			if((List<String>)nivelJSON.get("Jugada.seq")!=null)
 			{
-				this.setRecord(((List<String>)nivelJSON.get("Jugada.seq")).size());
+				this.setRecord(((List<String>)nivelJSON.get("Jugada.seq")).size()-1);
 				this.setRecordName(nivelJSON.getString("Jugada.Jugador"));
 			}
 
@@ -372,7 +375,7 @@ public class Escenario {
 			if(nivelJSON!=null)
 			{
 				Document jugada =  (Document) nivelJSON.get("Jugada");
-				this.setRecord(((ArrayList<String>)jugada.get("seq")).size());
+				this.setRecord(((ArrayList<String>)jugada.get("seq")).size()-1);
 				this.setRecordName(jugada.getString("Jugador"));
 				List<Object> aux1 = (List<Object>) nivelJSON.get("Mapa");
 				this.cas = new char[aux1.size()][(((List<Object>) aux1.get(0)).size())];
