@@ -20,7 +20,7 @@ public class Resolver {
 	}
 
 	/**
-	 * Método que resuelve el nivel pasado usando el algoritmo AStar(A*) o IDAStar(IDA*)
+	 * Mï¿½todo que resuelve el nivel pasado usando el algoritmo AStar(A*) o IDAStar(IDA*)
 	 * @param escenario - escenario a resolver
 	 * @param pasos - numero de pasos realizados hasta el momento
 	 * @return Array con secuencia de caracteres para llegar a la meta
@@ -76,7 +76,7 @@ public class Resolver {
 	}
 
 	/**
-	 * Método que resuelve el nivel en base al algortimo AStar(A*)
+	 * Mï¿½todo que resuelve el nivel en base al algortimo AStar(A*)
 	 * @param actual - nodo padre
 	 * @return Secuencia de movimientos hasta llegar a meta
 	 */
@@ -100,7 +100,7 @@ public class Resolver {
 				if(!hijos.isEmpty()){//el nodo padre tiene hijos
 					for(Node h:hijos){
 						if(!yaEstudiado(h, cerrados)&&!yaEnCola(h, abiertos)){//comprobamos si ese nodo fue ya estudiado o ya esta a la espera en cola
-							abiertos.add(h);//añadimos el nuevo nodo a la cola
+							abiertos.add(h);//aï¿½adimos el nuevo nodo a la cola
 						}
 					}
 				}
@@ -241,7 +241,7 @@ public class Resolver {
 	}
 
 	/**
-	 * Método que recibe el nodo hijo generado y comprueba si cumple las restricciones para su posterior estudio
+	 * Mï¿½todo que recibe el nodo hijo generado y comprueba si cumple las restricciones para su posterior estudio
 	 * @param test - Nodo
 	 * @return false - si no las cumple, true - si las cumple
 	 */
@@ -252,8 +252,11 @@ public class Resolver {
 			for (Posicion posicion : cajasSinColocar) {
 				if(esEsquina(test.getEscenario(), posicion) || esUnBloque2x2(test.getEscenario(), posicion)|| esUnBloque3x3(test.getEscenario(), posicion)
 						|| esParedLimitada(test.getEscenario(), posicion) || esCaminoBloqueante(test.getEscenario(), posicion)){
+					//					System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
+					//					test.getEscenario().escenarioToString();
 					return false;
 				}else if(test.getEscenario().cajas()>2 && esBloqueEspecial(test.getEscenario(), posicion)){
+					//					System.out.println("ESPECIAL");
 					return false;
 				}
 			}
@@ -262,7 +265,7 @@ public class Resolver {
 	}
 
 	/**
-	 * Método que comprueba escenarios tipo que pueden dejar el nivel irresoluble
+	 * Mï¿½todo que comprueba escenarios tipo que pueden dejar el nivel irresoluble
 	 * @param escenario - Escenario actual
 	 * @param posicion - Posicion de la caja a evaluar
 	 * @return true - es bloque, false - no es bloque
@@ -345,44 +348,37 @@ public class Resolver {
 		aux2[0][0]=test.getCas()[caja.x][caja.y-1];
 		aux2[0][1]=test.getCas()[caja.x][caja.y];
 		aux2[0][2]=test.getCas()[caja.x][caja.y+1];
-		if((aux1[0][0]=='#')&&(aux1[2][0]=='#'))
-		{//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
+		if((aux1[0][0]=='#')&&(aux1[2][0]=='#')){//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
 			jugadorMedio = false;
-			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++)
-			{//recorremos hacia derecha
+			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++){//recorremos hacia derecha
 				if((test.getCas()[caja.x+1][caja.y+i]=='#'||test.getCas()[caja.x+1][caja.y+i]=='$'||test.getCas()[caja.x+1][caja.y+i]=='*')
-						&&(test.getCas()[caja.x-1][caja.y+i]=='#'||test.getCas()[caja.x-1][caja.y+i]=='$'||test.getCas()[caja.x-1][caja.y+i]=='*')
-						&&(test.getCas()[caja.x][caja.y+i]!='.'||test.getCas()[caja.x][caja.y+i]!='+')){
-					if(test.getCas()[caja.x][caja.y+i]=='@')
-					{
+						&&(test.getCas()[caja.x-1][caja.y+i]=='#'||test.getCas()[caja.x-1][caja.y+i]=='$'||test.getCas()[caja.x-1][caja.y+i]=='*')){
+					if(test.getCas()[caja.x][caja.y+i]=='@'||test.getCas()[caja.x][caja.y+i]=='+'){
 						jugadorMedio = true;
-					}else if(test.getCas()[caja.x][caja.y+i]=='.'){
-						break;
+					}else if(test.getCas()[caja.x][caja.y+i]=='.'&&!jugadorMedio){
+						return false;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y+i]=='$'||test.getCas()[caja.x][caja.y+i]=='*')){
-						//												System.out.println("CAMINO BLOQUEANTE HORIZONTAL 1 EN "+caja.x+","+caja.y);
-						//												test.escenarioToString();
+						//																		System.out.println("CAMINO BLOQUEANTE HORIZONTAL 1 EN "+caja.x+","+caja.y);
+						//																		test.escenarioToString();
 						return true;
 					}
-				}else{
+				}else{				
 					break;
 				}
 			}
 			jugadorMedio = false;
-			for(int i = 1; i<=caja.y; i++)
-			{//recorremos hacia izquierda
+			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
 				if((((test.getCas()[caja.x+1][caja.y-i]=='#')||(test.getCas()[caja.x+1][caja.y-i]=='$')||(test.getCas()[caja.x+1][caja.y-i]=='*'))
-						&&((test.getCas()[caja.x-1][caja.y-i]=='#')||(test.getCas()[caja.x-1][caja.y-i]=='$')||(test.getCas()[caja.x-1][caja.y-i]=='*')))
-						&&(test.getCas()[caja.x][caja.y-i]!='.'||test.getCas()[caja.x][caja.y-i]!='+')){
-					if(test.getCas()[caja.x][caja.y-i]=='@')
-					{
+						&&((test.getCas()[caja.x-1][caja.y-i]=='#')||(test.getCas()[caja.x-1][caja.y-i]=='$')||(test.getCas()[caja.x-1][caja.y-i]=='*')))){
+					if(test.getCas()[caja.x][caja.y-i]=='@'||test.getCas()[caja.x][caja.y-i]=='+'){
 						jugadorMedio = true;
-					}else if(test.getCas()[caja.x][caja.y-i]=='.'){
-						break;
+					}else if(test.getCas()[caja.x][caja.y-i]=='.'&&!jugadorMedio){
+						return false;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x][caja.y-i]=='$'||test.getCas()[caja.x][caja.y-i]=='*')){
-						//												System.out.println("CAMINO BLOQUEANTE HORIZONTAL 2 EN "+caja.x+","+caja.y);
-						//												test.escenarioToString();
+						//																		System.out.println("CAMINO BLOQUEANTE HORIZONTAL 2 EN "+caja.x+","+caja.y);
+						//																		test.escenarioToString();
 						return true;
 					}
 				}else{
@@ -394,20 +390,17 @@ public class Resolver {
 		if(aux2[0][0]=='#'&&aux2[0][2]=='#')
 		{//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
 			jugadorMedio = false;
-			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++)
-			{//recorremos hacia arriba
+			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++){//recorremos hacia arriba
 				if((((test.getCas()[caja.x+i][caja.y+1]=='#')||(test.getCas()[caja.x+i][caja.y+1]=='$')||(test.getCas()[caja.x+i][caja.y+1]=='*'))
-						&&((test.getCas()[caja.x+i][caja.y-1]=='#')||(test.getCas()[caja.x+i][caja.y-1]=='$')||(test.getCas()[caja.x+i][caja.y-1]=='*')))
-						&&(test.getCas()[caja.x+i][caja.y]!='.'||test.getCas()[caja.x+i][caja.y]!='+')){
-					if(test.getCas()[caja.x+i][caja.y]=='@')
-					{
+						&&((test.getCas()[caja.x+i][caja.y-1]=='#')||(test.getCas()[caja.x+i][caja.y-1]=='$')||(test.getCas()[caja.x+i][caja.y-1]=='*')))){
+					if(test.getCas()[caja.x+i][caja.y]=='@'||test.getCas()[caja.x+i][caja.y]=='+'){
 						jugadorMedio = true;
-					}else if(test.getCas()[caja.x+i][caja.y]=='.'){
-						break;
+					}else if(test.getCas()[caja.x+i][caja.y]=='.'&&!jugadorMedio){
+						return false;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x+i][caja.y]=='$'||test.getCas()[caja.x+i][caja.y]=='*')){
-						//												System.out.println("CAMINO BLOQUEANTE VERTICAL 1 EN "+caja.x+","+caja.y);
-						//												test.escenarioToString();
+						//																		System.out.println("CAMINO BLOQUEANTE VERTICAL 1 EN "+caja.x+","+caja.y);
+						//																		test.escenarioToString();
 						return true;
 					}
 				}else{
@@ -415,20 +408,17 @@ public class Resolver {
 				}
 			}
 			jugadorMedio = false;
-			for(int i = 1; i<=caja.x; i++)
-			{//recorremos hacia abajo
+			for(int i = 1; i<=caja.x; i++){//recorremos hacia abajo
 				if((((test.getCas()[caja.x-i][caja.y+1]=='#')||(test.getCas()[caja.x-i][caja.y+1]=='$')||(test.getCas()[caja.x-i][caja.y+1]=='*'))
-						&&((test.getCas()[caja.x-i][caja.y-1]=='#')||(test.getCas()[caja.x-i][caja.y-1]=='$')||(test.getCas()[caja.x-i][caja.y-1]=='*')))
-						&&(test.getCas()[caja.x-i][caja.y]!='.'||test.getCas()[caja.x-i][caja.y]!='+')){
-					if(test.getCas()[caja.x-i][caja.y]=='@')
-					{
+						&&((test.getCas()[caja.x-i][caja.y-1]=='#')||(test.getCas()[caja.x-i][caja.y-1]=='$')||(test.getCas()[caja.x-i][caja.y-1]=='*')))){
+					if(test.getCas()[caja.x-i][caja.y]=='@'||test.getCas()[caja.x-i][caja.y]=='+'){
 						jugadorMedio = true;
-					}else if(test.getCas()[caja.x-i][caja.y]=='.'){
+					}else if(test.getCas()[caja.x-i][caja.y]=='.'&&!jugadorMedio){
 						break;
 					}
 					if(!jugadorMedio&&(test.getCas()[caja.x-i][caja.y]=='$'||test.getCas()[caja.x-i][caja.y]=='*')){
-						//												System.out.println("CAMINO BLOQUEANTE VERTICAL 2 EN "+caja.x+","+caja.y);
-						//												test.escenarioToString();
+						//																		System.out.println("CAMINO BLOQUEANTE VERTICAL 2 EN "+caja.x+","+caja.y);
+						//																		test.escenarioToString();
 						return true;
 					}
 				}else{
@@ -490,7 +480,6 @@ public class Resolver {
 					return false;
 				}
 			}
-			return true;
 		}
 		return false;
 	}
