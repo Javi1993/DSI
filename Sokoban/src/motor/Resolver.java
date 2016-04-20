@@ -480,6 +480,7 @@ public class Resolver {
 					return false;
 				}
 			}
+			return true;
 		}
 		return false;
 	}
