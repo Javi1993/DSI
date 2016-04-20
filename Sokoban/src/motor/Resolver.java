@@ -252,8 +252,8 @@ public class Resolver {
 			for (Posicion posicion : cajasSinColocar) {
 				if(esEsquina(test.getEscenario(), posicion) || esUnBloque2x2(test.getEscenario(), posicion)|| esUnBloque3x3(test.getEscenario(), posicion)
 						|| esParedLimitada(test.getEscenario(), posicion) || esCaminoBloqueante(test.getEscenario(), posicion)){
-					//										System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
-					//										test.getEscenario().escenarioToString();
+//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
+//															test.getEscenario().escenarioToString();
 					return false;
 				}else if(test.getEscenario().cajas()>2 && esBloqueEspecial(test.getEscenario(), posicion)){
 //					System.out.println("ESPECIAL");
@@ -445,8 +445,7 @@ public class Resolver {
 			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++){//recorremos hacia derecha
 				if(test.getCas()[caja.x][caja.y+i]=='#'){
 					break;
-				}else if((((test.getCas()[caja.x+1][caja.y+i]==' ')||(test.getCas()[caja.x+1][caja.y+i]=='@')||(test.getCas()[caja.x+1][caja.y+i]=='+'))
-						&&((test.getCas()[caja.x-1][caja.y+i]==' ')||(test.getCas()[caja.x-1][caja.y+i]=='@')||(test.getCas()[caja.x-1][caja.y+i]=='+')))
+				}else if(((test.getCas()[caja.x+1][caja.y+i]!='#')&&(test.getCas()[caja.x-1][caja.y+i]!='#'))
 						||(test.getCas()[caja.x][caja.y+i]=='.'||test.getCas()[caja.x][caja.y+i]=='+')){
 					return false;
 
@@ -454,16 +453,15 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
 				if(test.getCas()[caja.x][caja.y-i]=='#'){
-//					System.out.println("BLOQ EN "+caja.x+", "+caja.y);
+//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
 //					test.escenarioToString();
 					return true;
-				}else if((((test.getCas()[caja.x+1][caja.y-i]==' ')||(test.getCas()[caja.x+1][caja.y-i]=='@')||(test.getCas()[caja.x+1][caja.y-i]=='+'))
-						&&((test.getCas()[caja.x-1][caja.y-i]==' ')||(test.getCas()[caja.x-1][caja.y-i]=='@')||(test.getCas()[caja.x-1][caja.y-i]=='+')))
+				}else if(((test.getCas()[caja.x+1][caja.y-i]!='#')&&(test.getCas()[caja.x-1][caja.y-i]!='#'))
 						||(test.getCas()[caja.x][caja.y-i]=='.'||test.getCas()[caja.x][caja.y-i]=='+')){
 					return false;
 				}
 			}
-//			System.out.println("BLOQ EN "+caja.x+", "+caja.y);
+//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
 //			test.escenarioToString();
 			return true;
 		}
@@ -472,8 +470,7 @@ public class Resolver {
 			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++){//recorremos hacia arriba
 				if(test.getCas()[caja.x+i][caja.y]=='#'){
 					break;
-				}else if((((test.getCas()[caja.x+i][caja.y+1]==' ')||(test.getCas()[caja.x+i][caja.y+1]=='@')||(test.getCas()[caja.x+i][caja.y+1]=='+'))
-						&&((test.getCas()[caja.x+i][caja.y-1]==' ')||(test.getCas()[caja.x+i][caja.y-1]=='@')||(test.getCas()[caja.x+i][caja.y-1]=='+')))
+				}else if(((test.getCas()[caja.x+i][caja.y+1]!='#')&&(test.getCas()[caja.x+i][caja.y-1]!='#'))
 						||(test.getCas()[caja.x+i][caja.y]=='.'||test.getCas()[caja.x+i][caja.y]=='+')){
 					return false;
 				}
@@ -483,13 +480,12 @@ public class Resolver {
 //					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
 //					test.escenarioToString();
 					return true;
-				}if((((test.getCas()[caja.x-i][caja.y+1]==' ')||(test.getCas()[caja.x-i][caja.y+1]=='@')||(test.getCas()[caja.x-i][caja.y+1]=='+'))
-						&&((test.getCas()[caja.x-i][caja.y-1]==' ')||(test.getCas()[caja.x-i][caja.y-1]=='@')||(test.getCas()[caja.x-i][caja.y-1]=='+')))
+				}if(((test.getCas()[caja.x-i][caja.y+1]!='#')&&(test.getCas()[caja.x-i][caja.y-1]!='#'))
 						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
 					return false;
 				}
 			}
-//			System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
+//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
 //			test.escenarioToString();
 			return true;
 		}
