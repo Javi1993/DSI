@@ -329,8 +329,7 @@ public class Resolver {
 	private static boolean esEsquina(Escenario test, Posicion posicion)
 	{
 		if((test.getCas()[posicion.x-1][posicion.y]=='#'||test.getCas()[posicion.x+1][posicion.y]=='#')
-				&&(test.getCas()[posicion.x][posicion.y-1]=='#'||test.getCas()[posicion.x][posicion.y+1]=='#')
-				&&(test.getCas()[posicion.x][posicion.y]!='*'))
+				&&(test.getCas()[posicion.x][posicion.y-1]=='#'||test.getCas()[posicion.x][posicion.y+1]=='#'))
 		{//se ha colocado una caja en una esquina que no es posicion destino
 			return true;
 		}
