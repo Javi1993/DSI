@@ -43,7 +43,6 @@ public class Grafica extends JFrame{
 	public Escenario escenario;
 	private List<String> teclasManual;
 	private boolean comenzado = false;
-	private static final int COLOR_ROJO = 13123134;
 	private static final int COLOR_NEGRO = -16777216;
 
 	public static void main(String [] args) throws InterruptedException
@@ -136,11 +135,12 @@ public class Grafica extends JFrame{
 						break;
 					case CAJA_SOBRE_DESTINO:
 						// 1: Destino
-						g.setColor(new Color(COLOR_ROJO));
-						g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
+						pathToFile = new File("./img/EndPoint_Red.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
 						// 2: Caja
-						pathToFile = new File("./img/CrateDark_Brown.png");
+						pathToFile = new File("./img/CrateDark_Brown_Background.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
@@ -156,7 +156,7 @@ public class Grafica extends JFrame{
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
 						//2: Jugador
-						pathToFile = new File("./img/Character5.png");
+						pathToFile = new File("./img/Character5_Background.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
@@ -227,8 +227,7 @@ public class Grafica extends JFrame{
 		case 'd':
 			if(comenzado){
 				if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
-					if(escenario.hasGanado())
-					{
+					if(escenario.hasGanado()){
 						establecerPasos(pasos+1);
 						b1.setText("Next level");
 					}else{
