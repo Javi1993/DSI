@@ -12,13 +12,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import jugador.Mapas;
 import jugador.Player;
 import motor.Resolver;
@@ -42,12 +43,8 @@ public class Grafica extends JFrame{
 	public Escenario escenario;
 	private List<String> teclasManual;
 	private boolean comenzado = false;
-	private static final int COLOR_VERDE = -16711936;
-	private static final int COLOR_AZUL = -16776961;
-	private static final int COLOR_NARANJA = -14336;
+	private static final int COLOR_ROJO = 13123134;
 	private static final int COLOR_NEGRO = -16777216;
-	private static final int COLOR_BLANCO = -1;
-	private static final int COLOR_GRIS = -7829368;
 
 	public static void main(String [] args) throws InterruptedException
 	{	
@@ -102,110 +99,101 @@ public class Grafica extends JFrame{
 	 */
 	public void dibujarTablero(Graphics g)
 	{
-		// Pinta los bordes
-		g.fillRect(BORDE - 2, BORDE - 2, (PIXELSCUADRADO+1)* (ancho) + 3, (PIXELSCUADRADO+1) * (alto) + 3);
-		/*
+		try {
+			// Pinta los bordes
+			g.fillRect(BORDE - 2, BORDE - 2, (PIXELSCUADRADO+1)* (ancho) + 3, (PIXELSCUADRADO+1) * (alto) + 3);
+			/*
         g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 2,
                    BORDE + (PIXELSCUADRADO+1) - 2,
                    (PIXELSCUADRADO+1)* (DIMENSIONPIEZA) + 3, (PIXELSCUADRADO+1) * (DIMENSIONPIEZA) + 3);
-		 */                   
-		// Pinta el tablero
-		for (int i = 0; i < alto; i++) {
-			for (int j = 0; j < ancho; j++) {
-				Escenario.TipoCasilla tipoCasilla = tablero[i][j];
-				switch(tipoCasilla) {
-				case VACIA:
-					g.setColor(new Color(COLOR_NEGRO));
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
-					break;
-				case MURO:
-					g.setColor(new Color(COLOR_GRIS));
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
-					break;
-				case CAJA:
-					g.setColor(new Color(COLOR_NARANJA));
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
-					break;
-					// Pinta un punto
-				case DESTINO:
-					g.setColor(new Color(COLOR_VERDE));
-					g.fillArc(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, 120, 360);
-					// Punto: g.fillRect(BORDE+(PIXELSCUADRADO+1)*j+((PIXELSCUADRADO-PIXELSPUNTO)/2), BORDE+(PIXELSCUADRADO+1)*i+((PIXELSCUADRADO-PIXELSPUNTO)/2), PIXELSPUNTO, PIXELSPUNTO);
-					break;
-				case CAJA_SOBRE_DESTINO:
-					g.setColor(new Color(COLOR_NARANJA));
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
-					g.setColor(new Color(COLOR_VERDE));
-					g.drawArc(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, 120, 360);
-					break;
-				case JUGADOR:
-					g.setColor(new Color(COLOR_AZUL));
-					// Figura
-					g.fillArc(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, 0, 180);
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)-1, PIXELSCUADRADO, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/3), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/3), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					// Ojos
-					g.setColor(new Color(COLOR_BLANCO));
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/4), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4), PIXELSCUADRADO/5, PIXELSCUADRADO/4);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/4), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4), PIXELSCUADRADO/5, PIXELSCUADRADO/4);
-					g.setColor(new Color(COLOR_NEGRO));
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/4)+PIXELSCUADRADO/20, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4)+PIXELSCUADRADO/8, PIXELSCUADRADO/10, PIXELSCUADRADO/8);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/4)+PIXELSCUADRADO/20, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4)+PIXELSCUADRADO/8, PIXELSCUADRADO/10, PIXELSCUADRADO/8);
-					break;
-				case JUGADOR_SOBRE_DESTINO:
-					// 1: Destino
-					g.setColor(new Color(COLOR_VERDE));
-					g.fillArc(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, 120, 360);
+			 */                   
+			// Pinta el tablero
+			File pathToFile;
+			Image image;
+			for (int i = 0; i < alto; i++) {
+				for (int j = 0; j < ancho; j++) {
+					Escenario.TipoCasilla tipoCasilla = tablero[i][j];
+					switch(tipoCasilla) {
+					case VACIA:
+						g.setColor(new Color(COLOR_NEGRO));
+						g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
+						break;
+					case MURO:
+						pathToFile = new File("./img/Wall_Gray.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
+						break;
+					case CAJA:
+						pathToFile = new File("./img/CrateDark_Brown.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
+						break;
+						// Pinta un punto
+					case DESTINO:
+						pathToFile = new File("./img/EndPoint_Red.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
+						break;
+					case CAJA_SOBRE_DESTINO:
+						// 1: Destino
+						g.setColor(new Color(COLOR_ROJO));
+						g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
 
-					// 2: Jugador
-					g.setColor(new Color(COLOR_AZUL));
-					// Figura
-					g.fillArc(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, 0, 180);
-					g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)-1, PIXELSCUADRADO, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/3), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/3), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/2)+(PIXELSCUADRADO/6), PIXELSCUADRADO/3, PIXELSCUADRADO/3);
-					// Ojos
-					g.setColor(new Color(COLOR_VERDE));
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/4), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4), PIXELSCUADRADO/5, PIXELSCUADRADO/4);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/4), BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4), PIXELSCUADRADO/5, PIXELSCUADRADO/4);
-					g.setColor(new Color(COLOR_NEGRO));
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(PIXELSCUADRADO/4)+PIXELSCUADRADO/20, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4)+PIXELSCUADRADO/8, PIXELSCUADRADO/10, PIXELSCUADRADO/8);
-					g.fillOval(BORDE+(PIXELSCUADRADO+1)*j+(2*PIXELSCUADRADO/4)+PIXELSCUADRADO/20, BORDE+(PIXELSCUADRADO+1)*i+(PIXELSCUADRADO/4)+PIXELSCUADRADO/8, PIXELSCUADRADO/10, PIXELSCUADRADO/8);
-					break;
+						// 2: Caja
+						pathToFile = new File("./img/CrateDark_Brown.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
+						break;
+					case JUGADOR:
+						pathToFile = new File("./img/Character5.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
+						break;
+					case JUGADOR_SOBRE_DESTINO:
+						// 1: Destino
+						pathToFile = new File("./img/EndPoint_Red.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
+
+						//2: Jugador
+						pathToFile = new File("./img/Character5.png");
+						image = ImageIO.read(pathToFile);
+						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
+						break;
+					}
 				}
 			}
-		}
-		// Pinta los pasos
-		g.setColor(Color.black);
-		g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 5, BORDE+ (PIXELSCUADRADO+1)* (alto - 3) + 7,
-				ANCHODERECHA - 2, PIXELSCUADRADO);
-		g.setColor(Color.white);
-		g.drawString("Steps: " + pasos, BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 2));
+			// Pinta los pasos
+			g.setColor(Color.black);
+			g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 5, BORDE+ (PIXELSCUADRADO+1)* (alto - 3) + 7,
+					ANCHODERECHA - 2, PIXELSCUADRADO);
+			g.setColor(Color.white);
+			g.drawString("Steps: " + pasos, BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 2));
 
-		//Pintar instrucciones
-		g.setColor(Color.black);
-		g.setFont(new Font("Dialog", Font.BOLD, 15));
-		g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
+			//Pintar instrucciones
+			g.setColor(Color.black);
+			g.setFont(new Font("Dialog", Font.BOLD, 15));
+			g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
 
-		//Pintar record info
-		g.setColor(Color.black);
-		g.setFont(new Font("Dialog", Font.BOLD, 13));
-		if(escenario.getRecord()>0)
-		{
-			g.drawString("Level "+escenario.getNivel()+": The recordman is "+escenario.getRecordName()+" with "+escenario.getRecord()+" steps.", BORDE, BORDE-6);
-		}else{
-			g.drawString("Level "+escenario.getNivel()+": No record yet.", BORDE, BORDE-6);
-		}
+			//Pintar record info
+			g.setColor(Color.black);
+			g.setFont(new Font("Dialog", Font.BOLD, 13));
+			if(escenario.getRecord()>0){
+				g.drawString("Level "+escenario.getNivel()+": The recordman is "+escenario.getRecordName()+" with "+escenario.getRecord()+" steps.", BORDE, BORDE-6);
+			}else{
+				g.drawString("Level "+escenario.getNivel()+": No record yet.", BORDE, BORDE-6);
+			}
 
-		g.setColor(Color.black);
-		g.setFont(new Font("Dialog", Font.BOLD, 15));
-		if(escenario.hasGanado()&&!escenario.isIA()){
-			g.drawString("You win! =)", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
-		}else if(escenario.hasGanado()&&escenario.isIA()){
-			g.drawString("IA win! =(", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+			g.setColor(Color.black);
+			g.setFont(new Font("Dialog", Font.BOLD, 15));
+			if(escenario.hasGanado()&&!escenario.isIA()){
+				g.drawString("You win! =)", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+			}else if(escenario.hasGanado()&&escenario.isIA()){
+				g.drawString("IA win! =(", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
