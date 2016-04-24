@@ -227,9 +227,9 @@ public class Resolver {
 					}
 				}
 				break;
-			default://movimiento hacia abajo (X)
+			default://movimiento hacia abajo (S)
 				if(test.realizarMovimiento('S')){//comprobamos si es posible el movimiento
-					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"X");//generamos el nodo tras el movumiento
+					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"S");//generamos el nodo tras el movumiento
 					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
 					}
