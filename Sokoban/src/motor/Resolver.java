@@ -445,8 +445,9 @@ public class Resolver {
 		aux2[0][1]=test.getCas()[caja.x][caja.y];
 		aux2[0][2]=test.getCas()[caja.x][caja.y+1];
 
-		if((aux1[0][0]=='#')||(aux1[0][0]=='$')||(aux1[0][0]=='*')||(aux1[2][0]=='#')
-				||(aux1[2][0]=='$')||(aux1[2][0]=='*')){//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
+		if(aux1[0][0]=='#'||aux1[2][0]=='#'||((aux1[0][0]=='$'||aux1[0][0]=='*'||aux1[2][0]=='$'||aux1[2][0]=='*')
+				&&((test.getCas()[caja.x][caja.y+1]=='#'||test.getCas()[caja.x][caja.y+1]=='$'||test.getCas()[caja.x][caja.y+1]=='*')||(test.getCas()[caja.x][caja.y-1]=='#'
+				||test.getCas()[caja.x][caja.y-1]=='$'||test.getCas()[caja.x][caja.y-1]=='*')))){//recorremos  derecha e izquierda del escenario por ese camino para ver si tiene salida para la caja
 			for(int i = 1; i<((test.getCas()[0].length)-(caja.y)); i++){//recorremos hacia derecha
 				if(test.getCas()[caja.x][caja.y+i]=='#'){
 					break;
@@ -458,22 +459,23 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
 				if(test.getCas()[caja.x][caja.y-i]=='#'){
-					//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
-					//					test.escenarioToString();
+//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
+//					test.escenarioToString();
 					return true;
 				}else if(((test.getCas()[caja.x+1][caja.y-i]!='#')&&(test.getCas()[caja.x-1][caja.y-i]!='#'))
 						||(test.getCas()[caja.x][caja.y-i]=='.'||test.getCas()[caja.x][caja.y-i]=='+')){
 					return false;
 				}
 			}
-			//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
-			//			test.escenarioToString();
+//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
+//			test.escenarioToString();
 			return true;
 		}
 
-		if(aux2[0][0]=='#'||aux2[0][0]=='$'||aux2[0][0]=='*'||aux2[0][2]=='#'||
-				aux2[0][2]=='$'||aux2[0][2]=='*'){//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
-			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++){//recorremos hacia arriba
+		if(aux2[0][0]=='#'||aux2[0][2]=='#'||((aux2[0][0]=='$'||aux2[0][0]=='*'||aux2[0][2]=='$'||aux2[0][2]=='*')
+				&&((test.getCas()[caja.x+1][caja.y]=='#'||test.getCas()[caja.x+1][caja.y]=='$'||test.getCas()[caja.x+1][caja.y]=='*')||(test.getCas()[caja.x-1][caja.y]=='#'
+				||test.getCas()[caja.x-1][caja.y]=='$'||test.getCas()[caja.x-1][caja.y]=='*')))){//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
+			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++){//recorremos hacia abajo
 				if(test.getCas()[caja.x+i][caja.y]=='#'){
 					break;
 				}else if(((test.getCas()[caja.x+i][caja.y+1]!='#')&&(test.getCas()[caja.x+i][caja.y-1]!='#'))
@@ -481,18 +483,18 @@ public class Resolver {
 					return false;
 				}
 			}
-			for(int i = 1; i<=caja.x; i++){//recorremos hacia abajo
+			for(int i = 1; i<=caja.x; i++){//recorremos hacia arriba
 				if(test.getCas()[caja.x-i][caja.y]=='#'){
-					//					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
-					//					test.escenarioToString();
+//					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
+//					test.escenarioToString();
 					return true;
 				}if(((test.getCas()[caja.x-i][caja.y+1]!='#')&&(test.getCas()[caja.x-i][caja.y-1]!='#'))
 						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
 					return false;
 				}
 			}
-			//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
-			//			test.escenarioToString();
+//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
+//			test.escenarioToString();
 			return true;
 		}
 		return false;
