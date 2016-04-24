@@ -83,7 +83,8 @@ public class Resolver {
 	private String AStar(Node actual)
 	{
 		nodosTotal = 0;//numero nodos estudiados
-		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
+//		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
+		Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
 		abiertos.add(actual);//aniadimos el nodo padre a la cola
