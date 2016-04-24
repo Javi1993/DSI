@@ -201,14 +201,14 @@ public class Mapas {
 		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("niveles");//elegimos la colecci�n
 
-		long time = 0;
+		double time = 0;
 		long nodos = 0;
 		for(int i = 0; i<collection.count(); i++){
 			Document doc = collection.find(new Document("_id",i+1)).first();
 			time = time + ((Document)doc.get("AStar")).getLong("Time");
-			nodos = nodos + ((Document)doc.get("AStar")).getLong("Nodos");
+			nodos = nodos + ((Document)doc.get("AStar")).getInteger("Nodos");
 		}
-		System.out.println("Tiempo total: "+(time/(1000*60)));
+		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
 		System.out.println("Nodos total: "+nodos);
 	}
 }

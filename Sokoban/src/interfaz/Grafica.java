@@ -195,11 +195,11 @@ public class Grafica extends JFrame{
 			g.drawString(": Player on goal ", BORDE+(9*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*16));
 			pathToFile = new File("./img/EndPoint_Red.png");
 			image = ImageIO.read(pathToFile);
-			g.drawImage(image, BORDE+(13*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawImage(image, BORDE+(13*PIXELSCUADRADO+7), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			pathToFile = new File("./img/CrateDark_Brown_Background.png");
 			image = ImageIO.read(pathToFile);
-			g.drawImage(image, BORDE+(13*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
-			g.drawString(": Box on goal ", BORDE+(14*PIXELSCUADRADO-10), BORDE+(PIXELSCUADRADO*16));
+			g.drawImage(image, BORDE+(13*PIXELSCUADRADO+7), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Box on goal ", BORDE+(14*PIXELSCUADRADO+2), BORDE+(PIXELSCUADRADO*16));
 
 			//Pintar record info
 			g.setColor(Color.black);

@@ -89,12 +89,11 @@ public class Player {
 			return false;
 		}
 		Document user = collection.find(new Document("_id",this.id)).first();
-		if(user!=null)
-		{
-			if(user.getString("Pass").equals(this.pswd))
-			{
+		if(user!=null){
+			if(user.getString("Pass").equals(this.pswd)){
 				int tmn = ((ArrayList<Document>)user.get("Progreso")).size();
 				this.progreso = (int)(((ArrayList<Document>)user.get("Progreso")).get(tmn-1).get("Nivel"));
+				if(this.progreso>150){this.progreso=150;}
 			}else{
 				client.close();
 				return false;
