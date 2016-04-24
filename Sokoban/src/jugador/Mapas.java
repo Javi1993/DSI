@@ -36,22 +36,17 @@ public class Mapas {
 				Iterator<String> it = Files.lines(ruta).iterator();
 				while(it.hasNext()) {
 					String s = it.next();
-					if(s.length()>0&&s.charAt(0)!=';')
-					{//leemos el nivel del txt
-						for(int j = 0; j<s.length(); j++)
-						{
+					if(s.length()>0&&s.charAt(0)!=';'){//leemos el nivel del txt
+						for(int j = 0; j<s.length(); j++){
 							mapa[cnt][j] = s.charAt(j);
 						}
 						cnt++;
-					}else if(s.length()==0&&cnt!=0)
-					{//fin de nivel
+					}else if(s.length()==0&&cnt!=0){//fin de nivel
 						ajustarMapa(mapa);
 						List<List<String>> mapaAux = new ArrayList<List<String>>();
-						for(int k = 0; k<mapa.length; k++)
-						{//lo pasamos a un formato reconocible por la base de datos y sobre el que trabajaremos
+						for(int k = 0; k<mapa.length; k++){//lo pasamos a un formato reconocible por la base de datos y sobre el que trabajaremos
 							List<String> aux = new ArrayList<String>();
-							for(int l = 0; l<mapa[k].length; l++)
-							{
+							for(int l = 0; l<mapa[k].length; l++){
 								aux.add(String.valueOf(mapa[k][l]).replace('\u0000', ' '));
 							}
 							mapaAux.add(aux);
@@ -70,47 +65,47 @@ public class Mapas {
 		client.close();
 	}
 
-//	public static void repetidos()
-//	{
-//		Path ruta;
-//		char[][] mapa = new char[14][20];
-//		int cnt = 0;
-//		List<char[][]> test = new ArrayList<char[][]>();
-//		try {
-//			ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
-//			Iterator<String> it = Files.lines(ruta).iterator();
-//			while(it.hasNext()) {
-//				String s = it.next();
-//				if(s.length()>0&&s.charAt(0)!=';')
-//				{//leemos el nivel del txt
-//					for(int j = 0; j<s.length(); j++)
-//					{
-//						mapa[cnt][j] = s.charAt(j);
-//					}
-//					cnt++;
-//				}else if(s.length()==0&&cnt!=0)
-//				{//fin de nivel
-//					test.add(mapa);
-//					mapa = new char[14][20];//nuevo nivel
-//					cnt=0;
-//				}
-//			}
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		for (int i = 0; i < test.size(); i++) {
-//			for (int j = 0; j < test.size(); j++) {
-//				if(i!=j)
-//				{
-//					if(Arrays.deepEquals(test.get(i), test.get(j)))
-//					{
-//						System.out.println((i+1)+" es igual a "+(j+1));
-//					}
-//				}
-//			}
-//		}
-//	}
+	//	public static void repetidos()
+	//	{
+	//		Path ruta;
+	//		char[][] mapa = new char[14][20];
+	//		int cnt = 0;
+	//		List<char[][]> test = new ArrayList<char[][]>();
+	//		try {
+	//			ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
+	//			Iterator<String> it = Files.lines(ruta).iterator();
+	//			while(it.hasNext()) {
+	//				String s = it.next();
+	//				if(s.length()>0&&s.charAt(0)!=';')
+	//				{//leemos el nivel del txt
+	//					for(int j = 0; j<s.length(); j++)
+	//					{
+	//						mapa[cnt][j] = s.charAt(j);
+	//					}
+	//					cnt++;
+	//				}else if(s.length()==0&&cnt!=0)
+	//				{//fin de nivel
+	//					test.add(mapa);
+	//					mapa = new char[14][20];//nuevo nivel
+	//					cnt=0;
+	//				}
+	//			}
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//		for (int i = 0; i < test.size(); i++) {
+	//			for (int j = 0; j < test.size(); j++) {
+	//				if(i!=j)
+	//				{
+	//					if(Arrays.deepEquals(test.get(i), test.get(j)))
+	//					{
+	//						System.out.println((i+1)+" es igual a "+(j+1));
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
 
 	private static void ajustarMapa(char[][] mapa){
 		int cntCol=0;//cuenta las columnas de la derecha que no tienen nada
@@ -121,11 +116,8 @@ public class Mapas {
 		//reordenamos columnas
 		for(int j = mapa[0].length-1; j>=0; j--){
 			if(!finCol){
-				for(int i = 0; i<mapa.length; i++)
-				{
-
-					if(mapa[i][j]!='\u0000')
-					{
+				for(int i = 0; i<mapa.length; i++){
+					if(mapa[i][j]!='\u0000'){
 						finCol = true;
 						break;
 					}
@@ -136,11 +128,9 @@ public class Mapas {
 			cntCol++;
 		}
 
-		for(int k = 0; k<(cntCol-1)/2; k++)
-		{
+		for(int k = 0; k<(cntCol-1)/2; k++){
 			char[] last = getColumn(mapa, mapa[0].length-1);
-			for( int l =mapa[0].length-2; l >= 0 ; l-- )
-			{
+			for( int l =mapa[0].length-2; l >= 0 ; l-- ){
 				setColumn(mapa, getColumn(mapa, l), l+1);
 			}
 			setColumn(mapa, last, 0);  
@@ -149,11 +139,8 @@ public class Mapas {
 		//reordenamos filas
 		for(int jk = mapa.length-1; jk>=0; jk--){
 			if(!finFil){
-				for(int ik = 0; ik<mapa[jk].length; ik++)
-				{
-
-					if(mapa[jk][ik]!='\u0000')
-					{
+				for(int ik = 0; ik<mapa[jk].length; ik++){
+					if(mapa[jk][ik]!='\u0000'){
 						finFil = true;
 						break;
 					}
@@ -164,11 +151,9 @@ public class Mapas {
 			cntFil++;
 		}
 
-		for(int k = 0; k<(cntFil-1)/2; k++)
-		{
+		for(int k = 0; k<(cntFil-1)/2; k++){
 			char[] last = mapa[mapa.length-1];
-			for( int l =mapa.length-2; l >= 0 ; l-- )
-			{
+			for( int l =mapa.length-2; l >= 0 ; l-- ){
 				mapa[l+1] = mapa[l];
 			}
 			mapa[0] = last;  
@@ -197,20 +182,33 @@ public class Mapas {
 		collection = database.getCollection("niveles");//elegimos la colecci�n
 		char seq[] = null;
 		Document sol = collection.find(new Document("_id", id)).first();
-		if(sol!=null)
-		{
+		if(sol!=null){
 			Document inf = (Document)sol.get(tipe);
-			if(inf!=null)
-			{//hay una solucion ya guardada	
+			if(inf!=null){//hay una solucion ya guardada	
 				List<Document> secuencia = (List<Document>) inf.get("seq");
 				seq = new char[secuencia.size()-1];
-				for(int i = 0; i<seq.length; i++)
-				{
+				for(int i = 0; i<seq.length; i++){
 					seq[i] = ((Document)secuencia.get(i+1)).getString("tecla").charAt(0);
 				}
 			}
 		}
 		client.close();
 		return seq;
+	}
+
+	public static void verResultados(){
+		client = new MongoClient("localhost", 27017);//conectamos
+		database = client.getDatabase("sokoban");//elegimos bbdd
+		collection = database.getCollection("niveles");//elegimos la colecci�n
+
+		long time = 0;
+		long nodos = 0;
+		for(int i = 0; i<collection.count(); i++){
+			Document doc = collection.find(new Document("_id",i+1)).first();
+			time = time + ((Document)doc.get("AStar")).getLong("Time");
+			nodos = nodos + ((Document)doc.get("AStar")).getLong("Nodos");
+		}
+		System.out.println("Tiempo total: "+(time/(1000*60)));
+		System.out.println("Nodos total: "+nodos);
 	}
 }
