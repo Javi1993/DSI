@@ -10,10 +10,11 @@ public class Simulacion {
 	public static void main(String[] args) throws IOException{
 		Mapas.generarMapas();
 		Player p = new Player("User", "pass");
+		Resolver res = new Resolver();
 		while(p.getProgreso()<=150)
 		{
 			Escenario testEscenario = new Escenario(p.getProgreso(), false);//creamos el escenario
-			if(Resolver.solucion(testEscenario, 0)==null){
+			if(res.solucion(testEscenario, 0)==null){
 				System.out.println("Nivel "+p.getProgreso()+" no encuenta solucion!");
 				break;
 			}

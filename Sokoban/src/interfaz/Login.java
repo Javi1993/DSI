@@ -66,9 +66,11 @@ public class Login extends JFrame{
 					player = new Player(user.getText().trim(), new String(password.getPassword()));
 					valido = player.estado;}
 				if(!valido){
+					update(getGraphics());
 					getGraphics().setFont(new Font("Dialog", Font.PLAIN, 11));
 					getGraphics().drawString("User already exists or wrong password.", 10, 190);
 					b1.setBorder(borde);
+					user.setBorder(borde);
 					password.setBorder(borde);
 				}
 			}

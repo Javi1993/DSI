@@ -173,7 +173,33 @@ public class Grafica extends JFrame{
 			//Pintar instrucciones
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 15));
-			g.drawString("W: Up  A: Left  D: Right  X: Down  R: Solver/Next level  T: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
+			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  P: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
+			pathToFile = new File("./img/Character5.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Player", BORDE+PIXELSCUADRADO-5, BORDE+(PIXELSCUADRADO*16));
+			pathToFile = new File("./img/CrateDark_Brown.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+(3*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Box", BORDE+4*PIXELSCUADRADO-5, BORDE+(PIXELSCUADRADO*16));
+			pathToFile = new File("./img/EndPoint_Red.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+5*PIXELSCUADRADO+10, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Goal ", BORDE+6*PIXELSCUADRADO+5, BORDE+(PIXELSCUADRADO*16));
+			pathToFile = new File("./img/EndPoint_Red.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+(8*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			pathToFile = new File("./img/Character5_Background.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+(8*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Player on goal ", BORDE+(9*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*16));
+			pathToFile = new File("./img/EndPoint_Red.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+(13*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			pathToFile = new File("./img/CrateDark_Brown_Background.png");
+			image = ImageIO.read(pathToFile);
+			g.drawImage(image, BORDE+(13*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
+			g.drawString(": Box on goal ", BORDE+(14*PIXELSCUADRADO-10), BORDE+(PIXELSCUADRADO*16));
 
 			//Pintar record info
 			g.setColor(Color.black);
@@ -219,11 +245,11 @@ public class Grafica extends JFrame{
 		switch (tecla) {
 		case 'W':
 		case 'A':
-		case 'X':
+		case 'S':
 		case 'D':
 		case 'w':
 		case 'a':
-		case 'x':
+		case 's':
 		case 'd':
 			if(comenzado){
 				if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
@@ -242,15 +268,15 @@ public class Grafica extends JFrame{
 			// Si se pulsa la tecla q sale del programa
 			System.exit(0);
 			break;
-		case 'r':
-		case 'R':
+		case 'L':
+		case 'l':
 			if(comenzado||(!comenzado&&escenario.hasGanado())){
 				// Si se pulsa la tecla r sale inicia el solver o se pasa de nivel
 				solverButton();
 			}
 			break;
-		case 't':
-		case 'T':
+		case 'P':
+		case 'p':
 			// Si se pulsa la tecla t se reinicia o empieza el nivel
 			restarButton();
 			break;
@@ -302,6 +328,10 @@ public class Grafica extends JFrame{
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Level restarted.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+		}else{
+			getGraphics().setColor(Color.black);
+			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+			getGraphics().drawString("Level started.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 		}
 		teclasManual = new ArrayList<String>();
 		b2.setText("Restart");
@@ -312,12 +342,13 @@ public class Grafica extends JFrame{
 		comenzado = false;
 		if(b1.getText().equals("Solver"))
 		{
-			//			pintarTablero();
-			//			update(getGraphics());
+			pintarTablero();
+			update(getGraphics());
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
-			sol = Resolver.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
+			Resolver res = new Resolver();
+			sol = res.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
 			teclasManual = new ArrayList<String>();
 			if(sol!=null){
 				for(int i =0; i<sol.length; i++)
@@ -391,11 +422,11 @@ public class Grafica extends JFrame{
 			switch (key) {
 			case 'W':
 			case 'A':
-			case 'X':
+			case 'S':
 			case 'D':
 			case 'w':
 			case 'a':
-			case 'x':
+			case 's':
 			case 'd':
 			case 'Q':
 			case 'q':
@@ -409,10 +440,10 @@ public class Grafica extends JFrame{
 			switch (key) {
 			case 'Q':
 			case 'q':
-			case 'R':
-			case 'r':
-			case 'T':
-			case 't':
+			case 'P':
+			case 'p':
+			case 'L':
+			case 'l':
 				t.teclaPulsada(key);
 				break;
 			default:

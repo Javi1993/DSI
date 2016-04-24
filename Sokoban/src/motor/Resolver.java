@@ -14,7 +14,7 @@ public class Resolver {
 	private static String solIDA;
 	private static int nodosTotal;
 
-	public static void nextStep(/*recibir posicion actual y avanzar un poco*/)
+	public void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
 
 	}
@@ -25,7 +25,7 @@ public class Resolver {
 	 * @param pasos - numero de pasos realizados hasta el momento
 	 * @return Array con secuencia de caracteres para llegar a la meta
 	 */
-	public static char[] solucion(Escenario escenario, int pasos)
+	public char[] solucion(Escenario escenario, int pasos)
 	{
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//marcamos que el usuario solicito ayuda de la IA
@@ -80,7 +80,7 @@ public class Resolver {
 	 * @param actual - nodo padre
 	 * @return Secuencia de movimientos hasta llegar a meta
 	 */
-	private static String AStar(Node actual)
+	private String AStar(Node actual)
 	{
 		nodosTotal = 0;//numero nodos estudiados
 		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
@@ -113,7 +113,7 @@ public class Resolver {
 	}
 
 	@SuppressWarnings("unused")
-	private static String IDAStar(Node actual)
+	private String IDAStar(Node actual)
 	{
 		int bound = actual.getF();
 		while (true) {
@@ -132,7 +132,7 @@ public class Resolver {
 		}
 	}
 
-	private static int IDAStarSearch(Node actual, int bound, List<Node> listRepetido)
+	private int IDAStarSearch(Node actual, int bound, List<Node> listRepetido)
 	{
 		int min = 0;
 		if(actual.getF()>bound){
@@ -190,7 +190,7 @@ public class Resolver {
 	 * @param padre - nodo a expandir
 	 * @return Lista con los nodos hijos resultantes
 	 */
-	private static List<Node> getHijos(Node padre)
+	private List<Node> getHijos(Node padre)
 	{
 		List<Node> hijos = new ArrayList<>();//lista de nodos hijos
 		int i = 0;//contador
@@ -227,7 +227,7 @@ public class Resolver {
 				}
 				break;
 			default://movimiento hacia abajo (X)
-				if(test.realizarMovimiento('X')){//comprobamos si es posible el movimiento
+				if(test.realizarMovimiento('S')){//comprobamos si es posible el movimiento
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"X");//generamos el nodo tras el movumiento
 					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
@@ -245,7 +245,7 @@ public class Resolver {
 	 * @param test - Nodo
 	 * @return false - si no las cumple, true - si las cumple
 	 */
-	private static boolean comprobarRestricciones(Node test) {
+	private boolean comprobarRestricciones(Node test) {
 		List<Posicion> cajasSinColocar = test.getEscenario().getCajas();//obtenemos la posicion de las cajas sin colocar
 		if(!cajasSinColocar.isEmpty())
 		{
@@ -270,7 +270,7 @@ public class Resolver {
 	 * @param posicion - Posicion de la caja a evaluar
 	 * @return true - es bloque, false - no es bloque
 	 */
-	private static boolean esBloqueEspecial(Escenario test, Posicion caja) {
+	private boolean esBloqueEspecial(Escenario test, Posicion caja) {
 		char[][] aux1 = new char[3][4];//Caja en (0, 1)
 		for(int i = 0; i<aux1.length; i++){//                    #$$#
 			for(int j = 0; j<aux1[i].length; j++){//             #  #
@@ -311,8 +311,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean testBloqueEspecial(char[][] aux) {
-		// TODO Auto-generated method stub
+	private boolean testBloqueEspecial(char[][] aux) {
 		if((aux[0][1] == '$' || aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*') 
 				&& (aux[2][1] == '$' || aux[2][1] == '*')){
 			if(aux[0][0] == '#' && aux[0][3] == '#' && aux[1][0] == '#' && aux[1][1] == ' '
@@ -326,7 +325,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean esEsquina(Escenario test, Posicion posicion)
+	private boolean esEsquina(Escenario test, Posicion posicion)
 	{
 		if((test.getCas()[posicion.x-1][posicion.y]=='#'||test.getCas()[posicion.x+1][posicion.y]=='#')
 				&&(test.getCas()[posicion.x][posicion.y-1]=='#'||test.getCas()[posicion.x][posicion.y+1]=='#'))
@@ -336,7 +335,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean esCaminoBloqueante(Escenario test, Posicion caja) {
+	private boolean esCaminoBloqueante(Escenario test, Posicion caja) {
 		boolean jugadorMedio = false;
 		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
 		aux1[0][0]=test.getCas()[caja.x+1][caja.y];
@@ -433,7 +432,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean esParedLimitada(Escenario test, Posicion caja) {
+	private boolean esParedLimitada(Escenario test, Posicion caja) {
 		char[][] aux1 = new char[3][1];//caja con posibles paredes abajo y/o arriba
 		aux1[0][0]=test.getCas()[caja.x+1][caja.y];
 		aux1[1][0]=test.getCas()[caja.x][caja.y];
@@ -495,7 +494,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean esUnBloque3x3(Escenario test, Posicion caja) {
+	private boolean esUnBloque3x3(Escenario test, Posicion caja) {
 		//creamos los bloques 3x3 que rodean a nuestra caja (9 posibilidades)
 		char[][] aux1 = new char[3][3];//caja en 0,0
 		for(int i = 0; i<aux1.length; i++){
@@ -607,7 +606,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean esUnBloque2x2 (Escenario test, Posicion caja){
+	private boolean esUnBloque2x2 (Escenario test, Posicion caja){
 		//creamos los bloques 2x2 que rodean a nuestra caja (4 posibilidades)
 		char[][] aux1 = new char[2][2];//caja en 0,0
 		for(int i = 0; i<aux1.length; i++){
@@ -646,7 +645,7 @@ public class Resolver {
 		return false;
 	}
 
-	private static boolean testBloque2x2(char[][] aux) {
+	private boolean testBloque2x2(char[][] aux) {
 		int cntB=0;//contador cajas y muros
 		for(int i=0;i<aux.length; i++){
 			for(int j = 0;j<aux[i].length; j++){
@@ -662,7 +661,7 @@ public class Resolver {
 		}
 	}
 
-	private static boolean testBloque3x3(char[][] aux) {
+	private boolean testBloque3x3(char[][] aux) {
 		int cntB=0;//contador cajas y muros
 		boolean centro = false;//centro vacio
 		if(aux[1][1]==' '){centro = true;}
@@ -694,7 +693,7 @@ public class Resolver {
 		return false;
 	}
 
-	public static void copiarEscenarioActual(Escenario test, Escenario padre)
+	public void copiarEscenarioActual(Escenario test, Escenario padre)
 	{
 		char[][] auxEsce = new char[padre.getALTO()][padre.getANCHO()+1];
 		for (int j = 0; j < auxEsce.length; j++) {
@@ -703,7 +702,7 @@ public class Resolver {
 		test.setCas(auxEsce);
 	}
 
-	private static boolean yaEnCola(Node hijo, PriorityQueue<Node> abiertos)
+	private boolean yaEnCola(Node hijo, PriorityQueue<Node> abiertos)
 	{//si el escenario es el mismo
 		for(Node comparar : abiertos)
 		{//comparamos con los ya existentes
@@ -714,7 +713,7 @@ public class Resolver {
 		return false;	
 	}
 
-	private static boolean yaEstudiado(Node hijo, List<Node> cerrados)
+	private boolean yaEstudiado(Node hijo, List<Node> cerrados)
 	{//si el escenario es el mismo
 		for(Node comparar : cerrados)
 		{//comparamos con los ya existentes

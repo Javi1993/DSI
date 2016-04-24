@@ -10,23 +10,19 @@ public class Posicion {
 		switch (tecla) { 
 		case 'W': 
 		case 'w': 
-			/*Posición original desplazada hacia arriba.
-			 * ERROR:La consola muestra errores con y-- y x--.
-			 */
+			//Posición original desplazada hacia arriba.
 			moverPosicion.x = x-1;
 			moverPosicion.y = y;
 			break;
-		case 'X':
-		case 'x': 
+		case 'S':
+		case 's': 
 			//Posición original desplazada hacia abajo.
 			moverPosicion.x = x+1;
 			moverPosicion.y = y;
 			break;
 		case 'A':
 		case 'a': 
-			/*Posición original desplazada hacia la derecha. 
-			 * ERROR:La consola muestra errores con y-- y x--.
-			 */
+			//Posición original desplazada hacia la derecha. 
 			moverPosicion.y = y-1;
 			moverPosicion.x = x;
 			break;
