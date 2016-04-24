@@ -251,12 +251,12 @@ public class Resolver {
 		if(!cajasSinColocar.isEmpty())
 		{
 			for (Posicion posicion : cajasSinColocar) {
-				if(esEsquina(test.getEscenario(), posicion) || esUnBloque2x2(test.getEscenario(), posicion)|| esUnBloque3x3(test.getEscenario(), posicion)
-						|| esParedLimitada(test.getEscenario(), posicion) || esCaminoBloqueante(test.getEscenario(), posicion)){
+				if(esEsquina(test.getEscenario(), posicion) || esUnBloque2x2(test.getEscenario(), posicion)|| esUnBloque3x3(test.getEscenario(), posicion) || esParedLimitada(test.getEscenario(), posicion) 
+						|| esCaminoBloqueante(test.getEscenario(), posicion) || esBloqueEspecial_2a(test.getEscenario(), posicion) || esBloqueEspecial_2b(test.getEscenario(), posicion)){
 					//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
 					//															test.getEscenario().escenarioToString();
 					return false;
-				}else if(test.getEscenario().cajas()>2 && esBloqueEspecial(test.getEscenario(), posicion)){
+				}else if(test.getEscenario().cajas()>2 && esBloqueEspecial_1a(test.getEscenario(), posicion)){
 					//					System.out.println("ESPECIAL");
 					return false;
 				}
@@ -265,13 +265,18 @@ public class Resolver {
 		return true;
 	}
 
+	/*
+	 * 
+	 * HACER TUMBADO E INTERCAMBIANDO CAJA DE 2,1 por muro de al lado
+	 * 
+	 */
 	/**
 	 * M�todo que comprueba escenarios tipo que pueden dejar el nivel irresoluble
 	 * @param escenario - Escenario actual
 	 * @param posicion - Posicion de la caja a evaluar
 	 * @return true - es bloque, false - no es bloque
 	 */
-	private boolean esBloqueEspecial(Escenario test, Posicion caja) {
+	private boolean esBloqueEspecial_1a(Escenario test, Posicion caja) {
 		char[][] aux1 = new char[3][4];//Caja en (0, 1)
 		for(int i = 0; i<aux1.length; i++){//                    #$$#
 			for(int j = 0; j<aux1[i].length; j++){//             #  #
@@ -305,14 +310,89 @@ public class Resolver {
 			}
 		}
 
-		if(testBloqueEspecial(aux1)||testBloqueEspecial(aux2)||testBloqueEspecial(aux3))
-		{//vemos si alguno forma bloque
+		if(testBloqueEspecial_1a(aux1)||testBloqueEspecial_1a(aux2)||testBloqueEspecial_1a(aux3)){//vemos si alguno forma bloque
 			return true;
 		}
 		return false;
 	}
 
-	private boolean testBloqueEspecial(char[][] aux) {
+	private boolean esBloqueEspecial_2a(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[2][3];//Caja en (0, 1)
+		for(int i = 0; i<aux1.length; i++){//                     $#
+			for(int j = 0; j<aux1[i].length; j++){//             #$
+				try{ 
+					aux1[i][j]=test.getCas()[caja.x+i][caja.y-1+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[2][3];//Caja en (1, 1)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-1][caja.y-1+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_2a(aux1)||testBloqueEspecial_2a(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_2b(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[3][2];//Caja en (1, 0)
+		for(int i = 0; i<aux1.length; i++){//                    #
+			for(int j = 0; j<aux1[i].length; j++){//            $$ 
+				try{//											# 
+					aux1[i][j]=test.getCas()[caja.x+i-1][caja.y+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[3][2];//Caja en (1, 1)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-1][caja.y-1+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_2b(aux1)||testBloqueEspecial_2b(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_2a(char[][] aux) {
+		if((aux[0][1] == '$'|| aux[0][1] == '*') && (aux[1][1] == '$' || aux[1][1] == '*')){
+			if(aux[0][2] == '#' && aux[1][0] == '#'){
+				return true;
+			}else if(aux[0][0] == '#' && aux[1][2] == '#'){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_2b(char[][] aux) {
+		if((aux[1][0] == '$'|| aux[0][1] == '*') && (aux[1][1] == '$' || aux[1][1] == '*')){
+			if(aux[0][1] == '#' && aux[2][0] == '#'){
+				return true;
+			}else if(aux[0][0] == '#' && aux[2][1] == '#'){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean testBloqueEspecial_1a(char[][] aux) {
 		if((aux[0][1] == '$' || aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*') 
 				&& (aux[2][1] == '$' || aux[2][1] == '*')){
 			if(aux[0][0] == '#' && aux[0][3] == '#' && aux[1][0] == '#' && aux[1][1] == ' '
@@ -456,16 +536,16 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
 				if(test.getCas()[caja.x][caja.y-i]=='#'){
-					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
-					test.escenarioToString();
+//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
+//					test.escenarioToString();
 					return true;
 				}else if(((test.getCas()[caja.x+1][caja.y-i]!='#')&&(test.getCas()[caja.x-1][caja.y-i]!='#'))
 						||(test.getCas()[caja.x][caja.y-i]=='.'||test.getCas()[caja.x][caja.y-i]=='+')){
 					return false;
 				}
 			}
-			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
-			test.escenarioToString();
+//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
+//			test.escenarioToString();
 			return true;
 		}
 
@@ -480,16 +560,16 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.x; i++){//recorremos hacia arriba
 				if(test.getCas()[caja.x-i][caja.y]=='#'){
-					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
-					test.escenarioToString();
+//					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
+//					test.escenarioToString();
 					return true;
 				}if(((test.getCas()[caja.x-i][caja.y+1]!='#')&&(test.getCas()[caja.x-i][caja.y-1]!='#'))
 						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
 					return false;
 				}
 			}
-			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
-			test.escenarioToString();
+//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
+//			test.escenarioToString();
 			return true;
 		}
 		return false;
