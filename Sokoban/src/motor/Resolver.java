@@ -272,12 +272,12 @@ public class Resolver {
 	 */
 	private boolean comprobarRestricciones(Node test, Posicion caja) {
 		if(caja!=null){//vemos si alguna caja fue desplazada
-			if(esEsquina(test.getEscenario(), caja) || esUnBloque2x2(test.getEscenario(), caja)|| esBloqueEspecial_2a(test.getEscenario(), caja) || esBloqueEspecial_2b(test.getEscenario(), caja) 
-					|| esUnBloque3x3(test.getEscenario(), caja) || esParedLimitada(test.getEscenario(), caja) || esCaminoBloqueante(test.getEscenario(), caja)){
+			if(esEsquina(test.getEscenario(), caja) || esUnBloque2x2(test.getEscenario(), caja)|| esBloqueEspecial_2(test.getEscenario(), caja) || esUnBloque3x3(test.getEscenario(), caja)
+					|| esParedLimitada(test.getEscenario(), caja) || esCaminoBloqueante(test.getEscenario(), caja) || esBloqueEspecial_3(test.getEscenario(), caja)){
 				//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
 				//															test.getEscenario().escenarioToString();
 				return false;
-			}else if(test.getEscenario().cajas()>2 && esBloqueEspecial_1a(test.getEscenario(), caja)){
+			}else if(test.getEscenario().cajas()>2 && esBloqueEspecial_1(test.getEscenario(), caja)){
 				//					System.out.println("ESPECIAL");
 				return false;
 			}
@@ -285,11 +285,29 @@ public class Resolver {
 		return true;
 	}
 
-	/*
-	 * 
-	 * HACER TUMBADO E INTERCAMBIANDO CAJA DE 2,1 por muro de al lado
-	 * 
-	 */
+	private boolean esBloqueEspecial_1(Escenario test, Posicion caja){
+		if(esBloqueEspecial_1a(test, caja) || esBloqueEspecial_1b(test, caja) 
+				||esBloqueEspecial_1c(test, caja) || esBloqueEspecial_1d(test, caja)){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_2(Escenario test, Posicion caja){
+		if(esBloqueEspecial_2a(test, caja) || esBloqueEspecial_2b(test, caja)){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_3(Escenario test, Posicion caja){
+		if(esBloqueEspecial_3a(test, caja) || esBloqueEspecial_3b(test, caja) 
+				||esBloqueEspecial_3c(test, caja) || esBloqueEspecial_3d(test, caja)){
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * M�todo que comprueba escenarios tipo que pueden dejar el nivel irresoluble
 	 * @param escenario - Escenario actual
@@ -332,6 +350,178 @@ public class Resolver {
 
 		if(testBloqueEspecial_1a(aux1)||testBloqueEspecial_1a(aux2)||testBloqueEspecial_1a(aux3)){//vemos si alguno forma bloque
 			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_1b(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[3][4];//Caja en (0, 2)
+		for(int i = 0; i<aux1.length; i++){//                     #$
+			for(int j = 0; j<aux1[i].length; j++){//             #  #
+				try{//                                           #$$#
+					aux1[i][j]=test.getCas()[caja.x+i][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux2 = new char[3][4];//Caja en (2, 1)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-2][caja.y-1+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux3 = new char[3][4];//Caja en (2, 2)
+		for(int i = 0; i<aux3.length; i++){
+			for(int j = 0; j<aux3[i].length; j++){
+				try{
+					aux3[i][j]=test.getCas()[caja.x+i-2][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		if(testBloqueEspecial_1b(aux1)||testBloqueEspecial_1b(aux2)||testBloqueEspecial_1b(aux3)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_1c(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[4][3];//Caja en (1, 0)           ##
+		for(int i = 0; i<aux1.length; i++){//                    $ $
+			for(int j = 0; j<aux1[i].length; j++){//             # $
+				try{//                                            ## 
+					aux1[i][j]=test.getCas()[caja.x+i-1][caja.y+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux2 = new char[4][3];//Caja en (1, 2)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-1][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux3 = new char[4][3];//Caja en (2, 2)
+		for(int i = 0; i<aux3.length; i++){
+			for(int j = 0; j<aux3[i].length; j++){
+				try{
+					aux3[i][j]=test.getCas()[caja.x+i-2][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		if(testBloqueEspecial_1c(aux1)||testBloqueEspecial_1c(aux2)||testBloqueEspecial_1c(aux3)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_1d(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[4][3];//Caja en (1, 0)           ##
+		for(int i = 0; i<aux1.length; i++){//                     $ #
+			for(int j = 0; j<aux1[i].length; j++){//              $ $
+				try{//                                            ## 
+					aux1[i][j]=test.getCas()[caja.x+i-1][caja.y+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux2 = new char[4][3];//Caja en (2, 0)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-2][caja.y+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		char[][] aux3 = new char[4][3];//Caja en (2, 2)
+		for(int i = 0; i<aux3.length; i++){
+			for(int j = 0; j<aux3[i].length; j++){
+				try{
+					aux3[i][j]=test.getCas()[caja.x+i-2][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){
+					aux1[i][j]=' ';
+				}
+			}
+		}
+
+		if(testBloqueEspecial_1d(aux1)||testBloqueEspecial_1d(aux2)||testBloqueEspecial_1d(aux3)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_1a(char[][] aux) {
+		if((aux[0][1] == '$' || aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*') 
+				&& (aux[2][1] == '$' || aux[2][1] == '*' || aux[2][1] == '#')){
+			if(aux[0][0] == '#' && aux[0][3] == '#' && aux[1][0] == '#' && aux[1][1] == ' '
+					&& aux[1][2] == ' ' && aux[1][3] == '#' && (aux[2][2] == '#'||aux[2][2] == '$'||aux[2][2] == '*')){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_1b(char[][] aux) {
+		if((aux[2][1] == '$' || aux[2][1] == '*') && (aux[2][2] == '$' || aux[2][2] == '*') 
+				&& (aux[0][2] == '$' || aux[0][2] == '*' || aux[0][2] == '#')){
+			if(aux[1][0] == '#' && aux[2][0] == '#' && aux[1][3] == '#' && aux[1][1] == ' '
+					&& aux[1][2] == ' ' && aux[2][3] == '#' && (aux[0][1] == '#'||aux[0][1] == '$'||aux[0][1] == '*')){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_1c(char[][] aux) {
+		if((aux[1][2] == '$' || aux[1][2] == '*') && (aux[2][2] == '$' || aux[2][2] == '*') 
+				&& (aux[1][0] == '$' || aux[1][0] == '*' || aux[1][0] == '#')){
+			if(aux[0][1] == '#' && aux[0][2] == '#' && aux[3][1] == '#' && aux[1][1] == ' '
+					&& aux[2][1] == ' ' && aux[3][2] == '#' && (aux[2][0] == '#'||aux[2][0] == '$'||aux[2][0] == '*')){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_1d(char[][] aux) {
+		if((aux[1][0] == '$' || aux[1][0] == '*') && (aux[2][0] == '$' || aux[2][0] == '*') 
+				&& (aux[2][2] == '$' || aux[2][2] == '*' || aux[2][2] == '#')){
+			if(aux[0][0] == '#' && aux[0][1] == '#' && aux[3][0] == '#' && aux[1][1] == ' '
+					&& aux[2][1] == ' ' && aux[3][1] == '#' && (aux[1][2] == '#'||aux[1][2] == '$'||aux[1][2] == '*')){
+				return true;
+			}else{
+				return false;
+			}
 		}
 		return false;
 	}
@@ -412,15 +602,149 @@ public class Resolver {
 		return false;
 	}
 
-	private boolean testBloqueEspecial_1a(char[][] aux) {
-		if((aux[0][1] == '$' || aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*') 
-				&& (aux[2][1] == '$' || aux[2][1] == '*')){
-			if(aux[0][0] == '#' && aux[0][3] == '#' && aux[1][0] == '#' && aux[1][1] == ' '
-					&& aux[1][2] == ' ' && aux[1][3] == '#' && (aux[2][0] == ' ' || aux[2][0] == '#') 
-					&& aux[2][2] == '#' && (aux[2][3] == ' ' || aux[2][3] == '#')){
+	private boolean esBloqueEspecial_3a(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[3][4];//Caja en (2, 1)
+		for(int i = 0; i<aux1.length; i++){//                   ##
+			for(int j = 0; j<aux1[i].length; j++){//           #  #
+				try{//											$$ 
+					aux1[i][j]=test.getCas()[caja.x+i-2][caja.y+j-1];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[3][4];//Caja en (2, 2)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-2][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_3a(aux1)||testBloqueEspecial_3a(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_3b(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[3][4];//Caja en (0, 1)
+		for(int i = 0; i<aux1.length; i++){//                   $$
+			for(int j = 0; j<aux1[i].length; j++){//           #  #
+				try{//											## 
+					aux1[i][j]=test.getCas()[caja.x+i][caja.y+j-1];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[3][4];//Caja en (0, 2)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i][caja.y-2+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_3b(aux1)||testBloqueEspecial_3b(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_3c(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[4][3];//Caja en (1, 0)         #
+		for(int i = 0; i<aux1.length; i++){//                  $ # 
+			for(int j = 0; j<aux1[i].length; j++){//           $ #
+				try{//											# 
+					aux1[i][j]=test.getCas()[caja.x+i-1][caja.y+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[4][3];//Caja en (2, 0)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-2][caja.y+j];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_3c(aux1)||testBloqueEspecial_3c(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean esBloqueEspecial_3d(Escenario test, Posicion caja) {
+		char[][] aux1 = new char[4][3];//Caja en (1, 2)         #
+		for(int i = 0; i<aux1.length; i++){//                  # $ 
+			for(int j = 0; j<aux1[i].length; j++){//           # $
+				try{//											# 
+					aux1[i][j]=test.getCas()[caja.x+i-1][caja.y+j-2];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux1[i][j]=' ';
+				}
+			}
+		}
+		char[][] aux2 = new char[4][3];//Caja en (2, 2)
+		for(int i = 0; i<aux2.length; i++){
+			for(int j = 0; j<aux2[i].length; j++){
+				try{
+					aux2[i][j]=test.getCas()[caja.x+i-2][caja.y+j-2];
+				}catch(IndexOutOfBoundsException e){//nos salimos de los limites, damos valor vacio
+					aux2[i][j]=' ';
+				}
+			}
+		}
+		if(testBloqueEspecial_3d(aux1)||testBloqueEspecial_3d(aux2)){//vemos si alguno forma bloque
+			return true;
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_3a(char[][] aux) {
+		if((aux[2][1] == '$'|| aux[2][1] == '*') && (aux[2][2] == '$' || aux[2][2] == '*')){
+			if(aux[0][1] == '#' && aux[0][2] == '#' && aux[1][0] == '#' && aux[1][3] == '#'
+					&& aux[1][1] == ' ' && aux[1][2] == ' '){
 				return true;
-			}else{
-				return false;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_3b(char[][] aux) {
+		if((aux[0][1] == '$'|| aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*')){
+			if(aux[2][1] == '#' && aux[2][2] == '#' && aux[1][0] == '#' && aux[1][3] == '#'
+					&& aux[1][1] == ' ' && aux[1][2] == ' '){
+				return true;
+			}
+		}
+		return false;
+	}	
+
+	private boolean testBloqueEspecial_3c(char[][] aux) {
+		if((aux[1][0] == '$'|| aux[1][0] == '*') && (aux[2][0] == '$' || aux[2][0] == '*')){
+			if(aux[0][1] == '#' && aux[3][1] == '#' && aux[1][2] == '#' && aux[2][2] == '#'
+					&& aux[1][1] == ' ' && aux[2][1] == ' '){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean testBloqueEspecial_3d(char[][] aux) {
+		if((aux[1][2] == '$'|| aux[1][2] == '*') && (aux[2][2] == '$' || aux[2][2] == '*')){
+			if(aux[0][1] == '#' && aux[3][1] == '#' && aux[1][0] == '#' && aux[2][0] == '#'
+					&& aux[1][1] == ' ' && aux[2][1] == ' '){
+				return true;
 			}
 		}
 		return false;
