@@ -194,10 +194,12 @@ public class Resolver {
 	private List<Node> getHijos(Node padre)
 	{
 		List<Node> hijos = new ArrayList<>();//lista de nodos hijos
+		List<Posicion> cajas = padre.getEscenario().getCajas();//lista de posicion cajas para controlar cual se movio
 		int i = 0;//contador
 		while(i<4)
 		{//maximo 4 movimientos a realizar (4 hijos posibles)
 			Node aux = null;//nodo auxiliar
+			Posicion caja = null;//posicion caja movida
 			Escenario test = new Escenario(padre.getEscenario().getNivel(), true);//escenario auxiliar
 			copiarEscenarioActual(test, padre.getEscenario());//copiamos el escenario del nodo padre al auxiliar
 			test.setALTO(test.getCas().length);
@@ -206,7 +208,8 @@ public class Resolver {
 			case 0://movimiento hacia arriba (W)
 				if(test.realizarMovimiento('W')){//comprobamos si es posible el movimiento
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"W");//generamos el nodo tras el movumiento
-					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
+					caja = posicionCambiada(aux, cajas);
+					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux, caja)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
 					}
 				}
@@ -214,7 +217,8 @@ public class Resolver {
 			case 1://movimiento a la izquierda (A)
 				if(test.realizarMovimiento('A')){//comprobamos si es posible el movimiento
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"A");//generamos el nodo tras el movumiento
-					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
+					caja = posicionCambiada(aux, cajas);
+					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux, caja)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
 					}
 				}
@@ -222,7 +226,8 @@ public class Resolver {
 			case 2://movimiento a la derecha (D)
 				if(test.realizarMovimiento('D')){//comprobamos si es posible el movimiento
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"D");//generamos el nodo tras el movumiento
-					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
+					caja = posicionCambiada(aux, cajas);
+					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux, caja)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
 					}
 				}
@@ -230,7 +235,8 @@ public class Resolver {
 			default://movimiento hacia abajo (S)
 				if(test.realizarMovimiento('S')){//comprobamos si es posible el movimiento
 					aux = new Node(test, padre.getG()+1, test.placedBox(),padre.getID()+"S");//generamos el nodo tras el movumiento
-					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux)){//comprobamos si el escenario resultante cumple las restricciones
+					caja = posicionCambiada(aux, cajas);
+					if(aux.getEscenario().hasGanado() || comprobarRestricciones(aux, caja)){//comprobamos si el escenario resultante cumple las restricciones
 						hijos.add(aux);//guardamos nodo resultante en la lista de hijos
 					}
 				}
@@ -241,25 +247,39 @@ public class Resolver {
 		return hijos;
 	}
 
+	private Posicion posicionCambiada(Node aux, List<Posicion> cajas) {
+		List<Posicion> auxCajas = aux.getEscenario().getCajas();
+		boolean movida=true;
+		for(Posicion pos:auxCajas){
+			for(Posicion posVieja:cajas){
+				if((pos.x==posVieja.x)&&(pos.y==posVieja.y)){//esta caja no se movio
+					movida = false;//no fue movida esa caja
+					break;
+				}
+			}
+			if(movida){//fue movida esta caja
+				return pos;
+			}
+			movida = true;
+		}
+		return null;//no se movio ninguna caja
+	}
+
 	/**
 	 * M�todo que recibe el nodo hijo generado y comprueba si cumple las restricciones para su posterior estudio
 	 * @param test - Nodo
 	 * @return false - si no las cumple, true - si las cumple
 	 */
-	private boolean comprobarRestricciones(Node test) {
-		List<Posicion> cajasSinColocar = test.getEscenario().getCajas();//obtenemos la posicion de las cajas sin colocar
-		if(!cajasSinColocar.isEmpty())
-		{
-			for (Posicion posicion : cajasSinColocar) {
-				if(esEsquina(test.getEscenario(), posicion) || esUnBloque2x2(test.getEscenario(), posicion)|| esUnBloque3x3(test.getEscenario(), posicion) || esParedLimitada(test.getEscenario(), posicion) 
-						|| esCaminoBloqueante(test.getEscenario(), posicion) || esBloqueEspecial_2a(test.getEscenario(), posicion) || esBloqueEspecial_2b(test.getEscenario(), posicion)){
-					//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
-					//															test.getEscenario().escenarioToString();
-					return false;
-				}else if(test.getEscenario().cajas()>2 && esBloqueEspecial_1a(test.getEscenario(), posicion)){
-					//					System.out.println("ESPECIAL");
-					return false;
-				}
+	private boolean comprobarRestricciones(Node test, Posicion caja) {
+		if(caja!=null){//vemos si alguna caja fue desplazada
+			if(esEsquina(test.getEscenario(), caja) || esUnBloque2x2(test.getEscenario(), caja)|| esBloqueEspecial_2a(test.getEscenario(), caja) || esBloqueEspecial_2b(test.getEscenario(), caja) 
+					|| esUnBloque3x3(test.getEscenario(), caja) || esParedLimitada(test.getEscenario(), caja) || esCaminoBloqueante(test.getEscenario(), caja)){
+				//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
+				//															test.getEscenario().escenarioToString();
+				return false;
+			}else if(test.getEscenario().cajas()>2 && esBloqueEspecial_1a(test.getEscenario(), caja)){
+				//					System.out.println("ESPECIAL");
+				return false;
 			}
 		}
 		return true;
@@ -391,7 +411,7 @@ public class Resolver {
 		}
 		return false;
 	}
-	
+
 	private boolean testBloqueEspecial_1a(char[][] aux) {
 		if((aux[0][1] == '$' || aux[0][1] == '*') && (aux[0][2] == '$' || aux[0][2] == '*') 
 				&& (aux[2][1] == '$' || aux[2][1] == '*')){
@@ -536,16 +556,16 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
 				if(test.getCas()[caja.x][caja.y-i]=='#'){
-//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
-//					test.escenarioToString();
+					//					System.out.println("BLOQ EN HOR"+caja.x+", "+caja.y);
+					//					test.escenarioToString();
 					return true;
 				}else if(((test.getCas()[caja.x+1][caja.y-i]!='#')&&(test.getCas()[caja.x-1][caja.y-i]!='#'))
 						||(test.getCas()[caja.x][caja.y-i]=='.'||test.getCas()[caja.x][caja.y-i]=='+')){
 					return false;
 				}
 			}
-//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
-//			test.escenarioToString();
+			//			System.out.println("BLOQ EN HOR FIN"+caja.x+", "+caja.y);
+			//			test.escenarioToString();
 			return true;
 		}
 
@@ -560,16 +580,16 @@ public class Resolver {
 			}
 			for(int i = 1; i<=caja.x; i++){//recorremos hacia arriba
 				if(test.getCas()[caja.x-i][caja.y]=='#'){
-//					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
-//					test.escenarioToString();
+					//					System.out.println("BLOQ EN VERT"+caja.x+", "+caja.y);
+					//					test.escenarioToString();
 					return true;
 				}if(((test.getCas()[caja.x-i][caja.y+1]!='#')&&(test.getCas()[caja.x-i][caja.y-1]!='#'))
 						||(test.getCas()[caja.x-i][caja.y]=='.'||test.getCas()[caja.x-i][caja.y]=='+')){
 					return false;
 				}
 			}
-//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
-//			test.escenarioToString();
+			//			System.out.println("BLOQ EN VERT FIN"+caja.x+", "+caja.y);
+			//			test.escenarioToString();
 			return true;
 		}
 		return false;
