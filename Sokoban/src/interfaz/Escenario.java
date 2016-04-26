@@ -279,8 +279,7 @@ public class Escenario {
 			database = client.getDatabase("sokoban");//elegimos bbdd
 			collection = database.getCollection("niveles");
 			Document nivel = collection.find(new Document("_id", this.getNivel())).first();
-			if(nivel.get(tipe)==null)
-			{//no hay guardada solucion de la IA
+			if(p==null&&nivel.get(tipe)==null){//no hay guardada solucion de la IA
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Time", time)));
 				if(tipe.equals("AStar")){collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Nodos", nodos)));}
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
@@ -295,8 +294,7 @@ public class Escenario {
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".seq",seq)));
 			}
 			List<String> pasosAnt =((List<String>)nivel.get("Jugada.seq"));
-			if(pasosAnt==null||sol.size()<(pasosAnt.size()-1))
-			{//la solucion es mejor que la almacenada
+			if(pasosAnt==null||sol.size()<(pasosAnt.size()-1)){//la solucion es mejor que la almacenada
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
 				Node aux = new Node(incial, 0, incial.placedBox(), "");
