@@ -11,9 +11,10 @@ import jugador.Mapas;
 
 public class Resolver {
 
-	private static String solIDA;
-	private static int nodosTotal;
-
+	private String solIDA;
+	private int nodosTotal;
+	private Restricciones r;
+	
 	public void nextStep(/*recibir posicion actual y avanzar un poco*/)
 	{
 
@@ -51,6 +52,7 @@ public class Resolver {
 			}
 		}
 		//no hay solucion, la calculamos
+		r = new Restricciones();
 		long time_start, time_end;//Variables para calcular el tiempo de computo para hayar la solucion
 		time_start = System.currentTimeMillis();//empezamos el contador
 		String secuencia = AStar(actual);//buscamos la solucion con A*
@@ -272,7 +274,6 @@ public class Resolver {
 	 */
 	private boolean comprobarRestricciones(Node test, Posicion caja) {
 		if(caja!=null){//vemos si alguna caja fue desplazada
-			Restricciones r = new Restricciones();
 			if(r.esEsquina(test.getEscenario(), caja) || r.esUnBloque2x2(test.getEscenario(), caja)|| r.esBloqueEspecial_2(test.getEscenario(), caja) || r.esUnBloque3x3(test.getEscenario(), caja)
 					|| r.esParedLimitada(test.getEscenario(), caja) || r.esCaminoBloqueante(test.getEscenario(), caja) || r.esBloqueEspecial_3(test.getEscenario(), caja)){
 				//															System.out.println("BLOQ EN "+posicion.x+", "+posicion.y);
