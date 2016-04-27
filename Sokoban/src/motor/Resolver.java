@@ -60,8 +60,8 @@ public class Resolver {
 	public char[] solucion(Escenario escenario, int pasos, List<String> teclasManual){
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//marcamos que el usuario solicito ayuda de la IA
-		String tipe="AStar";//usamos el algoritmo A*
-		//		String tipe="IDAStar"; //usamos el algoritmo IDA*
+//		String tipe="AStar";//usamos el algoritmo A*
+				String tipe="IDAStar"; //usamos el algoritmo IDA*
 		char[] solExist = Mapas.verSol(escenario.getNivel(), tipe);//comprobamos si el nivel ya tiene una solucion de la IA
 		if(solExist!=null && pasos==0){//ya hay una soluci�n almacenada de la IA y el jugador no realizo movimiento previo
 			return solExist;//devolvemos solucion desde posicion inicial
@@ -85,8 +85,8 @@ public class Resolver {
 		r = new Restricciones();
 		long time_start, time_end;//Variables para calcular el tiempo de computo para hayar la solucion
 		time_start = System.currentTimeMillis();//empezamos el contador
-		String secuencia = AStar(actual, false);//buscamos la solucion con A*
-		//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+//		String secuencia = AStar(actual, false);//buscamos la solucion con A*
+					String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
 		time_end = System.currentTimeMillis();//finalizamos contador
 		long time = time_end - time_start;//calculamos el tiempo total que demoro el calculo
 		if(secuencia!=null){//existe solucion
@@ -167,20 +167,20 @@ public class Resolver {
 		return aux.getID();
 	}
 
-	@SuppressWarnings("unused")
 	private String IDAStar(Node actual){
 		int bound = actual.getF();
+		nodosTotal = 0;
 		while (true) {
 			List<Node> listRepetido = new ArrayList<Node>();
 			listRepetido.add(actual);
 			int aux = IDAStarSearch(actual, bound, listRepetido);
-			if(aux==0)
-			{
+			if(aux==0){
 				return solIDA;
 			}else if(aux==2147483647){
 				return null;
 			}
-			else{
+			else{//cambiamos limite
+				nodosTotal = 0;
 				bound = aux;
 			}
 		}
@@ -189,6 +189,7 @@ public class Resolver {
 	private int IDAStarSearch(Node actual, int bound, List<Node> listRepetido)
 	{
 		int min = 0;
+		nodosTotal++;
 		if(actual.getF()>bound){
 			return actual.getF();
 		}else if(actual.getEscenario().hasGanado()){

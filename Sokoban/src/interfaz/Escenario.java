@@ -281,7 +281,7 @@ public class Escenario {
 			Document nivel = collection.find(new Document("_id", this.getNivel())).first();
 			if(p==null&&nivel.get(tipe)==null){//no hay guardada solucion de la IA
 				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Time", time)));
-				if(tipe.equals("AStar")){collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Nodos", nodos)));}
+				collection.updateOne(new Document("_id", this.getNivel()), new Document("$set", new Document(tipe+".Nodos", nodos)));
 				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
 				incial = new Escenario(incial.getNivel(), false);
 				Node aux = new Node(incial, 0, incial.placedBox(), "");
