@@ -14,10 +14,41 @@ public class Resolver {
 	private String solIDA;
 	private int nodosTotal;
 	private Restricciones r;
-	
-	public void nextStep(/*recibir posicion actual y avanzar un poco*/)
-	{
 
+	/**
+	 * 
+	 */
+	public char[] nextStep(Escenario escenario, int pasos, List<String> teclasManual){
+		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
+		escenario.setIA(true);//marcamos que el usuario solicito ayuda de la IA
+		String tipe="AStar";//usamos el algoritmo A*
+		//		String tipe="IDAStar"; //usamos el algoritmo IDA*
+		r = new Restricciones();
+		String secuencia = AStar(actual, true);//buscamos la solucion con A*
+		//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+		if(secuencia!=null){//existe camino
+			char[] sol = new char[secuencia.length()];//secuencia de teclas
+			for(int i=0;i<secuencia.length(); i++){
+				sol[i]=secuencia.charAt(i);
+			}
+			List<String> aux = new ArrayList<String>();
+			if(teclasManual!=null && teclasManual.size()>0){//añadimos las teclas usadas por el usuario manualmente
+				for(String tecla : teclasManual){
+					aux.add(tecla);
+				}
+			}
+			for(int i = 0; i<sol.length; i++ ){
+				aux.add(String.valueOf(sol[i]));
+			}
+			Escenario test = new Escenario(actual.getEscenario().getNivel(), true);//actualizamos los metadatos del nivel en la DB
+			copiarEscenarioActual(test, actual.getEscenario());
+			if(test.hasGanado()){//actualizamos nivel
+				escenario.updateNivel(aux, null, 0, test, tipe, nodosTotal);
+			}
+			return sol;//devolvemos camino
+		}else{//no hay camino posible desde la posicion actual
+			return null;
+		}
 	}
 
 	/**
@@ -26,8 +57,7 @@ public class Resolver {
 	 * @param pasos - numero de pasos realizados hasta el momento
 	 * @return Array con secuencia de caracteres para llegar a la meta
 	 */
-	public char[] solucion(Escenario escenario, int pasos)
-	{
+	public char[] solucion(Escenario escenario, int pasos, List<String> teclasManual){
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//marcamos que el usuario solicito ayuda de la IA
 		String tipe="AStar";//usamos el algoritmo A*
@@ -55,7 +85,7 @@ public class Resolver {
 		r = new Restricciones();
 		long time_start, time_end;//Variables para calcular el tiempo de computo para hayar la solucion
 		time_start = System.currentTimeMillis();//empezamos el contador
-		String secuencia = AStar(actual);//buscamos la solucion con A*
+		String secuencia = AStar(actual, false);//buscamos la solucion con A*
 		//			String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
 		time_end = System.currentTimeMillis();//finalizamos contador
 		long time = time_end - time_start;//calculamos el tiempo total que demoro el calculo
@@ -65,6 +95,11 @@ public class Resolver {
 				sol[i]=secuencia.charAt(i);
 			}
 			List<String> aux = new ArrayList<String>();
+			if(teclasManual!=null && teclasManual.size()>0){//añadimos las teclas usadas por el usuario manualmente
+				for(String tecla : teclasManual){
+					aux.add(tecla);
+				}
+			}
 			for(int i = 0; i<sol.length; i++ ){
 				aux.add(String.valueOf(sol[i]));
 			}
@@ -82,15 +117,21 @@ public class Resolver {
 	 * @param actual - nodo padre
 	 * @return Secuencia de movimientos hasta llegar a meta
 	 */
-	private String AStar(Node actual)
-	{
+	private String AStar(Node actual, boolean nextStep){
+		long time_start = 0;//Variables para calcular el tiempo si se eligio sugerir camino
 		nodosTotal = 0;//numero nodos estudiados
 		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
 		//		Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
 		abiertos.add(actual);//aniadimos el nodo padre a la cola
+		if(nextStep){//emepezamos a contar limite de sugerir camino
+			time_start = System.currentTimeMillis();//empezamos el contador
+		}
 		while (!abiertos.isEmpty()){//mientras cola tenga nodos buscamos solucion al nivel
+			if(nextStep && (System.currentTimeMillis()-time_start)>10000){//se eligio sugerir camino y tiempo mayor a 10seg
+				return masBueno(cerrados);
+			}
 			Node estudiando = abiertos.poll();//extraemos el nodo de la cabeza de la cola
 			if(estudiando.getEscenario().hasGanado()){//Existe solucion, salimos
 				nodosTotal = cerrados.size();//guardamos el numero total de nodos estudiados
@@ -115,9 +156,19 @@ public class Resolver {
 		return null;//no tiene solucion el nivel
 	}
 
+	private String masBueno(List<Node> cerrados){
+		Node aux = null;
+		int max = -1;
+		for(Node node : cerrados){//buscamos el nodo con mas cajas colocadas
+			if(node.getI()>max){
+				aux = node;
+			}
+		}
+		return aux.getID();
+	}
+
 	@SuppressWarnings("unused")
-	private String IDAStar(Node actual)
-	{
+	private String IDAStar(Node actual){
 		int bound = actual.getF();
 		while (true) {
 			List<Node> listRepetido = new ArrayList<Node>();

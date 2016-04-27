@@ -29,14 +29,8 @@ public class Grafica extends JFrame{
 	private static final int PIXELSCUADRADO = 30;
 	private static final int BORDE = 50;
 	private static final int ANCHODERECHA = (PIXELSCUADRADO + 1) * 5;
-	private JButton b1;
-	private JButton b2;
-	private int altoFrame;
-	private int anchoFrame;
-	private int alto;
-	private int ancho;
-	private int pasos;
-	private KeyListener keyListen;
+	private JButton b1, b2, b3;
+	private int altoFrame, anchoFrame, alto, ancho, pasos;
 	private char[] sol;
 	private static Login lo;
 	private Escenario.TipoCasilla[][] tablero;
@@ -61,12 +55,10 @@ public class Grafica extends JFrame{
 	public Grafica(Player p){
 		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario
 		teclasManual = new ArrayList<String>();
-		keyListen = new TeclaPulsada(this);
 		establecerCoodenadas(escenario);
 	}
 
-	public void establecerCoodenadas(Escenario escenario)
-	{
+	public void establecerCoodenadas(Escenario escenario){
 		this.ancho = escenario.getANCHO();
 		this.alto = escenario.getALTO();
 		tablero = new Escenario.TipoCasilla[alto][ancho];
@@ -76,15 +68,14 @@ public class Grafica extends JFrame{
 		setTitle("DSI | Sokoban");
 		this.setVisible(true);
 		this.setResizable(false);
-		this.pintarBotones();
 		this.pintarTablero();
+		this.pintarBotones();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 	}
 
-	public void update (Graphics g)
-	{
+	public void update (Graphics g){
 		Image buffer = createImage (anchoFrame, altoFrame);
 		Graphics sg = buffer.getGraphics();
 		sg.clearRect(0, 0, anchoFrame, altoFrame);
@@ -96,16 +87,11 @@ public class Grafica extends JFrame{
 	 * Pinta el tablero del juego
 	 * @param g Graphics en el que pintarlo
 	 */
-	public void dibujarTablero(Graphics g)
-	{
+	public void dibujarTablero(Graphics g){
 		try {
 			// Pinta los bordes
 			g.fillRect(BORDE - 2, BORDE - 2, (PIXELSCUADRADO+1)* (ancho) + 3, (PIXELSCUADRADO+1) * (alto) + 3);
-			/*
-        g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 2,
-                   BORDE + (PIXELSCUADRADO+1) - 2,
-                   (PIXELSCUADRADO+1)* (DIMENSIONPIEZA) + 3, (PIXELSCUADRADO+1) * (DIMENSIONPIEZA) + 3);
-			 */                   
+
 			// Pinta el tablero
 			File pathToFile;
 			Image image;
@@ -173,7 +159,7 @@ public class Grafica extends JFrame{
 			//Pintar instrucciones
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 15));
-			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  P: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
+			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  N: Next steps  P: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
 			pathToFile = new File("./img/Character5.png");
 			image = ImageIO.read(pathToFile);
 			g.drawImage(image, BORDE, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
@@ -270,14 +256,21 @@ public class Grafica extends JFrame{
 			break;
 		case 'L':
 		case 'l':
-			if(comenzado||(!comenzado&&escenario.hasGanado())){
-				// Si se pulsa la tecla r sale inicia el solver o se pasa de nivel
-				solverButton();
+			if(comenzado||escenario.hasGanado()){
+				// Si se pulsa la tecla L iniciar el solver o se pasa de nivel
+				solverButton(false);
+			}
+			break;
+		case 'N':
+		case 'n':
+			if(comenzado){
+				// Si se pulsa la tecla N para sugerir nuevos pasos
+				solverButton(true);
 			}
 			break;
 		case 'P':
 		case 'p':
-			// Si se pulsa la tecla t se reinicia o empieza el nivel
+			// Si se pulsa la tecla P se reinicia o empieza el nivel
 			restarButton();
 			break;
 		default:
@@ -292,11 +285,12 @@ public class Grafica extends JFrame{
 		southPanel.setOpaque(true);
 		b1 = new JButton("Solver"); 
 		b2 = new JButton("Start");  
-		b2.addKeyListener(keyListen);
-		b1.setVisible(false);
+		b3 = new JButton("Next steps");
+		b1.setEnabled(false);
+		b3.setEnabled(false);
 		b1.addActionListener(new ActionListener() {          
 			public void actionPerformed(ActionEvent e) {
-				solverButton();
+				solverButton(false);
 			}
 		}); 
 		b2.addActionListener(new ActionListener() {          
@@ -304,12 +298,20 @@ public class Grafica extends JFrame{
 				restarButton();
 			}
 		}); 
+		b3.addActionListener(new ActionListener() {          
+			public void actionPerformed(ActionEvent e) {
+				solverButton(true);
+			}
+		}); 
 		b1.setPreferredSize(new Dimension(90, 25));
 		b1.setFont(new Font("Arial", 1, 11));
 		b2.setPreferredSize(new Dimension(90, 25)); 
 		b2.setFont(new Font("Arial", 1, 11));
+		b3.setPreferredSize(new Dimension(90, 25)); 
+		b3.setFont(new Font("Arial", 1, 11));
 		southPanel.add(b1);
 		southPanel.add(b2);
+		southPanel.add(b3);
 		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
@@ -318,9 +320,10 @@ public class Grafica extends JFrame{
 		if(!b2.getText().equals("Start")){
 			establecerPasos(0);
 			escenario.setIA(false);
+			escenario.resetEscenario();
 		}
-		b1.setVisible(true);
-		escenario.resetEscenario();
+		b1.setEnabled(true);
+		b3.setEnabled(true);
 		pintarTablero();
 		update(getGraphics());
 		b1.setText("Solver");
@@ -337,22 +340,23 @@ public class Grafica extends JFrame{
 		b2.setText("Restart");
 	}
 
-	private void solverButton()
-	{
+	private void solverButton(boolean nextSteps){
 		comenzado = false;
-		if(b1.getText().equals("Solver"))
-		{
+		if(b1.getText().equals("Solver")){
 			pintarTablero();
 			update(getGraphics());
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 			Resolver res = new Resolver();
-			sol = res.solucion(escenario, pasos);//el solver devuelve un array de caracteres con la solucion
-			teclasManual = new ArrayList<String>();
+			if(nextSteps){//se ha solicitado sugerir los pasos
+				sol = res.nextStep(escenario, pasos, teclasManual);
+			}else{//se ha solicitado la solucion entera
+				sol = res.solucion(escenario, pasos, teclasManual);//el solver devuelve un array de caracteres con la solucion
+			}
+
 			if(sol!=null){
-				for(int i =0; i<sol.length; i++)
-				{
+				for(int i =0; i<sol.length; i++){
 					escenario.realizarMovimiento(sol[i]);
 					establecerPasos(pasos+1);
 					pintarTablero();
@@ -365,7 +369,7 @@ public class Grafica extends JFrame{
 					}
 				}
 			}else{
-				b1.setVisible(false);
+				b1.setEnabled(false);
 				pintarTablero();
 				update(getGraphics());
 				getGraphics().setColor(Color.black);
@@ -373,19 +377,22 @@ public class Grafica extends JFrame{
 				getGraphics().drawString("Solution not found.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 				getGraphics().drawString("Please restart level.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 9));
 			}
-			b1.setText("Next level");
+			if(!nextSteps || escenario.hasGanado()){
+				teclasManual.clear();
+				b3.setEnabled(false);
+				b1.setText("Next level");
+			}
 		}else{
-			if(escenario.hasGanado())
-			{
-				if(!escenario.isIA())
-				{//guardamos jugada de usuario
+			if(escenario.hasGanado()){
+				if(!escenario.isIA()){//guardamos jugada de usuario
 					lo.player.updatePlayer(teclasManual, escenario);
 					escenario.updateNivel(teclasManual, lo.player, 0, escenario, null, 0);
 				}else{
 					lo.player.updatePlayer(null, escenario);
 				}
 				b1.setText("Solver");
-				b1.setVisible(false);
+				b1.setEnabled(false);
+				b3.setEnabled(false);
 				b2.setText("Start");
 				establecerPasos(0);
 				escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
@@ -399,8 +406,7 @@ public class Grafica extends JFrame{
 	/**
 	 * 
 	 */
-	public void pintarTablero()
-	{
+	public void pintarTablero(){
 		// Rellena el tablero con las casilla de la variable elTablero.
 		for(int i=0; i< escenario.getALTO(); i++) {
 			for(int j=0; j<escenario.getANCHO(); j++) {
@@ -419,36 +425,9 @@ public class Grafica extends JFrame{
 
 		public void keyPressed (KeyEvent e) {
 			char key = e.getKeyChar();
-			switch (key) {
-			case 'W':
-			case 'A':
-			case 'S':
-			case 'D':
-			case 'w':
-			case 'a':
-			case 's':
-			case 'd':
-			case 'Q':
-			case 'q':
-				t.teclaPulsada(key);
-				break;
-			default:
-				break;
-			}
+			t.teclaPulsada(key);
 			t.pintarTablero();
 			t.update(t.getGraphics());
-			switch (key) {
-			case 'Q':
-			case 'q':
-			case 'P':
-			case 'p':
-			case 'L':
-			case 'l':
-				t.teclaPulsada(key);
-				break;
-			default:
-				break;
-			}
 		}
 	}
 }

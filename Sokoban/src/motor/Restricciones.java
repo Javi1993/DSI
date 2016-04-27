@@ -40,17 +40,22 @@ public class Restricciones {
 						//						System.out.println("CAMINO BLOQUEANTE HORIZONTAL 1 EN "+caja.x+","+caja.y);
 						//						test.escenarioToString();
 						return true;
-					}else if(test.getCas()[caja.x][caja.y+i]=='#'){
+					}else if(!jugadorMedio&&test.getCas()[caja.x][caja.y+i]=='#'){
 						return true;
 					}
+				}else if(!jugadorMedio&&test.getCas()[caja.x][caja.y+i]=='#'){//bloqueo en camino
+					return true;
+				}else if(!jugadorMedio&&(test.getCas()[caja.x][caja.y+i]=='$'||test.getCas()[caja.x][caja.y+i]=='*')&&((test.getCas()[caja.x+1][caja.y+i]=='#'||test.getCas()[caja.x+1][caja.y+i]=='$'||test.getCas()[caja.x+1][caja.y+i]=='*')
+						||(test.getCas()[caja.x-1][caja.y+i]=='#'||test.getCas()[caja.x-1][caja.y+i]=='$'||test.getCas()[caja.x-1][caja.y+i]=='*'))){
+					return true;
 				}else{				
 					return false;
 				}
 			}
 			jugadorMedio = false;
 			for(int i = 1; i<=caja.y; i++){//recorremos hacia izquierda
-				if((((test.getCas()[caja.x+1][caja.y-i]=='#')||(test.getCas()[caja.x+1][caja.y-i]=='$')||(test.getCas()[caja.x+1][caja.y-i]=='*'))
-						&&((test.getCas()[caja.x-1][caja.y-i]=='#')||(test.getCas()[caja.x-1][caja.y-i]=='$')||(test.getCas()[caja.x-1][caja.y-i]=='*')))){
+				if((test.getCas()[caja.x+1][caja.y-i]=='#'||test.getCas()[caja.x+1][caja.y-i]=='$'||test.getCas()[caja.x+1][caja.y-i]=='*')
+						&&(test.getCas()[caja.x-1][caja.y-i]=='#'||test.getCas()[caja.x-1][caja.y-i]=='$'||test.getCas()[caja.x-1][caja.y-i]=='*')){
 					if(test.getCas()[caja.x][caja.y-i]=='@'||test.getCas()[caja.x][caja.y-i]=='+'){
 						jugadorMedio = true;
 					}else if(test.getCas()[caja.x][caja.y-i]=='.'&&!jugadorMedio){
@@ -59,9 +64,14 @@ public class Restricciones {
 						//						System.out.println("CAMINO BLOQUEANTE HORIZONTAL 2 EN "+caja.x+","+caja.y);
 						//						test.escenarioToString();
 						return true;
-					}else if(test.getCas()[caja.x][caja.y-i]=='#'){
+					}else if(!jugadorMedio&&test.getCas()[caja.x][caja.y-i]=='#'){
 						return true;
 					}
+				}else if(!jugadorMedio&&test.getCas()[caja.x][caja.y-i]=='#'){//bloqueo en camino
+					return true;
+				}else if(!jugadorMedio&&(test.getCas()[caja.x][caja.y-i]=='$'||test.getCas()[caja.x][caja.y-i]=='*')&&((test.getCas()[caja.x+1][caja.y-i]=='#'||test.getCas()[caja.x+1][caja.y-i]=='$'||test.getCas()[caja.x+1][caja.y-i]=='*')
+						||(test.getCas()[caja.x-1][caja.y-i]=='#'||test.getCas()[caja.x-1][caja.y-i]=='$'||test.getCas()[caja.x-1][caja.y-i]=='*'))){
+					return true;
 				}else{
 					return false;
 				}
@@ -72,8 +82,8 @@ public class Restricciones {
 				&&(aux2[0][2]=='#'||aux2[0][2]=='$'||aux2[0][2]=='*')){//recorremos arriba y abajo del escenario por ese camino para ver si tiene salida para la caja
 			jugadorMedio = false;
 			for(int i = 1; i<((test.getCas().length)-(caja.x)); i++){//recorremos hacia arriba
-				if((((test.getCas()[caja.x+i][caja.y+1]=='#')||(test.getCas()[caja.x+i][caja.y+1]=='$')||(test.getCas()[caja.x+i][caja.y+1]=='*'))
-						&&((test.getCas()[caja.x+i][caja.y-1]=='#')||(test.getCas()[caja.x+i][caja.y-1]=='$')||(test.getCas()[caja.x+i][caja.y-1]=='*')))){
+				if((test.getCas()[caja.x+i][caja.y+1]=='#'||test.getCas()[caja.x+i][caja.y+1]=='$'||test.getCas()[caja.x+i][caja.y+1]=='*')
+						&&(test.getCas()[caja.x+i][caja.y-1]=='#'||test.getCas()[caja.x+i][caja.y-1]=='$'||test.getCas()[caja.x+i][caja.y-1]=='*')){
 					if(test.getCas()[caja.x+i][caja.y]=='@'||test.getCas()[caja.x+i][caja.y]=='+'){
 						jugadorMedio = true;
 					}else if(test.getCas()[caja.x+i][caja.y]=='.'&&!jugadorMedio){
@@ -82,17 +92,22 @@ public class Restricciones {
 						//						System.out.println("CAMINO BLOQUEANTE VERTICAL 1 EN "+caja.x+","+caja.y);
 						//						test.escenarioToString();
 						return true;
-					}else if(test.getCas()[caja.x+i][caja.y]=='#'){
+					}else if(!jugadorMedio&&test.getCas()[caja.x+i][caja.y]=='#'){
 						return true;
 					}
+				}else if(!jugadorMedio&&test.getCas()[caja.x+i][caja.y]=='#'){//bloqueo en camino
+					return true;
+				}else if(!jugadorMedio&&(test.getCas()[caja.x+i][caja.y]=='$'||test.getCas()[caja.x+i][caja.y]=='*')&&((test.getCas()[caja.x+i][caja.y+1]=='#'||test.getCas()[caja.x+i][caja.y+1]=='$'||test.getCas()[caja.x+i][caja.y+1]=='*')
+						&&(test.getCas()[caja.x+i][caja.y-1]=='#'||test.getCas()[caja.x+i][caja.y-1]=='$'||test.getCas()[caja.x+i][caja.y-1]=='*'))){
+					return true;
 				}else{
 					return false;
 				}
 			}
 			jugadorMedio = false;
 			for(int i = 1; i<=caja.x; i++){//recorremos hacia abajo
-				if((((test.getCas()[caja.x-i][caja.y+1]=='#')||(test.getCas()[caja.x-i][caja.y+1]=='$')||(test.getCas()[caja.x-i][caja.y+1]=='*'))
-						&&((test.getCas()[caja.x-i][caja.y-1]=='#')||(test.getCas()[caja.x-i][caja.y-1]=='$')||(test.getCas()[caja.x-i][caja.y-1]=='*')))){
+				if((test.getCas()[caja.x-i][caja.y+1]=='#'||test.getCas()[caja.x-i][caja.y+1]=='$'||test.getCas()[caja.x-i][caja.y+1]=='*')
+						&&(test.getCas()[caja.x-i][caja.y-1]=='#'||test.getCas()[caja.x-i][caja.y-1]=='$'||test.getCas()[caja.x-i][caja.y-1]=='*')){
 					if(test.getCas()[caja.x-i][caja.y]=='@'||test.getCas()[caja.x-i][caja.y]=='+'){
 						jugadorMedio = true;
 					}else if(test.getCas()[caja.x-i][caja.y]=='.'&&!jugadorMedio){
@@ -101,9 +116,14 @@ public class Restricciones {
 						//						System.out.println("CAMINO BLOQUEANTE VERTICAL 2 EN "+caja.x+","+caja.y);
 						//						test.escenarioToString();
 						return true;
-					}else if(test.getCas()[caja.x-i][caja.y]=='#'){
+					}else if(!jugadorMedio&&test.getCas()[caja.x-i][caja.y]=='#'){
 						return true;
 					}
+				}else if(!jugadorMedio&&test.getCas()[caja.x-i][caja.y]=='#'){//bloqueo en camino
+					return true;
+				}else if(!jugadorMedio&&(test.getCas()[caja.x-i][caja.y]=='$'||test.getCas()[caja.x-i][caja.y]=='*')&&((test.getCas()[caja.x-i][caja.y+1]=='#'||test.getCas()[caja.x-i][caja.y+1]=='$'||test.getCas()[caja.x-i][caja.y+1]=='*')
+						&&(test.getCas()[caja.x-i][caja.y-1]=='#'||test.getCas()[caja.x-i][caja.y-1]=='$'||test.getCas()[caja.x-i][caja.y-1]=='*'))){
+					return true;
 				}else{
 					return false;
 				}
