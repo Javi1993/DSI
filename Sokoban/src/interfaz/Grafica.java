@@ -1,25 +1,17 @@
 package interfaz;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import jugador.Mapas;
 import jugador.Player;
 import motor.Resolver;
@@ -29,14 +21,13 @@ public class Grafica extends JFrame{
 	private static final int PIXELSCUADRADO = 30;
 	private static final int BORDE = 50;
 	private static final int ANCHODERECHA = (PIXELSCUADRADO + 1) * 5;
-	private JButton b1, b2, b3;
 	private int altoFrame, anchoFrame, alto, ancho, pasos;
 	private char[] sol;
 	private static Login lo;
 	private Escenario.TipoCasilla[][] tablero;
 	public Escenario escenario;
 	private List<String> teclasManual;
-	private boolean comenzado = false;
+	private boolean comenzado = true;
 	private static final int COLOR_NEGRO = -16777216;
 
 	public static void main(String [] args) throws InterruptedException
@@ -66,6 +57,7 @@ public class Grafica extends JFrame{
 		altoFrame = 14 * (PIXELSCUADRADO+1) + (2 * BORDE)+10;
 		setSize (anchoFrame, altoFrame);
 		setTitle("DSI | Sokoban");
+		addKeyListener (new TeclaPulsada(this));
 		this.setVisible(true);
 		this.setResizable(false);
 		this.pintarTablero();
@@ -159,7 +151,7 @@ public class Grafica extends JFrame{
 			//Pintar instrucciones
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 15));
-			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  N: Next steps  P: Start/Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
+			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  N: Next steps  P: Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
 			pathToFile = new File("./img/Character5.png");
 			image = ImageIO.read(pathToFile);
 			g.drawImage(image, BORDE, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
@@ -241,7 +233,6 @@ public class Grafica extends JFrame{
 				if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
 					if(escenario.hasGanado()){
 						establecerPasos(pasos+1);
-						b1.setText("Next level");
 					}else{
 						establecerPasos(pasos+1);
 					}
@@ -275,76 +266,61 @@ public class Grafica extends JFrame{
 			break;
 		default:
 			if(!escenario.hasGanado()){
-				System.out.println("Introduzca la tecla correcta por favor.");}
+				System.out.println("Introduzca la tecla correcta por favor.");
+			}
 		}
 	}
 
 	public void pintarBotones()
 	{
-		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
-		southPanel.setOpaque(true);
-		b1 = new JButton("Solver"); 
-		b2 = new JButton("Start");  
-		b3 = new JButton("Next steps");
-		b1.setEnabled(false);
-		b3.setEnabled(false);
-		b1.addActionListener(new ActionListener() {          
-			public void actionPerformed(ActionEvent e) {
-				solverButton(false);
-			}
-		}); 
-		b2.addActionListener(new ActionListener() {          
-			public void actionPerformed(ActionEvent e) {
-				restarButton();
-			}
-		}); 
-		b3.addActionListener(new ActionListener() {          
-			public void actionPerformed(ActionEvent e) {
-				solverButton(true);
-			}
-		}); 
-		b1.setPreferredSize(new Dimension(90, 25));
-		b1.setFont(new Font("Arial", 1, 11));
-		b2.setPreferredSize(new Dimension(90, 25)); 
-		b2.setFont(new Font("Arial", 1, 11));
-		b3.setPreferredSize(new Dimension(90, 25)); 
-		b3.setFont(new Font("Arial", 1, 11));
-		southPanel.add(b1);
-		southPanel.add(b2);
-		southPanel.add(b3);
-		this.add(southPanel, BorderLayout.SOUTH);
+		//		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
+		//		southPanel.setOpaque(true);
+		//		b1 = new JButton("Solver"); 
+		//		b2 = new JButton("Start");  
+		//		b3 = new JButton("Next steps");
+		//		b1.setEnabled(false);
+		//		b3.setEnabled(false);
+		//		b1.addActionListener(new ActionListener() {          
+		//			public void actionPerformed(ActionEvent e) {
+		//				solverButton(false);
+		//			}
+		//		}); 
+		//		b2.addActionListener(new ActionListener() {          
+		//			public void actionPerformed(ActionEvent e) {
+		//				restarButton();
+		//			}
+		//		}); 
+		//		b3.addActionListener(new ActionListener() {          
+		//			public void actionPerformed(ActionEvent e) {
+		//				solverButton(true);
+		//			}
+		//		}); 
+		//		b1.setPreferredSize(new Dimension(90, 25));
+		//		b1.setFont(new Font("Arial", 1, 11));
+		//		b2.setPreferredSize(new Dimension(90, 25)); 
+		//		b2.setFont(new Font("Arial", 1, 11));
+		//		b3.setPreferredSize(new Dimension(90, 25)); 
+		//		b3.setFont(new Font("Arial", 1, 11));
+		//		southPanel.add(b1);
+		//		southPanel.add(b2);
+		//		southPanel.add(b3);
+		//		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
 	private void restarButton(){
-		comenzado = true;
-		if(!b2.getText().equals("Start")){
-			establecerPasos(0);
-			escenario.setIA(false);
-			escenario.resetEscenario();
-		}
-		b1.setEnabled(true);
-		b3.setEnabled(true);
+		establecerPasos(0);
+		escenario.setIA(false);
+		escenario.resetEscenario();
 		pintarTablero();
 		update(getGraphics());
-		b1.setText("Solver");
-		if(!b2.getText().equals("Start")){
-			getGraphics().setColor(Color.black);
-			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
-			getGraphics().drawString("Level restarted.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
-		}else{
-			getGraphics().setColor(Color.black);
-			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
-			getGraphics().drawString("Level started.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
-		}
-		teclasManual = new ArrayList<String>();
-		b2.setText("Restart");
+		getGraphics().setColor(Color.black);
+		getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+		getGraphics().drawString("Level restarted.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
+		comenzado = true;
 	}
 
 	private void solverButton(boolean nextSteps){
-		comenzado = false;
-		if(b1.getText().equals("Solver")){
-			pintarTablero();
-			update(getGraphics());
+		if(!escenario.hasGanado()){
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
@@ -354,7 +330,8 @@ public class Grafica extends JFrame{
 			}else{//se ha solicitado la solucion entera
 				sol = res.solucion(escenario, pasos, teclasManual);//el solver devuelve un array de caracteres con la solucion
 			}
-
+			pintarTablero();
+			update(getGraphics());
 			if(sol!=null){
 				for(int i =0; i<sol.length; i++){
 					escenario.realizarMovimiento(sol[i]);
@@ -369,9 +346,7 @@ public class Grafica extends JFrame{
 					}
 				}
 			}else{
-				b1.setEnabled(false);
-				pintarTablero();
-				update(getGraphics());
+				comenzado = false;
 				getGraphics().setColor(Color.black);
 				getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 				getGraphics().drawString("Solution not found.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
@@ -379,27 +354,24 @@ public class Grafica extends JFrame{
 			}
 			if(!nextSteps || escenario.hasGanado()){
 				teclasManual.clear();
-				b3.setEnabled(false);
-				b1.setText("Next level");
+				comenzado = false;
 			}
-		}else{
-			if(escenario.hasGanado()){
-				if(!escenario.isIA()){//guardamos jugada de usuario
-					lo.player.updatePlayer(teclasManual, escenario);
-					escenario.updateNivel(teclasManual, lo.player, 0, escenario, null, 0);
-				}else{
-					lo.player.updatePlayer(null, escenario);
-				}
-				b1.setText("Solver");
-				b1.setEnabled(false);
-				b3.setEnabled(false);
-				b2.setText("Start");
-				establecerPasos(0);
-				escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
-				teclasManual = new ArrayList<String>();
-				pintarTablero();
-				update(getGraphics());
-			}	
+		}else{//has ganado, siguiente nivel
+			if(!escenario.isIA()){//guardamos jugada de usuario
+				lo.player.updatePlayer(teclasManual, escenario);
+				escenario.updateNivel(teclasManual, lo.player, 0, escenario, null, 0);
+			}else{
+				lo.player.updatePlayer(null, escenario);
+			}
+			comenzado = true;
+			establecerPasos(0);
+			escenario = new Escenario(lo.player.getProgreso(), false);//creamos el escenario
+			teclasManual = new ArrayList<String>();
+			pintarTablero();
+			update(getGraphics());
+			getGraphics().setColor(Color.black);
+			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
+			getGraphics().drawString("Level started.", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 		}
 	}
 
@@ -425,9 +397,38 @@ public class Grafica extends JFrame{
 
 		public void keyPressed (KeyEvent e) {
 			char key = e.getKeyChar();
-			t.teclaPulsada(key);
+			switch (key) {
+			case 'W':
+			case 'A':
+			case 'S':
+			case 'D':
+			case 'w':
+			case 'a':
+			case 's':
+			case 'd':
+			case 'Q':
+			case 'q':
+				t.teclaPulsada(key);
+				break;
+			default:
+				break;
+			}
 			t.pintarTablero();
 			t.update(t.getGraphics());
+			switch (key) {
+			case 'Q':
+			case 'q':
+			case 'P':
+			case 'p':
+			case 'N':
+			case 'n':
+			case 'L':
+			case 'l':
+				t.teclaPulsada(key);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
