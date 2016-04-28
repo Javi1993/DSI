@@ -223,7 +223,7 @@ public class Mapas {
 	@SuppressWarnings("unchecked")
 	public static void escribirResultados(){
 		try {
-			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles.csv", true), ',');
+			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles.csv", true), ';');
 			csvOutput.write("id");
 			csvOutput.write("steps");
 			csvOutput.write("time");
