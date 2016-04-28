@@ -13,13 +13,14 @@ public class Simulacion {
 		Resolver res = new Resolver();
 		while(p.getProgreso()<=150){
 			Escenario testEscenario = new Escenario(p.getProgreso(), false);//creamos el escenario
-			if(res.solucion(testEscenario, 0)==null){
+			if(res.solucion(testEscenario, 0, null)==null){
 				System.out.println("Nivel "+p.getProgreso()+" no encuenta solucion!");
 				break;
 			}
 			System.out.println("Nivel "+p.getProgreso()+" completado!");
 			p.updatePlayer(null, testEscenario);
 		}
-		Mapas.verResultados();
+		Mapas.verResultados();//mostrar resultados totales por pantalla
+		Mapas.escribirResultados();//mostrar resultados detallados en csv
 	}
 }

@@ -1,6 +1,7 @@
 package jugador;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.bson.Document;
+
+import com.csvreader.CsvWriter;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -196,6 +199,7 @@ public class Mapas {
 		return seq;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void verResultados(){
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
@@ -203,12 +207,41 @@ public class Mapas {
 
 		double time = 0;
 		long nodos = 0;
+		long pasos = 0;
 		for(int i = 0; i<collection.count(); i++){
 			Document doc = collection.find(new Document("_id",i+1)).first();
 			time = time + ((Document)doc.get("AStar")).getLong("Time");
 			nodos = nodos + ((Document)doc.get("AStar")).getInteger("Nodos");
+			pasos = pasos + (((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1);
 		}
 		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
 		System.out.println("Nodos total: "+nodos);
+		client.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void escribirResultados(){
+		try {
+			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles.csv", true), ',');
+			csvOutput.write("id");
+			csvOutput.write("steps");
+			csvOutput.write("time");
+			csvOutput.write("nodes");
+			csvOutput.endRecord();
+			client = new MongoClient("localhost", 27017);//conectamos
+			database = client.getDatabase("sokoban");//elegimos bbdd
+			collection = database.getCollection("niveles");//elegimos la colecci�n
+			for(int i = 0; i<collection.count(); i++){
+				Document doc = collection.find(new Document("_id",i+1)).first();
+				csvOutput.write(doc.getString("_id"));
+				csvOutput.write("Bruce");
+				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getLong("Time")));
+				csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1));
+				csvOutput.endRecord();
+			}
+			csvOutput.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
