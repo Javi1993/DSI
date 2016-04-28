@@ -215,7 +215,8 @@ public class Mapas {
 			pasos = pasos + (((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1);
 		}
 		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
-		System.out.println("Nodos total: "+nodos);
+		System.out.println("Nodos totales: "+nodos);
+		System.out.println("Pasos totales: "+pasos);
 		client.close();
 	}
 
@@ -233,10 +234,10 @@ public class Mapas {
 			collection = database.getCollection("niveles");//elegimos la colecci�n
 			for(int i = 0; i<collection.count(); i++){
 				Document doc = collection.find(new Document("_id",i+1)).first();
-				csvOutput.write(doc.getString("_id"));
-				csvOutput.write("Bruce");
-				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getLong("Time")));
+				csvOutput.write(String.valueOf(doc.getInteger("_id")));
 				csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1));
+				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getLong("Time")));
+				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getInteger("Nodos")));
 				csvOutput.endRecord();
 			}
 			csvOutput.close();
