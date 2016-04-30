@@ -121,7 +121,7 @@ public class Resolver {
 		long time_start = 0;//Variables para calcular el tiempo si se eligio sugerir camino
 		nodosTotal = 0;//numero nodos estudiados
 		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
-		//		Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
+//				Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
 		abiertos.add(actual);//aniadimos el nodo padre a la cola
@@ -156,6 +156,11 @@ public class Resolver {
 		return null;//no tiene solucion el nivel
 	}
 
+	/**
+	 * 
+	 * @param cerrados
+	 * @return
+	 */
 	private String masBueno(List<Node> cerrados){
 		Node aux = null;
 		int max = -1;
@@ -181,7 +186,7 @@ public class Resolver {
 			}
 			else{//cambiamos limite
 				nodosTotal = 0;
-				bound = aux;
+				bound = (int)1.2*aux;
 			}
 		}
 	}

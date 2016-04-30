@@ -210,9 +210,9 @@ public class Mapas {
 		long pasos = 0;
 		for(int i = 0; i<collection.count(); i++){
 			Document doc = collection.find(new Document("_id",i+1)).first();
-			time = time + ((Document)doc.get("AStar")).getLong("Time");
-			nodos = nodos + ((Document)doc.get("AStar")).getInteger("Nodos");
-			pasos = pasos + (((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1);
+			time = time + ((Document)doc.get("IDAStar")).getLong("Time");
+			nodos = nodos + ((Document)doc.get("IDAStar")).getInteger("Nodos");
+			pasos = pasos + (((List<Document>)((Document)doc.get("IDAStar")).get("seq")).size()-1);
 		}
 		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
 		System.out.println("Nodos totales: "+nodos);
@@ -235,10 +235,17 @@ public class Mapas {
 			for(int i = 0; i<collection.count(); i++){
 				Document doc = collection.find(new Document("_id",i+1)).first();
 				csvOutput.write(String.valueOf(doc.getInteger("_id")));
-				csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get("AStar")).get("seq")).size()-1));
-				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getLong("Time")));
-				csvOutput.write(String.valueOf(((Document)doc.get("AStar")).getInteger("Nodos")));
+				try{
+				csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get("IDAStar")).get("seq")).size()-1));
+				csvOutput.write(String.valueOf(((Document)doc.get("IDAStar")).getLong("Time")));
+				csvOutput.write(String.valueOf(((Document)doc.get("IDAStar")).getInteger("Nodos")));
 				csvOutput.endRecord();
+				}catch(NullPointerException e){
+					csvOutput.write("-");
+					csvOutput.write("-");
+					csvOutput.write("-");
+					csvOutput.endRecord();
+				}
 			}
 			csvOutput.close();
 		} catch (IOException e) {
