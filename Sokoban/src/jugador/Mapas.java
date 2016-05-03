@@ -210,9 +210,13 @@ public class Mapas {
 		long pasos = 0;
 		for(int i = 0; i<collection.count(); i++){
 			Document doc = collection.find(new Document("_id",i+1)).first();
+			try{
 			time = time + ((Document)doc.get("IDAStar")).getLong("Time");
 			nodos = nodos + ((Document)doc.get("IDAStar")).getInteger("Nodos");
 			pasos = pasos + (((List<Document>)((Document)doc.get("IDAStar")).get("seq")).size()-1);
+			}catch(NullPointerException e){
+				continue;
+			}
 		}
 		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
 		System.out.println("Nodos totales: "+nodos);
