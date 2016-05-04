@@ -14,6 +14,8 @@ public class Resolver {
 	private String solIDA;
 	private int nodosTotal;
 	private Restricciones r;
+	
+	private long borrarTime;
 
 	/**
 	 * 
@@ -60,8 +62,8 @@ public class Resolver {
 	public char[] solucion(Escenario escenario, int pasos, List<String> teclasManual){
 		Node actual = new Node(escenario, pasos, escenario.placedBox(), "");//nodo actual del usuario
 		escenario.setIA(true);//marcamos que el usuario solicito ayuda de la IA
-//		String tipe="AStar";//usamos el algoritmo A*
-				String tipe="IDAStar"; //usamos el algoritmo IDA*
+		String tipe="AStar";//usamos el algoritmo A*
+//				String tipe="IDAStar"; //usamos el algoritmo IDA*
 		char[] solExist = Mapas.verSol(escenario.getNivel(), tipe);//comprobamos si el nivel ya tiene una solucion de la IA
 		if(solExist!=null && pasos==0){//ya hay una soluci�n almacenada de la IA y el jugador no realizo movimiento previo
 			return solExist;//devolvemos solucion desde posicion inicial
@@ -85,8 +87,8 @@ public class Resolver {
 		r = new Restricciones();
 		long time_start, time_end;//Variables para calcular el tiempo de computo para hayar la solucion
 		time_start = System.currentTimeMillis();//empezamos el contador
-//		String secuencia = AStar(actual, false);//buscamos la solucion con A*
-					String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
+		String secuencia = AStar(actual, false);//buscamos la solucion con A*
+//					String secuencia = IDAStar(actual);//buscamos la solucion con IDA*
 		time_end = System.currentTimeMillis();//finalizamos contador
 		long time = time_end - time_start;//calculamos el tiempo total que demoro el calculo
 		if(secuencia!=null){//existe solucion
@@ -120,15 +122,19 @@ public class Resolver {
 	private String AStar(Node actual, boolean nextStep){
 		long time_start = 0;//Variables para calcular el tiempo si se eligio sugerir camino
 		nodosTotal = 0;//numero nodos estudiados
-		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
-//				Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
+//		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
+//		Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
+		Comparator<Node> comparator = new MyComparatorVoraz();//con heuristica voraz
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
 		abiertos.add(actual);//aniadimos el nodo padre a la cola
 		if(nextStep){//emepezamos a contar limite de sugerir camino
 			time_start = System.currentTimeMillis();//empezamos el contador
 		}
-		while (!abiertos.isEmpty()){//mientras cola tenga nodos buscamos solucion al nivel
+		
+		borrarTime = System.currentTimeMillis();//BORRAR ESTA LINEA Y LA SEGUNDA CONDICION DEL WHILE
+		
+		while (!abiertos.isEmpty()||borrarTime<=6000000){//mientras cola tenga nodos buscamos solucion al nivel
 			if(nextStep && (System.currentTimeMillis()-time_start)>10000){//se eligio sugerir camino y tiempo mayor a 10seg
 				return masBueno(cerrados);
 			}

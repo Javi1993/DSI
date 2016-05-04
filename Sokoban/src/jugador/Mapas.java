@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.bson.Document;
-
 import com.csvreader.CsvWriter;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -227,7 +226,8 @@ public class Mapas {
 	@SuppressWarnings("unchecked")
 	public static void escribirResultados(String tipe){
 		try {
-			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles_"+tipe+".csv", true), ';');
+			//			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles_"+tipe+".csv", true), ';');
+			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles-voraz.csv", true), ';');
 			csvOutput.write("id");
 			csvOutput.write("steps");
 			csvOutput.write("time");

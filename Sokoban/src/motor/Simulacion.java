@@ -21,7 +21,7 @@ public class Simulacion {
 				p.updatePlayer(null, testEscenario);
 			}
 		}
-		Mapas.verResultados("IDAStar");//mostrar resultados totales por pantalla
-		Mapas.escribirResultados("IDAStar");//mostrar resultados detallados en csv
+		Mapas.verResultados("AStar");//mostrar resultados totales por pantalla
+		Mapas.escribirResultados("AStar");//mostrar resultados detallados en csv
 	}
 }
