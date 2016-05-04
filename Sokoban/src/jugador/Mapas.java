@@ -200,7 +200,7 @@ public class Mapas {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void verResultados(){
+	public static void verResultados(String tipe){
 		client = new MongoClient("localhost", 27017);//conectamos
 		database = client.getDatabase("sokoban");//elegimos bbdd
 		collection = database.getCollection("niveles");//elegimos la colecci�n
@@ -210,9 +210,13 @@ public class Mapas {
 		long pasos = 0;
 		for(int i = 0; i<collection.count(); i++){
 			Document doc = collection.find(new Document("_id",i+1)).first();
-			time = time + ((Document)doc.get("IDAStar")).getLong("Time");
-			nodos = nodos + ((Document)doc.get("IDAStar")).getInteger("Nodos");
-			pasos = pasos + (((List<Document>)((Document)doc.get("IDAStar")).get("seq")).size()-1);
+			try{
+				time = time + ((Document)doc.get(tipe)).getLong("Time");
+				nodos = nodos + ((Document)doc.get(tipe)).getInteger("Nodos");
+				pasos = pasos + (((List<Document>)((Document)doc.get(tipe)).get("seq")).size()-1);
+			}catch(NullPointerException e){
+				continue;
+			}
 		}
 		System.out.println("Tiempo total: "+(time/(1000*60*60))+" horas");
 		System.out.println("Nodos totales: "+nodos);
@@ -221,9 +225,9 @@ public class Mapas {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void escribirResultados(){
+	public static void escribirResultados(String tipe){
 		try {
-			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles.csv", true), ';');
+			CsvWriter csvOutput = new CsvWriter(new FileWriter("."+File.separator+"niveles_"+tipe+".csv", true), ';');
 			csvOutput.write("id");
 			csvOutput.write("steps");
 			csvOutput.write("time");
@@ -236,15 +240,13 @@ public class Mapas {
 				Document doc = collection.find(new Document("_id",i+1)).first();
 				csvOutput.write(String.valueOf(doc.getInteger("_id")));
 				try{
-				csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get("IDAStar")).get("seq")).size()-1));
-				csvOutput.write(String.valueOf(((Document)doc.get("IDAStar")).getLong("Time")));
-				csvOutput.write(String.valueOf(((Document)doc.get("IDAStar")).getInteger("Nodos")));
-				csvOutput.endRecord();
-				}catch(NullPointerException e){
-					csvOutput.write("-");
-					csvOutput.write("-");
-					csvOutput.write("-");
+					csvOutput.write(String.valueOf(((List<Document>)((Document)doc.get(tipe)).get("seq")).size()-1));
+					csvOutput.write(String.valueOf(((Document)doc.get(tipe)).getLong("Time")));
+					csvOutput.write(String.valueOf(((Document)doc.get(tipe)).getInteger("Nodos")));
 					csvOutput.endRecord();
+				}catch(NullPointerException e){
+					csvOutput.endRecord();
+					continue;
 				}
 			}
 			csvOutput.close();
