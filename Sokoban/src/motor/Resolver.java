@@ -14,7 +14,6 @@ public class Resolver {
 	private String solIDA;
 	private int nodosTotal;
 	private Restricciones r;
-	private long borrarTime;
 
 	/**
 	 * 
@@ -176,8 +175,7 @@ public class Resolver {
 	private String IDAStar(Node actual){
 		int bound = actual.getF();
 		nodosTotal = 0;
-		borrarTime = System.currentTimeMillis();
-		while ((System.currentTimeMillis()-borrarTime)>5450000) {//BORRAR POR LINEA ANTERIOR
+		while (true) {
 			List<Node> listRepetido = new ArrayList<Node>();
 			listRepetido.add(actual);
 			int aux = IDAStarSearch(actual, bound, listRepetido);
@@ -191,7 +189,6 @@ public class Resolver {
 				bound = (int)1.2*aux;
 			}
 		}
-		return null;
 	}
 
 	private int IDAStarSearch(Node actual, int bound, List<Node> listRepetido)

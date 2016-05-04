@@ -15,12 +15,13 @@ public class Simulacion {
 			Escenario testEscenario = new Escenario(p.getProgreso(), false);//creamos el escenario
 			if(res.solucion(testEscenario, 0, null)==null){
 				System.out.println("Nivel "+p.getProgreso()+" no encuenta solucion!");
-				break;
+				p.setProgreso(p.getProgreso()+1);
+			}else{
+				System.out.println("Nivel "+p.getProgreso()+" completado!");
+				p.updatePlayer(null, testEscenario);
 			}
-			System.out.println("Nivel "+p.getProgreso()+" completado!");
-			p.updatePlayer(null, testEscenario);
 		}
-		Mapas.verResultados();//mostrar resultados totales por pantalla
-		Mapas.escribirResultados();//mostrar resultados detallados en csv
+		Mapas.verResultados("IDAStar");//mostrar resultados totales por pantalla
+		Mapas.escribirResultados("IDAStar");//mostrar resultados detallados en csv
 	}
 }
