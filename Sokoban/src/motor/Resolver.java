@@ -134,7 +134,7 @@ public class Resolver {
 		
 		borrarTime = System.currentTimeMillis();//BORRAR ESTA LINEA Y LA SEGUNDA CONDICION DEL WHILE
 		
-		while (!abiertos.isEmpty()||borrarTime<=6000000){//mientras cola tenga nodos buscamos solucion al nivel
+		while (!abiertos.isEmpty()&&borrarTime<=6000000){//mientras cola tenga nodos buscamos solucion al nivel
 			if(nextStep && (System.currentTimeMillis()-time_start)>10000){//se eligio sugerir camino y tiempo mayor a 10seg
 				return masBueno(cerrados);
 			}
