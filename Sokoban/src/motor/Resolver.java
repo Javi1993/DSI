@@ -14,8 +14,6 @@ public class Resolver {
 	private String solIDA;
 	private int nodosTotal;
 	private Restricciones r;
-	
-	private long borrarTime;
 
 	/**
 	 * 
@@ -123,8 +121,9 @@ public class Resolver {
 		long time_start = 0;//Variables para calcular el tiempo si se eligio sugerir camino
 		nodosTotal = 0;//numero nodos estudiados
 //		Comparator<Node> comparator = new MyComparator();//comparador que actuara en la cola de abiertos para ordenador nodos
-//		Comparator<Node> comparator = new MyComparatorAdmissible();//con heuristica admisible
-		Comparator<Node> comparator = new MyComparatorVoraz();//con heuristica voraz
+//		Comparator<Node> comparator = new MyComparatorAdmissible();//con funcion evaluacion admisible
+//		Comparator<Node> comparator = new MyComparatorVoraz();//con funcion evaluacion voraz
+		Comparator<Node> comparator = new MyComparatorTest();//con funcion de evaluacion prueba
 		PriorityQueue<Node> abiertos = new PriorityQueue<Node>(comparator);//cola de prioridades con nodos a estudiar
 		List<Node> cerrados = new ArrayList<Node>();//lista con nodos ya estudiados
 		abiertos.add(actual);//aniadimos el nodo padre a la cola
@@ -132,9 +131,7 @@ public class Resolver {
 			time_start = System.currentTimeMillis();//empezamos el contador
 		}
 		
-		borrarTime = System.currentTimeMillis();//BORRAR ESTA LINEA Y LA SEGUNDA CONDICION DEL WHILE
-		
-		while (!abiertos.isEmpty()&&borrarTime<=6000000){//mientras cola tenga nodos buscamos solucion al nivel
+		while (!abiertos.isEmpty()){//mientras cola tenga nodos buscamos solucion al nivel
 			if(nextStep && (System.currentTimeMillis()-time_start)>10000){//se eligio sugerir camino y tiempo mayor a 10seg
 				return masBueno(cerrados);
 			}
