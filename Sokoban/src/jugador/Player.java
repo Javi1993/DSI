@@ -11,10 +11,10 @@ import motor.Node;
 
 public class Player {
 
-	private String id;//id unica
-	private String pswd;//id unica
-	private int progreso;//nivel (debe ser una lista con todos los nivles compeltados)
-	public boolean estado = false;
+	private String id;//id unica del jugador.
+	private String pswd;//contraseña.
+	private int progreso;//nivel actual del jugador.
+	public boolean estado = false;//logueado.
 	private MongoClient client;
 	private MongoDatabase database;
 	private MongoCollection<Document> collection;   
@@ -28,6 +28,11 @@ public class Player {
 	public String getId() {
 		return id;
 	}
+	
+	/**
+	 * Guarda la ID del usuario, le da formato de primera letra mayuscula y restantes en minuscula.
+	 * @param id - ID inicial pasada (sin adaptar).
+	 */
 	public void setId(String id) {
 		String aux = null;
 		try{
@@ -46,17 +51,20 @@ public class Player {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void updatePlayer(List<String> secuencia, Escenario escenario)
-	{
-		client = new MongoClient("localhost", 27017);//conectamos
-		database = client.getDatabase("sokoban");//elegimos bbdd
+	/**
+	 * Actualiza la informacion del jugador en la BD tras completar un nivel.
+	 * @param secuencia - Secuencia de caracteres si lo resolvio manualmnente el nivel.
+	 * @param escenario - Nivel completado.
+	 */
+	public void updatePlayer(List<String> secuencia, Escenario escenario){
+		client = new MongoClient("localhost", 27017);//conectamos.
+		database = client.getDatabase("sokoban");//elegimos bbdd.
 		collection = database.getCollection("jugadores");
 		if(secuencia!=null){
 			Document player = collection.find(new Document("_id", this.getId())).first();
 			List<Document> pasosAnt =((List<Document>)player.get("Progreso."+(this.getProgreso()-1)+".Jugada"));
-			if(pasosAnt==null||secuencia.size()<pasosAnt.size())
-			{
-				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, heuristica y su mapa
+			if(pasosAnt==null||secuencia.size()<pasosAnt.size()){
+				List<Document> seq = new ArrayList<Document>();//lista que guarda las teclas, la funcion de evaluacion y su mapa.
 				Escenario test = new Escenario(escenario.getNivel(), false);
 				Node aux = new Node(test, 0, test.placedBox(), "");
 				seq.add(new Document("mapa", test.charArrayToList()).append("heuristica", aux.getF()));
@@ -72,20 +80,26 @@ public class Player {
 		client.close();
 	}
 
-	private void updateProgreso()
-	{
+	/**
+	 * Actualiza el progreso del jugador tras completar un nivel.
+	 */
+	private void updateProgreso(){
 		this.setProgreso(this.getProgreso()+1);
 		collection.updateOne(new Document("_id", this.getId()), new Document("$set", new Document("Progreso."+(this.getProgreso()-1)+".Nivel",(this.getProgreso()))));
 	}
 
 	@SuppressWarnings({ "unchecked", "serial" })
+	/**
+	 * Loguea o registra a un jugador.
+	 * @return login correcto o incorrecto.
+	 */
 	private boolean login(){
-		client = new MongoClient("localhost", 27017);//conectamos
-		database = client.getDatabase("sokoban");//elegimos bbdd
+		client = new MongoClient("localhost", 27017);//conectamos.
+		database = client.getDatabase("sokoban");//elegimos bbdd.
 		collection = database.getCollection("jugadores");
 		if(this.getId().equals("IA")
 				||this.getId()==null||this.getId().equals("")
-				||this.pswd==null||this.pswd.trim().equals("")){//nadie puede usar este nombre o es invlaido
+				||this.pswd==null||this.pswd.trim().equals("")){//nadie puede usar este nombre o es invlaido.
 			return false;
 		}
 		Document user = collection.find(new Document("_id",this.id)).first();

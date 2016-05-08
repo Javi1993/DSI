@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -26,12 +25,14 @@ public class Login extends JFrame{
 
 	private JTextField user;
 	private JPasswordField password;
-	Player player;
-	boolean valido;
+	Player player;//jugador que se va a loguear.
+	boolean valido;//controla que el login es valido.
 	private JButton b1;
 	private static Action enterAction; 
 
-
+	/**
+	 * Constructor de la clase que genera la interfaz grafica de login.
+	 */
 	public Login(){
 		this.setTitle("DSI | Sokoban");
 		valido = false;
@@ -46,6 +47,9 @@ public class Login extends JFrame{
 		this.setLocationRelativeTo(null);
 	}
 
+	/**
+	 * Genera los labels de la pantalla de login.
+	 */
 	private void crearLabels(){
 		JLabel label = new JLabel("       USER       ");
 		user = new JTextField(15);
@@ -57,6 +61,9 @@ public class Login extends JFrame{
 		this.getContentPane().add(password);
 	}
 
+	/**
+	 * Crea los botones de la pantalla de login.
+	 */
 	private void crearBotones(){
 		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 15));
 		southPanel.setOpaque(true);
@@ -90,6 +97,9 @@ public class Login extends JFrame{
 		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Clase interna que maneja el pulsar la tecla ENTER
+	 */
 	class EnterAction extends AbstractAction{
 		public void actionPerformed( ActionEvent tf ) { 
 			b1.doClick(); 

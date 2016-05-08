@@ -30,25 +30,32 @@ public class Grafica extends JFrame{
 	private boolean comenzado = true;
 	private static final int COLOR_NEGRO = -16777216;
 
-	public static void main(String [] args) throws InterruptedException
-	{	
-		Mapas.generarMapas();
+	public static void main(String [] args) throws InterruptedException{	
+		Mapas.generarMapas();//generamos los mapas a partir del niveles.txt si no estan en la BD.
 		lo = new Login();
-		while(!lo.valido){
+		while(!lo.valido){//solicitamos login.
 			Thread.sleep(1000);
 		}
 		lo.setVisible(false);
 		lo.dispose();
 		Thread.sleep(1000);
-		new Grafica(lo.player);
+		new Grafica(lo.player);//mostramos interfaz grafica del nivel.
 	}
 
+	/**
+	 * Costructor de la clase que dado un jugador genera el nivel con su interfaz grafica.
+	 * @param p - jugador logueado.
+	 */
 	public Grafica(Player p){
-		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario
-		teclasManual = new ArrayList<String>();
+		escenario = new Escenario(p.getProgreso(), false);//creamos el escenario.
+		teclasManual = new ArrayList<String>();//array con secuencia de teclas introducidas manualmente por el jugador.
 		establecerCoodenadas(escenario);
 	}
 
+	/**
+	 * Genera la interfaz grafica con el nivel en su estado inicial
+	 * @param escenario - Escenario con la informacion del nivel
+	 */
 	public void establecerCoodenadas(Escenario escenario){
 		this.ancho = escenario.getANCHO();
 		this.alto = escenario.getALTO();
@@ -61,12 +68,15 @@ public class Grafica extends JFrame{
 		this.setVisible(true);
 		this.setResizable(false);
 		this.pintarTablero();
-		this.pintarBotones();
 		this.update(this.getGraphics());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 	}
 
+	/**
+	 * Actualiza el escenario tras un movimiento.
+	 * @param g - Graphics en el que pintarlo.
+	 */
 	public void update (Graphics g){
 		Image buffer = createImage (anchoFrame, altoFrame);
 		Graphics sg = buffer.getGraphics();
@@ -76,15 +86,15 @@ public class Grafica extends JFrame{
 	}
 
 	/**
-	 * Pinta el tablero del juego
-	 * @param g Graphics en el que pintarlo
+	 * Pinta el tablero del juego.
+	 * @param g - Graphics en el que pintarlo.
 	 */
 	public void dibujarTablero(Graphics g){
 		try {
-			// Pinta los bordes
+			// Pinta los bordes.
 			g.fillRect(BORDE - 2, BORDE - 2, (PIXELSCUADRADO+1)* (ancho) + 3, (PIXELSCUADRADO+1) * (alto) + 3);
 
-			// Pinta el tablero
+			// Pinta el tablero.
 			File pathToFile;
 			Image image;
 			for (int i = 0; i < alto; i++) {
@@ -105,19 +115,18 @@ public class Grafica extends JFrame{
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
-						// Pinta un punto
 					case DESTINO:
 						pathToFile = new File("./img/EndPoint_Red.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 						break;
 					case CAJA_SOBRE_DESTINO:
-						// 1: Destino
+						// 1: Destino.
 						pathToFile = new File("./img/EndPoint_Red.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
-						// 2: Caja
+						// 2: Caja.
 						pathToFile = new File("./img/CrateDark_Brown_Background.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
@@ -128,12 +137,12 @@ public class Grafica extends JFrame{
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					case JUGADOR_SOBRE_DESTINO:
-						// 1: Destino
+						// 1: Destino.
 						pathToFile = new File("./img/EndPoint_Red.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
-						//2: Jugador
+						//2: Jugador.
 						pathToFile = new File("./img/Character5_Background.png");
 						image = ImageIO.read(pathToFile);
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
@@ -141,14 +150,14 @@ public class Grafica extends JFrame{
 					}
 				}
 			}
-			// Pinta los pasos
+			// Pinta los pasos.
 			g.setColor(Color.black);
 			g.fillRect(BORDE + (PIXELSCUADRADO+1)* (ancho +1) - 5, BORDE+ (PIXELSCUADRADO+1)* (alto - 3) + 7,
 					ANCHODERECHA - 2, PIXELSCUADRADO);
 			g.setColor(Color.white);
 			g.drawString("Steps: " + pasos, BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 2));
 
-			//Pintar instrucciones
+			//Pintar instrucciones.
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 15));
 			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  N: Next steps  P: Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
@@ -179,7 +188,7 @@ public class Grafica extends JFrame{
 			g.drawImage(image, BORDE+(13*PIXELSCUADRADO+7), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Box on goal ", BORDE+(14*PIXELSCUADRADO+2), BORDE+(PIXELSCUADRADO*16));
 
-			//Pintar record info
+			//Pintar record info.
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 13));
 			if(escenario.getRecord()>0){
@@ -196,7 +205,6 @@ public class Grafica extends JFrame{
 				g.drawString("IA win! =(", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -214,13 +222,12 @@ public class Grafica extends JFrame{
 	}
 
 	/**
-	 * M�todo invocado cada vez que el usuario pulsa una tecla
-	 * @param tecla la tecla pulsada
+	 * M�todo invocado cada vez que el usuario pulsa una tecla.
+	 * @param tecla la tecla pulsada.
 	 */
 	public void teclaPulsada(char tecla){
 		int pasos = obtenerPasos();
-		// En funci�n de la tecla pulsada hace algo
-		switch (tecla) {
+		switch (tecla) {// En funci�n de la tecla pulsada hace algo.
 		case 'W':
 		case 'A':
 		case 'S':
@@ -229,7 +236,7 @@ public class Grafica extends JFrame{
 		case 'a':
 		case 's':
 		case 'd':
-			if(comenzado){
+			if(comenzado){//el nivel comenzo y no ha finalizado, se puede mover
 				if(!escenario.hasGanado()&&escenario.realizarMovimiento(tecla)){
 					if(escenario.hasGanado()){
 						establecerPasos(pasos+1);
@@ -241,76 +248,39 @@ public class Grafica extends JFrame{
 			}
 			break;
 		case 'q':
-		case 'Q':
-			// Si se pulsa la tecla q sale del programa
+		case 'Q':// Si se pulsa la tecla q sale del programa
 			System.exit(0);
 			break;
 		case 'L':
 		case 'l':
-			if(comenzado||escenario.hasGanado()){
-				// Si se pulsa la tecla L iniciar el solver o se pasa de nivel
+			if(comenzado||escenario.hasGanado()){// Si se pulsa la tecla L iniciar el solver o se pasa de nivel.
 				solverButton(false);
 			}
 			break;
 		case 'N':
 		case 'n':
-			if(comenzado){
-				// Si se pulsa la tecla N para sugerir nuevos pasos
+			if(comenzado){// Si se pulsa la tecla N para sugerir nuevos pasos.
 				solverButton(true);
 			}
 			break;
 		case 'P':
-		case 'p':
-			// Si se pulsa la tecla P se reinicia o empieza el nivel
+		case 'p':// Si se pulsa la tecla P se reinicia el nivel.
 			restarButton();
 			break;
 		default:
-			if(!escenario.hasGanado()){
+			if(!escenario.hasGanado()){//no se reconoce esa tecla.
 				System.out.println("Introduzca la tecla correcta por favor.");
 			}
 		}
 	}
 
-	public void pintarBotones()
-	{
-		//		JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // new FlowLayout not needed
-		//		southPanel.setOpaque(true);
-		//		b1 = new JButton("Solver"); 
-		//		b2 = new JButton("Start");  
-		//		b3 = new JButton("Next steps");
-		//		b1.setEnabled(false);
-		//		b3.setEnabled(false);
-		//		b1.addActionListener(new ActionListener() {          
-		//			public void actionPerformed(ActionEvent e) {
-		//				solverButton(false);
-		//			}
-		//		}); 
-		//		b2.addActionListener(new ActionListener() {          
-		//			public void actionPerformed(ActionEvent e) {
-		//				restarButton();
-		//			}
-		//		}); 
-		//		b3.addActionListener(new ActionListener() {          
-		//			public void actionPerformed(ActionEvent e) {
-		//				solverButton(true);
-		//			}
-		//		}); 
-		//		b1.setPreferredSize(new Dimension(90, 25));
-		//		b1.setFont(new Font("Arial", 1, 11));
-		//		b2.setPreferredSize(new Dimension(90, 25)); 
-		//		b2.setFont(new Font("Arial", 1, 11));
-		//		b3.setPreferredSize(new Dimension(90, 25)); 
-		//		b3.setFont(new Font("Arial", 1, 11));
-		//		southPanel.add(b1);
-		//		southPanel.add(b2);
-		//		southPanel.add(b3);
-		//		this.add(southPanel, BorderLayout.SOUTH);
-	}
-
+	/**
+	 * Se ejecuta cuando se pulsa la tecla P de reiniciar nivel.
+	 */
 	private void restarButton(){
-		establecerPasos(0);
-		escenario.setIA(false);
-		escenario.resetEscenario();
+		establecerPasos(0);//reinicamos pasos.
+		escenario.setIA(false);//marcamos la utilizacion del solver como falsa.
+		escenario.resetEscenario();//reiniciamos el escenario.
 		pintarTablero();
 		update(getGraphics());
 		getGraphics().setColor(Color.black);
@@ -319,16 +289,20 @@ public class Grafica extends JFrame{
 		comenzado = true;
 	}
 
+	/**
+	 * Se ejecuta cuando se solicita el solver completo o parcial.
+	 * @param nextSteps - se solicita solver parcial.
+	 */
 	private void solverButton(boolean nextSteps){
 		if(!escenario.hasGanado()){
 			getGraphics().setColor(Color.black);
 			getGraphics().setFont(new Font("Dialog", Font.BOLD, 11));
 			getGraphics().drawString("Computing solution...", BORDE+ (PIXELSCUADRADO+1)* (ancho +1) , BORDE+ (PIXELSCUADRADO+1)* (alto - 10));
 			Resolver res = new Resolver();
-			if(nextSteps){//se ha solicitado sugerir los pasos
+			if(nextSteps){//se ha solicitado sugerir los pasos.
 				sol = res.nextStep(escenario, pasos, teclasManual);
-			}else{//se ha solicitado la solucion entera
-				sol = res.solucion(escenario, pasos, teclasManual);//el solver devuelve un array de caracteres con la solucion
+			}else{//se ha solicitado la solucion entera.
+				sol = res.solucion(escenario, pasos, teclasManual);//el solver devuelve un array de caracteres con la solucion.
 			}
 			pintarTablero();
 			update(getGraphics());
@@ -356,8 +330,8 @@ public class Grafica extends JFrame{
 				teclasManual.clear();
 				comenzado = false;
 			}
-		}else{//has ganado, siguiente nivel
-			if(!escenario.isIA()){//guardamos jugada de usuario
+		}else{//has ganado, siguiente nivel.
+			if(!escenario.isIA()){//guardamos jugada de usuario.
 				lo.player.updatePlayer(teclasManual, escenario);
 				escenario.updateNivel(teclasManual, lo.player, 0, escenario, null, 0);
 			}else{
@@ -376,10 +350,10 @@ public class Grafica extends JFrame{
 	}
 
 	/**
-	 * 
+	 * Rellena el tablero con las casilla de la variable escenario.
 	 */
 	public void pintarTablero(){
-		// Rellena el tablero con las casilla de la variable elTablero.
+		// 
 		for(int i=0; i< escenario.getALTO(); i++) {
 			for(int j=0; j<escenario.getANCHO(); j++) {
 				Escenario.TipoCasilla tipoCasilla = escenario.obtenerTipo(i,j);
@@ -388,7 +362,9 @@ public class Grafica extends JFrame{
 		}
 	}
 
-	// Clase interna que maneja la pulsación de teclas
+	/**
+	 * Clase interna que maneja las teclas pulsadas
+	 */
 	private class TeclaPulsada extends KeyAdapter {
 		private Grafica t;
 		public TeclaPulsada(Grafica t) {
