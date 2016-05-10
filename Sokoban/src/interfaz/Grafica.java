@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +94,6 @@ public class Grafica extends JFrame{
 			g.fillRect(BORDE - 2, BORDE - 2, (PIXELSCUADRADO+1)* (ancho) + 3, (PIXELSCUADRADO+1) * (alto) + 3);
 
 			// Pinta el tablero.
-			File pathToFile;
 			Image image;
 			for (int i = 0; i < alto; i++) {
 				for (int j = 0; j < ancho; j++) {
@@ -106,45 +104,37 @@ public class Grafica extends JFrame{
 						g.fillRect(BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO);
 						break;
 					case MURO:
-						pathToFile = new File("./img/Wall_Gray.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/Wall_Gray.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					case CAJA:
-						pathToFile = new File("./img/CrateDark_Brown.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/CrateDark_Brown.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					case DESTINO:
-						pathToFile = new File("./img/EndPoint_Red.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 						break;
 					case CAJA_SOBRE_DESTINO:
 						// 1: Destino.
-						pathToFile = new File("./img/EndPoint_Red.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
 						// 2: Caja.
-						pathToFile = new File("./img/CrateDark_Brown_Background.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/CrateDark_Brown_Background.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					case JUGADOR:
-						pathToFile = new File("./img/Character5.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/Character5.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					case JUGADOR_SOBRE_DESTINO:
 						// 1: Destino.
-						pathToFile = new File("./img/EndPoint_Red.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO-2, PIXELSCUADRADO-2, this);
 
 						//2: Jugador.
-						pathToFile = new File("./img/Character5_Background.png");
-						image = ImageIO.read(pathToFile);
+						image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/Character5_Background.png"));
 						g.drawImage(image, BORDE+(PIXELSCUADRADO+1)*j, BORDE+(PIXELSCUADRADO+1)*i, PIXELSCUADRADO, PIXELSCUADRADO, this);
 						break;
 					}
@@ -161,30 +151,23 @@ public class Grafica extends JFrame{
 			g.setColor(Color.black);
 			g.setFont(new Font("Dialog", Font.BOLD, 15));
 			g.drawString("W: Up  A: Left  D: Right  S: Down  L: Solver/Next level  N: Next steps  P: Restart  Q: Exit", BORDE, BORDE+(PIXELSCUADRADO*15));
-			pathToFile = new File("./img/Character5.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/Character5.png"));
 			g.drawImage(image, BORDE, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Player", BORDE+PIXELSCUADRADO-5, BORDE+(PIXELSCUADRADO*16));
-			pathToFile = new File("./img/CrateDark_Brown.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/CrateDark_Brown.png"));
 			g.drawImage(image, BORDE+(3*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Box", BORDE+4*PIXELSCUADRADO-5, BORDE+(PIXELSCUADRADO*16));
-			pathToFile = new File("./img/EndPoint_Red.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 			g.drawImage(image, BORDE+5*PIXELSCUADRADO+10, BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Goal ", BORDE+6*PIXELSCUADRADO+5, BORDE+(PIXELSCUADRADO*16));
-			pathToFile = new File("./img/EndPoint_Red.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 			g.drawImage(image, BORDE+(8*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
-			pathToFile = new File("./img/Character5_Background.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/Character5_Background.png"));
 			g.drawImage(image, BORDE+(8*PIXELSCUADRADO), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Player on goal ", BORDE+(9*PIXELSCUADRADO-5), BORDE+(PIXELSCUADRADO*16));
-			pathToFile = new File("./img/EndPoint_Red.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/EndPoint_Red.png"));
 			g.drawImage(image, BORDE+(13*PIXELSCUADRADO+7), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
-			pathToFile = new File("./img/CrateDark_Brown_Background.png");
-			image = ImageIO.read(pathToFile);
+			image = ImageIO.read(this.getClass().getClassLoader().getResource("./img/CrateDark_Brown_Background.png"));
 			g.drawImage(image, BORDE+(13*PIXELSCUADRADO+7), BORDE+(PIXELSCUADRADO*15+10), PIXELSCUADRADO-5, PIXELSCUADRADO-5, this);
 			g.drawString(": Box on goal ", BORDE+(14*PIXELSCUADRADO+2), BORDE+(PIXELSCUADRADO*16));
 
