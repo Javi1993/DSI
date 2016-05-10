@@ -3,6 +3,7 @@ package jugador;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +37,7 @@ public class Mapas {
 			Path ruta;
 			char[][] mapa = new char[14][20];
 			try {
-				ruta = Paths.get("."+File.separator+"niveles"+File.separator+"levels.txt");
+				ruta = Paths.get(Mapas.class.getClassLoader().getResource("levels.txt").toURI());
 				Iterator<String> it = Files.lines(ruta).iterator();
 				while(it.hasNext()) {
 					String s = it.next();
@@ -62,6 +63,9 @@ public class Mapas {
 					}
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
